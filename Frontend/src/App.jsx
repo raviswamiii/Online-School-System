@@ -1,7 +1,19 @@
-import React from 'react'
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { RegisterYourself } from "./pages/RegisterYourself";
+import { SchoolRegistration } from "./pages/SchoolRegistration";
+import { CollegeRegistration } from "./pages/CollegeRegistration";
+import { SoloRegistration } from "./pages/SoloRegistration";
 
 export const App = () => {
   return (
-    <div className='bg-red-500'>App</div>
-  )
-}
+    <div>
+      <Routes>
+        <Route path="/" element={<RegisterYourself />} />
+        <Route path="/schoolRegistration" element={<SchoolRegistration />} />
+        <Route path="/collegeRegistration" element={<CollegeRegistration />} />
+        <Route path="/SoloRegistration" element={<SoloRegistration />} />
+      </Routes>
+    </div>
+  );
+};
