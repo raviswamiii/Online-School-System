@@ -8,13 +8,15 @@ import cors from "cors";
 dotenv.config();
 databaseConnection();
 
-app.use(cors({
+app.use(
+  cors({
     origin: process.env.FRONTEND_URL,
-    credentials: true
-}))
+    credentials: true,
+  })
+);
 
 app.use("/school", schoolRouter);
 
 app.listen(3000, () => {
-    console.log("Server is running on port 3000.")
-})
+  console.log("Server is running on port 3000.");
+});
