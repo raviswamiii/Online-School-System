@@ -10,6 +10,7 @@ const createToken = (id) => {
 const registerSchool = async (req, res) => {
   try {
     const { schoolName, schoolEmail, schoolPassword } = req.body;
+    const schoolLogo = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (!schoolName || !schoolEmail || !schoolPassword) {
       return res
@@ -46,6 +47,7 @@ const registerSchool = async (req, res) => {
       schoolName,
       schoolEmail,
       schoolPassword: hashedPassword,
+      schoolLogo,
     });
 
     const school = await newSchool.save();
