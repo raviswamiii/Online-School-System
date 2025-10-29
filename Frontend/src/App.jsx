@@ -5,12 +5,14 @@ import { SchoolRegistration } from "./pages/SchoolRegistration";
 import { CollegeRegistration } from "./pages/CollegeRegistration";
 import { SoloRegistration } from "./pages/SoloRegistration";
 import { SchoolDashboard } from "./pages/SchoolDashboard";
+import { Home } from "./pages/Home";
 
 export const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<RegisterYourself />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/registerYourself" element={<RegisterYourself />} />
         <Route path="/schoolRegistration" element={<SchoolRegistration />} />
         <Route path="/collegeRegistration" element={<CollegeRegistration />} />
         <Route path="/SoloRegistration" element={<SoloRegistration />} />
