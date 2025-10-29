@@ -57,7 +57,7 @@ export const SchoolRegistration = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-gray-100">
+    <div className="h-screen flex flex-col gap-2 justify-center items-center bg-gray-100">
       <form
         onSubmit={onSubmitHandler}
         className="flex flex-col items-center space-y-4 shadow-md p-6 bg-white rounded-xl"
