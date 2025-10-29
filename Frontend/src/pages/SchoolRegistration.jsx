@@ -41,7 +41,7 @@ export const SchoolRegistration = () => {
       formdata.append("schoolPassword", schoolPassword);
       formdata.append("logo", logo);
 
-      const response = await axios.post(`${backendURL}/school`, formdata, {
+      const response = await axios.post(`${backendURL}/school/registerSchool`, formdata, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
