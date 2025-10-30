@@ -7,14 +7,14 @@ import { IndividualList } from "../components/IndividualList";
 export const Home = () => {
   const [value, setValue] = useState("schools");
   return (
-    <div className="py-2">
+    <div className="h-screen py-2 overflow-hidden">
       <Link
         className="absolute right-2 bg-green-200 p-2 rounded text-sm"
         to={"/registerYourself"}
       >
         Register Yourself
       </Link>
-      <div className="absolute top-[10%] w-full">
+      <div className="absolute top-[10%] h-full w-full">
         <div className="flex justify-between ">
           <div
             onClick={() => setValue("schools")}
@@ -35,7 +35,7 @@ export const Home = () => {
             Individuals
           </div>
         </div>
-        <div>
+        <div className="h-full">
           {value === "schools" ? (
             <SchoolList />
           ) : value === "colleges" ? (

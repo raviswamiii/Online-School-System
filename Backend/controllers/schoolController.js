@@ -9,10 +9,10 @@ const createToken = (id) => {
 
 const registerSchool = async (req, res) => {
   try {
-    const { schoolName, schoolEmail, schoolPassword } = req.body;
+    const { schoolName, schoolEmail, schoolPassword , schoolLocation } = req.body;
     const schoolLogo = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (!schoolName || !schoolEmail || !schoolPassword) {
+    if (!schoolName || !schoolEmail || !schoolPassword || !schoolLocation) {
       return res
         .status(400)
         .json({ success: false, message: "All fields are required." });
@@ -46,6 +46,7 @@ const registerSchool = async (req, res) => {
     const newSchool = new schoolModel({
       schoolName,
       schoolEmail,
+      schoolLocation,
       schoolPassword: hashedPassword,
       schoolLogo,
     });

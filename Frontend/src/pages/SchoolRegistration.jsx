@@ -10,6 +10,7 @@ export const SchoolRegistration = () => {
   const [schoolName, setSchoolName] = useState("");
   const [schoolEmail, setSchoolEmail] = useState("");
   const [schoolPassword, setSchoolPassword] = useState("");
+  const [schoolLocation, setSchoolLocation] = useState("");
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
   const [error, setError] = useState("");
@@ -30,7 +31,12 @@ export const SchoolRegistration = () => {
     try {
       e.preventDefault();
 
-      if (!schoolName || !schoolEmail || !schoolPassword) {
+      if (
+        !schoolName ||
+        !schoolEmail ||
+        !schoolPassword ||
+        !schoolLocation
+      ) {
         setError("All fields are required.");
         return;
       }
@@ -39,11 +45,16 @@ export const SchoolRegistration = () => {
       formdata.append("schoolName", schoolName);
       formdata.append("schoolEmail", schoolEmail);
       formdata.append("schoolPassword", schoolPassword);
+      formdata.append("schoolLocation", schoolLocation);
       formdata.append("logo", logo);
 
-      const response = await axios.post(`${backendURL}/school/registerSchool`, formdata, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        `${backendURL}/school/registerSchool`,
+        formdata,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
@@ -112,7 +123,16 @@ export const SchoolRegistration = () => {
           }}
         />
         <input
-          className="border rounded outline-none py-2 px-3 w-64 focul:ring-2 focus:ring-blue-400"
+          className="border rounded outline-none py-2 px-3 w-64 focus:ring-2 focus:ring-blue-400"
+          type="text"
+          placeholder="Enter School Location..."
+          value={schoolLocation}
+          onChange={(e) => {
+            setSchoolLocation(e.target.value);
+          }}
+        />
+        <input
+          className="border rounded outline-none py-2 px-3 w-64 focus:ring-2 focus:ring-blue-400"
           type="password"
           placeholder="Enter School Password..."
           value={schoolPassword}
@@ -127,7 +147,7 @@ export const SchoolRegistration = () => {
           Submit
         </button>
       </form>
-      <p className="text-red-500">{error}</p>
+      <p className="text-red-500 text-center">{error}</p>
     </div>
   );
 };
