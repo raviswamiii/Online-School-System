@@ -68,4 +68,14 @@ const registerSchool = async (req, res) => {
   }
 };
 
-export default registerSchool;
+const getSchools = async (req, res) => {
+  try {
+    const schools = await schoolModel.find().select("-schoolPassword");
+    return res.status(200).json({success: true, schools})
+  } catch (error) {
+    console.error("Error fetching schools:", error.message);
+    return res.status(500).json({success: false, message: "Server error while fetching schools."})
+  }
+}
+
+export {registerSchool, getSchools};
