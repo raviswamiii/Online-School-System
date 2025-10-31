@@ -59,6 +59,7 @@ const registerSchool = async (req, res) => {
       success: true,
       message: "School successfully registered.",
       token,
+      school
     });
   } catch (error) {
     console.error("School registration error:", error.message);

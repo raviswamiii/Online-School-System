@@ -58,7 +58,7 @@ export const SchoolRegistration = () => {
 
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
-        navigate("/schoolDashboard");
+        navigate(`/principalDashboard/${response.data.school._id}`);
       } else {
         setError(response.data.message);
       }
