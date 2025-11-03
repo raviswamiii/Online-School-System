@@ -17,9 +17,7 @@ export const App = () => {
         <Route path="/schoolRegistration" element={<SchoolRegistration />} />
         <Route path="/collegeRegistration" element={<CollegeRegistration />} />
         <Route path="/SoloRegistration" element={<SoloRegistration />} />
-        <Route path="/principalDashboard" element={<PrincipalDashboard />} />
         <Route path="/principalDashboard/:principalId" element={<PrincipalDashboard />} />
-        <Route path="/principalHome" element={<PrincipalHome />} />
         <Route path="/principalHome/:principalId" element={<PrincipalHome />} />
       </Routes>
     </div>

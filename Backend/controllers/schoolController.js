@@ -79,4 +79,21 @@ const getSchools = async (req, res) => {
   }
 }
 
-export {registerSchool, getSchools};
+const getSchoolById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const school = await schoolModel.findById(id).select("-schoolPassword");
+
+    if (!school) {
+      return res.status(404).json({ success: false, message: "School not found." });
+    }
+
+    return res.status(200).json({ success: true, school });
+  } catch (error) {
+    console.error("Error fetching school by ID:", error.message);
+    return res.status(500).json({ success: false, message: "Server error while fetching school." });
+  }
+};
+
+
+export {registerSchool, getSchools, getSchoolById};
