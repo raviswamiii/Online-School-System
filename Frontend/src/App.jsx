@@ -20,6 +20,7 @@ export const App = () => {
         <Route path="/principalDashboard" element={<PrincipalDashboard />} />
         <Route path="/principalDashboard/:principalId" element={<PrincipalDashboard />} />
         <Route path="/principalHome" element={<PrincipalHome />} />
+        <Route path="/principalHome/:principalId" element={<PrincipalHome />} />
       </Routes>
     </div>
   );

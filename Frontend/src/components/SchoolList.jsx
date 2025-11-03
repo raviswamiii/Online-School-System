@@ -57,7 +57,7 @@ export const SchoolList = () => {
             className="border p-2 flex items-center gap-2 rounded-lg shadow-sm hover:shadow-md transition"
             key={school._id}
           >
-            <div className="border rounded-full h-[70px] w-[70px] flex justify-center items-center overflow-hidden">
+            <div className="rounded-full h-[70px] w-[70px] flex justify-center items-center overflow-hidden">
               {school?.schoolLogo ? (
                 <img
                   className="h-full w-full object-cover"
