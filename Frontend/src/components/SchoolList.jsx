@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { SearchBar } from "./SearchBar";
+import { useNavigate } from "react-router-dom";
 
 export const SchoolList = () => {
   const [schools, setSchools] = useState([]);
@@ -9,6 +10,7 @@ export const SchoolList = () => {
   const [search, setSearch] = useState("");
   const [filteredSchools, setFilteredSchools] = useState([]);
   const backendURL = import.meta.env.VITE_BACKEND_URL;
+  const navigate = useNavigate();
 
   const fetchSchools = async () => {
     try {
@@ -25,6 +27,10 @@ export const SchoolList = () => {
       setLoading(false);
     }
   };
+
+  const onNavigateHandler = (schoolId) => {
+    navigate(`principalHome/${schoolId}`)
+  }
 
   useEffect(() => {
     fetchSchools();
@@ -56,6 +62,7 @@ export const SchoolList = () => {
           <div
             className="border p-2 flex items-center gap-2 rounded-lg shadow-sm hover:shadow-md transition"
             key={school._id}
+            onClick={()=>{onNavigateHandler(school._id)}}
           >
             <div className="rounded-full h-[70px] w-[70px] flex justify-center items-center overflow-hidden">
               {school?.schoolLogo ? (
