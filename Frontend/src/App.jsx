@@ -11,6 +11,7 @@ import { SignIn } from "./pages/SignIn";
 import { SchoolSignIn } from "./pages/SchoolSignIn";
 import { CollegeSignIn } from "./pages/CollegeSignIn";
 import { SoloSignIn } from "./pages/SoloSignIn";
+import { ProtectRoutes } from "./pages/ProtectRoutes";
 
 export const App = () => {
   return (
@@ -18,14 +19,14 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/registerYourself" element={<RegisterYourself />} />
-        <Route path="/signIn" element={<SignIn />} />
         <Route path="/schoolRegistration" element={<SchoolRegistration />} />
         <Route path="/collegeRegistration" element={<CollegeRegistration />} />
         <Route path="/soloRegistration" element={<SoloRegistration />} />
+        <Route path="/signIn" element={<SignIn />} />
         <Route path="/schoolSignIn" element={<SchoolSignIn />} />
         <Route path="/collegeSignIn" element={<CollegeSignIn />} />
         <Route path="/soloSignIn" element={<SoloSignIn />} />
-        <Route path="/principalDashboard/:principalId" element={<PrincipalDashboard />} />
+        <Route path="/principalDashboard/:principalId" element={ <ProtectRoutes><PrincipalDashboard /></ProtectRoutes>} />
         <Route path="/principalHome/:principalId" element={<PrincipalHome />} />
       </Routes>
     </div>
