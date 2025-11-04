@@ -8,12 +8,18 @@ export const Home = () => {
   const [value, setValue] = useState("schools");
   return (
     <div className="h-screen py-2 overflow-hidden">
-      <Link
-        className="absolute right-2 bg-green-200 p-2 rounded text-sm"
-        to={"/registerYourself"}
-      >
-        Register Yourself
-      </Link>
+      <div className="flex items-center gap-2 absolute right-2">
+        <Link className=" bg-green-200 p-2 rounded text-sm" to={"/signIn"}>
+          Sign In
+        </Link>
+        <Link
+          className=" bg-green-200 p-2 rounded text-sm"
+          to={"/registerYourself"}
+        >
+          Register
+        </Link>
+      </div>
+      
       <div className="absolute top-[10%] h-full w-full">
         <div className="flex justify-between ">
           <div

@@ -9,7 +9,8 @@ const createToken = (id) => {
 
 const registerSchool = async (req, res) => {
   try {
-    const { schoolName, schoolEmail, schoolPassword , schoolLocation } = req.body;
+    const { schoolName, schoolEmail, schoolPassword, schoolLocation } =
+      req.body;
     const schoolLogo = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (!schoolName || !schoolEmail || !schoolPassword || !schoolLocation) {
@@ -59,25 +60,28 @@ const registerSchool = async (req, res) => {
       success: true,
       message: "School successfully registered.",
       token,
-      school
+      school,
     });
   } catch (error) {
     console.error("School registration error:", error.message);
     return res
       .status(500)
-      .json({ success: false, message: "Registration server error." });
+      .json({ success: false, message: "Registration failed." });
   }
 };
 
 const getSchools = async (req, res) => {
   try {
     const schools = await schoolModel.find().select("-schoolPassword");
-    return res.status(200).json({success: true, schools})
+    return res.status(200).json({ success: true, schools });
   } catch (error) {
     console.error("Error fetching schools:", error.message);
-    return res.status(500).json({success: false, message: "Server error while fetching schools."})
+    return res.status(500).json({
+      success: false,
+      message: "Server error while fetching schools.",
+    });
   }
-}
+};
 
 const getSchoolById = async (req, res) => {
   try {
@@ -85,15 +89,56 @@ const getSchoolById = async (req, res) => {
     const school = await schoolModel.findById(id).select("-schoolPassword");
 
     if (!school) {
-      return res.status(404).json({ success: false, message: "School not found." });
+      return res
+        .status(404)
+        .json({ success: false, message: "School not found." });
     }
 
     return res.status(200).json({ success: true, school });
   } catch (error) {
     console.error("Error fetching school by ID:", error.message);
-    return res.status(500).json({ success: false, message: "Server error while fetching school." });
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error while fetching school." });
   }
 };
 
+const schoolSignIn = async (req, res) => {
+  try {
+    const { schoolEmail, schoolPassword } = req.body;
 
-export {registerSchool, getSchools, getSchoolById};
+    if (!schoolEmail || !schoolPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required.",
+      });
+    }
+
+    const exists = await schoolModel.findOne({ schoolEmail });
+
+    if (!exists)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid Credentials." });
+
+    const match = await bcrypt.compare(schoolPassword, exists.schoolPassword);
+
+    if (!match)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid Credentials." });
+
+    const token = createToken(exists._id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Sign in successful.",
+      token,
+      school: exists,
+    });
+  } catch (error) {
+    console.error("Error while signing in:", error.message);
+    return res.status(500).json({ success: false, message: "Sign in failed." });
+  }
+};
+export { registerSchool, getSchools, getSchoolById, schoolSignIn };
