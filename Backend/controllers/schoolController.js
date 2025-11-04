@@ -121,9 +121,9 @@ const schoolSignIn = async (req, res) => {
         .status(401)
         .json({ success: false, message: "Invalid Credentials." });
 
-    const match = await bcrypt.compare(schoolPassword, exists.schoolPassword);
+    const isMatch = await bcrypt.compare(schoolPassword, exists.schoolPassword);
 
-    if (!match)
+    if (!isMatch)
       return res
         .status(401)
         .json({ success: false, message: "Invalid Credentials." });
