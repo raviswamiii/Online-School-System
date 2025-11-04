@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { PrincipalFooter } from "../components/PrincipalFooter";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export const PrincipalHome = () => {
   const [schoolData, setSchoolData] = useState(null);
   const [error, setError] = useState("");
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const { principalId } = useParams();
-  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const getSchoolDetails = async () => {
     try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        navigate("/schoolSignIn");
-        return;
-      }
-      const response = await axios.get(`${backendURL}/schools/getSchool/${principalId}`, {headers: {Authorization: `Bearer ${token}`}});
+      const response = await axios.get(
+        `${backendURL}/schools/getSchool/${principalId}`
+      );
       if (response.data.success) {
         setSchoolData(response.data.school);
       } else {
@@ -31,14 +26,14 @@ export const PrincipalHome = () => {
 
   useEffect(() => {
     if (principalId) getSchoolDetails();
-  }, [principalId]); 
+  }, [principalId]);
 
   if (error) return <p className="text-red-500">{error}</p>;
   if (!schoolData) return <p>Loading...</p>;
 
   return (
     <div className="overflow-auto space-y-4">
-      <div className="flex border p-4 justify-between">
+      <div className="flex border p-4 justify-between items-center">
         <div className="rounded-full h-[60px] w-[60px] flex justify-center items-center overflow-hidden">
           {schoolData?.schoolLogo ? (
             <img
@@ -50,7 +45,14 @@ export const PrincipalHome = () => {
             "Logo"
           )}
         </div>
-        <div>Chat</div>
+        <div className="flex gap-3">
+          <div>
+            {token ? (
+              <Link to={`/principalDashboard/${schoolData._id}`}>PD</Link>
+            ) : null}
+          </div>
+          <div>Chat</div>
+        </div>
       </div>
 
       <div className="border h-60 flex justify-center items-center">
