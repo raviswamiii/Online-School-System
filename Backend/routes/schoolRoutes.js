@@ -6,7 +6,8 @@ const schoolRouter = express.Router();
 
 schoolRouter.post("/registerSchool", upload.single("logo"), registerSchool);
 schoolRouter.get("/getSchools", getSchools);
-schoolRouter.get("/getSchool/:id", schoolAuth, getSchoolById);
+schoolRouter.get("/getPrincipalDashboard/:id", schoolAuth, getSchoolById);
+schoolRouter.get("/getSchool/:id", getSchoolById);
 schoolRouter.post("/schoolSignIn", schoolSignIn)
 
-export default schoolRouter;
+export default schoolRouter; 

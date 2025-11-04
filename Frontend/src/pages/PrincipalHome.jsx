@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { PrincipalFooter } from "../components/PrincipalFooter";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const PrincipalHome = () => {
   const [schoolData, setSchoolData] = useState(null);
   const [error, setError] = useState("");
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const { principalId } = useParams();
+  const navigate = useNavigate();
 
   const getSchoolDetails = async () => {
     try {
-      const response = await axios.get(`${backendURL}/schools/getSchool/${principalId}`);
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        navigate("/schoolSignIn");
+        return;
+      }
+      const response = await axios.get(`${backendURL}/schools/getSchool/${principalId}`, {headers: {Authorization: `Bearer ${token}`}});
       if (response.data.success) {
         setSchoolData(response.data.school);
       } else {

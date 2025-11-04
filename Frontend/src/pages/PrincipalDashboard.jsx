@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 export const PrincipalDashboard = () => {
@@ -8,10 +8,21 @@ export const PrincipalDashboard = () => {
   const [error, setError] = useState("");
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const { principalId } = useParams();
+  const navigate = useNavigate();
 
   const fetchSchool = async () => {
     try {
-      const response = await axios.get(`${backendURL}/schools/getSchool/${principalId}`);
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        navigate("/schoolSignIn");
+        return;
+      }
+      const response = await axios.get(`${backendURL}/schools/getPrincipalDashboard/${principalId}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       if (response.data.success) {
         setSchoolData(response.data.school);
       } else {
