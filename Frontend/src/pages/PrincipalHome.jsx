@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 export const PrincipalHome = () => {
   const [schoolData, setSchoolData] = useState(null);
@@ -15,7 +15,7 @@ export const PrincipalHome = () => {
     try {
       if (token) {
         const decoded = jwtDecode(token);
-        setLoggedInPrincipalId(decoded.id);
+        setLoggedInPrincipalId(decoded.id || decoded._id);
       }
 
       const response = await axios.get(
@@ -27,6 +27,7 @@ export const PrincipalHome = () => {
         setError(response.data.message);
       }
     } catch (error) {
+      console.error(error);
       setError(error.response?.data?.message || "Something went wrong.");
     }
   };
@@ -39,7 +40,7 @@ export const PrincipalHome = () => {
   if (!schoolData) return <p>Loading...</p>;
 
   return (
-    <div className="overflow-auto space-y-4">
+    <div className="h-screen overflow-auto px-4 pt-4 flex flex-col gap-4 ">
       <div className="flex border p-4 justify-between items-center">
         <div className="rounded-full h-[60px] w-[60px] flex justify-center items-center overflow-hidden">
           {schoolData?.schoolLogo ? (
@@ -53,21 +54,16 @@ export const PrincipalHome = () => {
           )}
         </div>
         <div className="flex gap-3">
-          <div>
-            {loggedInPrincipalId === principalId && (
-              <Link to={`/principalDashboard/${schoolData._id}`}>PD</Link>
-            )}
-          </div>
           <div>Chat</div>
         </div>
       </div>
 
-      <div className="border h-60 flex justify-center items-center">
+      <div className="border flex justify-center items-center">
         School's images/videos
       </div>
 
       <div className="border">
-        <p className="text-center">
+        <p className="text-center p-3">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta atque
           molestias necessitatibus vel voluptatum provident dolor, labore,
           obcaecati perferendis est odit reiciendis numquam minima debitis
@@ -93,9 +89,26 @@ export const PrincipalHome = () => {
         </div>
       </div>
 
-      <div className="h-80 flex justify-center items-center">
+      <div className="flex justify-center items-center border">
         <p>Footer</p>
       </div>
-    </div>
+
+        {loggedInPrincipalId === principalId && (
+          <div className="sticky bottom-0 w-full flex border-t">
+            <Link
+              to={`/principalHome/${schoolData._id}`}
+              className="w-full text-center border-r bg-white"
+            >
+              Home
+            </Link>
+            <Link
+              to={`/principalDashboard/${schoolData._id}`}
+              className="w-full text-center bg-white"
+            >
+              My Profile
+            </Link>
+          </div>
+        )}
+      </div>
   );
 };

@@ -72,6 +72,7 @@ export const PrincipalDashboard = () => {
           <div className="text-center w-full border-r">Teachers(00)</div>
           <div className="text-center w-full">Students(00)</div>
         </div>
+        
         <div className="flex absolute bottom-0 border-t w-full">
           <Link
             to={`/principalHome/${schoolData._id}`}
