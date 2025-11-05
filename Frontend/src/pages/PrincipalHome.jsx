@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
 export const PrincipalHome = () => {
   const [schoolData, setSchoolData] = useState(null);
   const [error, setError] = useState("");
+  const [loggedInPrincipalId, setLoggedInPrincipalId] = useState(null);
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const { principalId } = useParams();
   const token = localStorage.getItem("token");
 
   const getSchoolDetails = async () => {
     try {
+      if (token) {
+        const decoded = jwtDecode(token);
+        setLoggedInPrincipalId(decoded.id);
+      }
+
       const response = await axios.get(
         `${backendURL}/schools/getSchool/${principalId}`
       );
@@ -47,9 +54,9 @@ export const PrincipalHome = () => {
         </div>
         <div className="flex gap-3">
           <div>
-            {token ? (
+            {loggedInPrincipalId === principalId && (
               <Link to={`/principalDashboard/${schoolData._id}`}>PD</Link>
-            ) : null}
+            )}
           </div>
           <div>Chat</div>
         </div>
