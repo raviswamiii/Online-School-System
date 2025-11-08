@@ -8,7 +8,7 @@ export const DeleteAccount = ({ setDeleteAccountPopUp }) => {
 
   const deleteAccountHandle = async () => {
     try {
-      const response = await axios.post(
+      const response = await axios.delete(
         `${backendURL}/schools/deleteSchoolAccount`,
         null,
         {

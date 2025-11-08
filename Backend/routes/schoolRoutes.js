@@ -10,6 +10,6 @@ schoolRouter.get("/getPrincipalDashboard/:id", schoolAuth, getSchoolById);
 schoolRouter.get("/getSchool/:id", getSchoolById);
 schoolRouter.post("/schoolSignIn", schoolSignIn)
 schoolRouter.post("/schoolLogOut", schoolLogOut)
-schoolRouter.post("/deleteSchoolAccount", deleteSchool)
+schoolRouter.delete("/deleteSchoolAccount", deleteSchool)
 
 export default schoolRouter; 
