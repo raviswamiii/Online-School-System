@@ -5,11 +5,13 @@ import axios from "axios";
 import { FaBars } from "react-icons/fa6";
 import { MdKeyboardBackspace } from "react-icons/md";
 import { LogOut } from "../components/LogOut";
+import { DeleteAccount } from "../components/DeleteAccount";
 
 export const PrincipalDashboard = () => {
   const [schoolData, setSchoolData] = useState(null);
   const [error, setError] = useState("");
   const [showMenuPage, setShowMenuPage] = useState(false);
+  const [deleteAccountPopUp, setDeleteAccountPopUp] = useState(false);
   const [showLogoutPopUp, setShowLogoutPopUp] = useState(false);
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const { principalId } = useParams();
@@ -73,7 +75,16 @@ export const PrincipalDashboard = () => {
             >
               <LogOut setShowLogoutPopUp={setShowLogoutPopUp} />
             </div>
-            <p>Delete Account</p>
+
+              <p onClick={() => {setDeleteAccountPopUp(true)}}>Delete Account</p>
+              <div
+                className={`flex justify-center items-center absolute top-0 bottom-0 left-0 right-0 translate-z-11 ${
+                  deleteAccountPopUp ? "block" : "hidden"
+                }`}
+              >
+                <DeleteAccount setDeleteAccountPopUp={setDeleteAccountPopUp} />
+              </div>
+            
           </div>
         </div>
         <div className="flex gap-3 border-b pb-5">
@@ -105,6 +116,7 @@ export const PrincipalDashboard = () => {
           <div className="text-center w-full">Students(00)</div>
         </div>
       </div>
+
       <div className="flex sticky bottom-0 border-t w-full">
         <Link
           to={`/principalHome/${schoolData._id}`}

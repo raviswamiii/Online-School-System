@@ -169,10 +169,48 @@ const schoolLogOut = async (req, res) => {
   }
 };
 
+const deleteSchool = async (req, res) => {
+  try {
+    const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+
+    if (!token)
+      return res
+        .status(401)
+        .json({ success: false, message: "Token not found." });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const school = await schoolModel.findOne({_id: decoded.id});
+
+    if (!school)
+      return res
+        .status(404)
+        .json({ success: false, message: "School does not exist." });
+
+    await schoolModel.findByIdAndDelete(decoded.id);
+
+    await blacklistTokenModel.create({ token });
+
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    return res.status(200).json({success: true, message: "Account deleted successfully."})
+  } catch (error) {
+    console.log("Error while deleting school:", error.message);
+    return res
+      .status(500)
+      .json({ success: false, message: "Account deletion failed." });
+  }
+};
+
 export {
   registerSchool,
   getSchools,
   getSchoolById,
   schoolSignIn,
   schoolLogOut,
+  deleteSchool
 };
