@@ -180,12 +180,12 @@ const deleteSchool = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const school = await schoolModel.findOne({_id: decoded.id});
+    const school = await schoolModel.findOne({ _id: decoded.id });
 
     if (!school)
       return res
         .status(404)
-        .json({ success: false, message: "School does not exist." });
+        .json({ success: false, message: "School not found." });
 
     await schoolModel.findByIdAndDelete(decoded.id);
 
@@ -197,12 +197,55 @@ const deleteSchool = async (req, res) => {
       sameSite: "strict",
     });
 
-    return res.status(200).json({success: true, message: "Account deleted successfully."})
+    return res
+      .status(200)
+      .json({ success: true, message: "Account deleted successfully." });
   } catch (error) {
     console.log("Error while deleting school:", error.message);
     return res
       .status(500)
       .json({ success: false, message: "Account deletion failed." });
+  }
+};
+
+const updateSchool = async (req, res) => {
+  try {
+    const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+    if (!token)
+      return res
+        .status(401)
+        .json({ success: false, message: "Token not found." });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const { changeName, changeLocation } = req.body;
+    const changeLogo = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const updateData = {};
+    if (changeName) updateData.schoolName = changeName;
+    if (changeLocation) updateData.schoolLocation = changeLocation;
+    if (changeLogo) updateData.schoolLogo = changeLogo;
+
+    const updatedSchool = await schoolModel.findByIdAndUpdate(
+      decoded.id,
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedSchool)
+      return res
+        .status(404)
+        .json({ success: false, message: "School not found." });
+    return res.status(200).json({
+      success: true,
+      message: "School updated successfull.",
+      school: updatedSchool,
+    });
+  } catch (error) {
+    console.log("Error during updating school:", error.message);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error during update." });
   }
 };
 
@@ -212,5 +255,6 @@ export {
   getSchoolById,
   schoolSignIn,
   schoolLogOut,
-  deleteSchool
+  deleteSchool,
+  updateSchool,
 };

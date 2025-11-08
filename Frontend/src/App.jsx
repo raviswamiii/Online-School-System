@@ -12,6 +12,7 @@ import { SchoolSignIn } from "./pages/SchoolSignIn";
 import { CollegeSignIn } from "./pages/CollegeSignIn";
 import { SoloSignIn } from "./pages/SoloSignIn";
 import { ProtectRoutes } from "./pages/ProtectRoutes";
+import { UpdateSchool } from "./components/UpdateSchool";
 
 export const App = () => {
   return (
@@ -28,6 +29,7 @@ export const App = () => {
         <Route path="/soloSignIn" element={<SoloSignIn />} />
         <Route path="/principalDashboard/:principalId" element={ <ProtectRoutes><PrincipalDashboard /></ProtectRoutes>} />
         <Route path="/principalHome/:principalId" element={<PrincipalHome />} />
+        <Route path="/edit" element={<UpdateSchool />} />
       </Routes>
     </div>
   );

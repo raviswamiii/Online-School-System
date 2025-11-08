@@ -31,12 +31,7 @@ export const SchoolRegistration = () => {
     try {
       e.preventDefault();
 
-      if (
-        !schoolName ||
-        !schoolEmail ||
-        !schoolPassword ||
-        !schoolLocation
-      ) {
+      if (!schoolName || !schoolEmail || !schoolPassword || !schoolLocation) {
         setError("All fields are required.");
         return;
       }

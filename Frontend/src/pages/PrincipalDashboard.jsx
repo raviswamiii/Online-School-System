@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { IoAddCircleSharp } from "react-icons/io5";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { FaBars } from "react-icons/fa6";
@@ -56,6 +55,7 @@ export const PrincipalDashboard = () => {
         <div className="mb-8 flex justify-between items-center">
           <p>{schoolData.schoolName}</p>
           <FaBars onClick={() => setShowMenuPage(true)} />
+
           <div
             className={`absolute bg-white border top-0 h-full w-full z-10 px-4 py-2 flex flex-col gap-2 transition-all duration-300 ease-in-out ${
               showMenuPage ? "right-0" : "-right-full"
@@ -76,32 +76,37 @@ export const PrincipalDashboard = () => {
               <LogOut setShowLogoutPopUp={setShowLogoutPopUp} />
             </div>
 
-              <p onClick={() => {setDeleteAccountPopUp(true)}}>Delete Account</p>
-              <div
-                className={`flex justify-center items-center absolute top-0 bottom-0 left-0 right-0 translate-z-11 ${
-                  deleteAccountPopUp ? "block" : "hidden"
-                }`}
-              >
-                <DeleteAccount setDeleteAccountPopUp={setDeleteAccountPopUp} />
-              </div>
-            
+            <p
+              onClick={() => {
+                setDeleteAccountPopUp(true);
+              }}
+            >
+              Delete Account
+            </p>
+            <div
+              className={`flex justify-center items-center absolute top-0 bottom-0 left-0 right-0 translate-z-11 ${
+                deleteAccountPopUp ? "block" : "hidden"
+              }`}
+            >
+              <DeleteAccount setDeleteAccountPopUp={setDeleteAccountPopUp} />
+            </div>
+            <Link to={"/edit"}>Edit</Link>
           </div>
         </div>
-        <div className="flex gap-3 border-b pb-5">
-          <div className="relative">
-            <div className="rounded-full h-20 w-20 flex justify-center items-center overflow-hidden">
-              {schoolData.schoolLogo ? (
-                <img
-                  className="h-full w-full object-cover"
-                  src={`${backendURL}${schoolData.schoolLogo}`}
-                  alt="School Logo"
-                />
-              ) : (
-                "Logo"
-              )}
-            </div>
-            <IoAddCircleSharp className="absolute bottom-0 right-0 rounded-full bg-white text-2xl" />
+
+        <div className="flex border-b pb-5">
+          <div className="rounded-full border h-20 w-20 flex justify-center items-center overflow-hidden">
+            {schoolData.schoolLogo ? (
+              <img
+                className="h-full w-full object-cover"
+                src={`${backendURL}${schoolData.schoolLogo}`}
+                alt="School Logo"
+              />
+            ) : (
+              "Logo"
+            )}
           </div>
+
           <div>
             <p className="text-center">00</p>
             <p className="text-center">Teacher's Requests</p>
