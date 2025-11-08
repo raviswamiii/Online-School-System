@@ -7,6 +7,7 @@ import { FaBars } from "react-icons/fa6";
 export const PrincipalDashboard = () => {
   const [schoolData, setSchoolData] = useState(null);
   const [error, setError] = useState("");
+  const [showMenuPage, setShowMenuPage] = useState(false);
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const { principalId } = useParams();
   const navigate = useNavigate();
@@ -45,11 +46,19 @@ export const PrincipalDashboard = () => {
   if (!schoolData) return <p>Loading...</p>;
 
   return (
-    <div className="px-4 py-2 h-screen">
-      <div className="h-full relative">
+    <div className="h-screen w-screen px-4 py-2 relative overflow-hidden">
+      <div className="h-full">
         <div className="mb-8 flex justify-between items-center">
           <p>{schoolData.schoolName}</p>
-          <FaBars />
+          <FaBars onClick={() => setShowMenuPage(true)} />
+          <div
+            className={`absolute bg-white border top-0 h-full w-full z-10 px-4 py-2 flex flex-col gap-2 transition-all duration-300 ease-in-out ${
+              showMenuPage ? "right-0" : "-right-full"
+            }`}
+          >
+            <p>Log Out</p>
+            <p>Delete Account</p>
+          </div>
         </div>
         <div className="flex gap-3 border-b pb-5">
           <div className="relative">
@@ -79,21 +88,20 @@ export const PrincipalDashboard = () => {
           <div className="text-center w-full border-r">Teachers(00)</div>
           <div className="text-center w-full">Students(00)</div>
         </div>
-
-        <div className="flex absolute bottom-0 border-t w-full">
-          <Link
-            to={`/principalHome/${schoolData._id}`}
-            className="w-full text-center border-r bg-white"
-          >
-            Home
-          </Link>
-          <Link
-            to={`/principalDashboard/${schoolData._id}`}
-            className="w-full text-center bg-white"
-          >
-            My Profile
-          </Link>
-        </div>
+      </div>
+      <div className="flex sticky bottom-0 border-t w-full">
+        <Link
+          to={`/principalHome/${schoolData._id}`}
+          className="w-full text-center border-r bg-white"
+        >
+          Home
+        </Link>
+        <Link
+          to={`/principalDashboard/${schoolData._id}`}
+          className="w-full text-center bg-white"
+        >
+          My Profile
+        </Link>
       </div>
     </div>
   );

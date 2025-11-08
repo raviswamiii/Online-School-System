@@ -93,22 +93,22 @@ export const PrincipalHome = () => {
         <p>Footer</p>
       </div>
 
-        {loggedInPrincipalId === principalId && (
-          <div className="sticky bottom-0 w-full flex border-t">
-            <Link
-              to={`/principalHome/${schoolData._id}`}
-              className="w-full text-center border-r bg-white"
-            >
-              Home
-            </Link>
-            <Link
-              to={`/principalDashboard/${schoolData._id}`}
-              className="w-full text-center bg-white"
-            >
-              My Profile
-            </Link>
-          </div>
-        )}
-      </div>
+      {loggedInPrincipalId === principalId && (
+        <div className="sticky bottom-0 w-full flex border-t">
+          <Link
+            to={`/principalHome/${schoolData._id}`}
+            className="w-full text-center border-r bg-white"
+          >
+            Home
+          </Link>
+          <Link
+            to={`/principalDashboard/${schoolData._id}`}
+            className="w-full text-center bg-white"
+          >
+            My Profile
+          </Link>
+        </div>
+      )}
+    </div>
   );
 };
