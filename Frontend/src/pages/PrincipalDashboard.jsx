@@ -4,11 +4,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { FaBars } from "react-icons/fa6";
 import { MdKeyboardBackspace } from "react-icons/md";
+import { LogOut } from "../components/LogOut";
 
 export const PrincipalDashboard = () => {
   const [schoolData, setSchoolData] = useState(null);
   const [error, setError] = useState("");
   const [showMenuPage, setShowMenuPage] = useState(false);
+  const [showLogoutPopUp, setShowLogoutPopUp] = useState(false);
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const { principalId } = useParams();
   const navigate = useNavigate();
@@ -63,7 +65,14 @@ export const PrincipalDashboard = () => {
               }}
               className="text-3xl"
             />
-            <p>Log Out</p>
+            <p onClick={() => setShowLogoutPopUp(true)}>Log Out</p>
+            <div
+              className={`flex justify-center items-center absolute top-0 bottom-0 left-0 right-0 translate-z-11 ${
+                showLogoutPopUp ? "block" : "hidden"
+              }`}
+            >
+              <LogOut setShowLogoutPopUp={setShowLogoutPopUp} />
+            </div>
             <p>Delete Account</p>
           </div>
         </div>
