@@ -3,6 +3,7 @@ import { IoAddCircleSharp } from "react-icons/io5";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { FaBars } from "react-icons/fa6";
+import { MdKeyboardBackspace } from "react-icons/md";
 
 export const PrincipalDashboard = () => {
   const [schoolData, setSchoolData] = useState(null);
@@ -56,6 +57,12 @@ export const PrincipalDashboard = () => {
               showMenuPage ? "right-0" : "-right-full"
             }`}
           >
+            <MdKeyboardBackspace
+              onClick={() => {
+                setShowMenuPage(false);
+              }}
+              className="text-3xl"
+            />
             <p>Log Out</p>
             <p>Delete Account</p>
           </div>
