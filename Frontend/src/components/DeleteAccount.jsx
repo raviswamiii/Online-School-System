@@ -10,9 +10,8 @@ export const DeleteAccount = ({ setDeleteAccountPopUp }) => {
     try {
       const response = await axios.delete(
         `${backendURL}/schools/deleteSchoolAccount`,
-        null,
         {
-          headers: { authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
 
@@ -30,7 +29,8 @@ export const DeleteAccount = ({ setDeleteAccountPopUp }) => {
     <div className="border flex flex-col justify-center items-center gap-4 rounded px-4 py-2 w-[70%]">
       <div className="text-center">
         <p className="text-gray-600">
-          Are you sure you want to delete this account? This action cannot be undone.
+          Are you sure you want to delete this account? This action cannot be
+          undone.
         </p>
       </div>
       <div>
