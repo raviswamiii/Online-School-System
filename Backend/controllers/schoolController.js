@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import schoolModel from "../models/schoolModel.js";
+import blacklistTokenModel from "../models/blacklistToken.js";
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
@@ -141,4 +142,37 @@ const schoolSignIn = async (req, res) => {
     return res.status(500).json({ success: false, message: "Sign in failed." });
   }
 };
-export { registerSchool, getSchools, getSchoolById, schoolSignIn };
+
+const schoolLogOut = async (req, res) => {
+  try {
+    const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+
+    if (!token)
+      return res
+        .status(401)
+        .json({ success: false, message: "Token not found." });
+
+    await blacklistTokenModel.create({ token });
+
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Logout successfull." });
+  } catch (error) {
+    console.log("School Logout error:", error.message);
+    return res.status(500).json({ success: false, message: "Log out failed." });
+  }
+};
+
+export {
+  registerSchool,
+  getSchools,
+  getSchoolById,
+  schoolSignIn,
+  schoolLogOut,
+};
