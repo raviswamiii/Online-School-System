@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { FaBars } from "react-icons/fa6";
 
 export const PrincipalDashboard = () => {
   const [schoolData, setSchoolData] = useState(null);
@@ -18,11 +19,14 @@ export const PrincipalDashboard = () => {
         navigate("/schoolSignIn");
         return;
       }
-      const response = await axios.get(`${backendURL}/schools/getPrincipalDashboard/${principalId}`,{
+      const response = await axios.get(
+        `${backendURL}/schools/getPrincipalDashboard/${principalId}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
+        }
+      );
       if (response.data.success) {
         setSchoolData(response.data.school);
       } else {
@@ -43,7 +47,10 @@ export const PrincipalDashboard = () => {
   return (
     <div className="px-4 py-2 h-screen">
       <div className="h-full relative">
-        <p className="mb-8">{schoolData.schoolName}</p>
+        <div className="mb-8 flex justify-between items-center">
+          <p>{schoolData.schoolName}</p>
+          <FaBars />
+        </div>
         <div className="flex gap-3 border-b pb-5">
           <div className="relative">
             <div className="rounded-full h-20 w-20 flex justify-center items-center overflow-hidden">
@@ -72,7 +79,7 @@ export const PrincipalDashboard = () => {
           <div className="text-center w-full border-r">Teachers(00)</div>
           <div className="text-center w-full">Students(00)</div>
         </div>
-        
+
         <div className="flex absolute bottom-0 border-t w-full">
           <Link
             to={`/principalHome/${schoolData._id}`}
