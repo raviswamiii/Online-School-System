@@ -13,6 +13,7 @@ import { CollegeSignIn } from "./pages/CollegeSignIn";
 import { SoloSignIn } from "./pages/SoloSignIn";
 import { ProtectRoutes } from "./pages/ProtectRoutes";
 import { UpdateSchool } from "./components/UpdateSchool";
+import { EditSchool } from "./components/EditSchool";
 
 export const App = () => {
   return (
@@ -30,6 +31,7 @@ export const App = () => {
         <Route path="/principalDashboard/:principalId" element={ <ProtectRoutes><PrincipalDashboard /></ProtectRoutes>} />
         <Route path="/principalHome/:principalId" element={<PrincipalHome />} />
         <Route path="/edit" element={<UpdateSchool />} />
+        <Route path="/editSchool" element={<EditSchool />} />
       </Routes>
     </div>
   );

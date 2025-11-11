@@ -56,6 +56,9 @@ export const PrincipalHome = () => {
           )}
         </div>
         <div className="flex gap-3">
+          <Link to={"/editSchool"} className="bg-[#4C763B] text-white px-4 py-2 rounded-xl hover:bg-[#043915] transition-all">
+            Edit
+          </Link>
           <button className="bg-[#4C763B] text-white px-4 py-2 rounded-xl hover:bg-[#043915] transition-all">
             Chat
           </button>
