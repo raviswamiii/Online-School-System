@@ -4,7 +4,11 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 export const EditSchool = () => {
   const [logoPreview, setLogoPreview] = useState(null);
-  const [imagesPreview, setImagesPreview] = useState(null);
+  const [imagesPreview, setImagesPreview] = useState([]);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const logoInputRef = useRef();
   const imageInputRef = useRef();
 
@@ -24,12 +28,39 @@ export const EditSchool = () => {
   };
 
   const getImageHandle = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImagesPreview(URL.createObjectURL(file));
+    const files = Array.from(e.target.files);
+    if (files) {
+      const newPreview = files.map((file) => URL.createObjectURL(file));
+      setImagesPreview((prev) => [...prev, ...newPreview]);
     }
   };
 
+  const touchStartHandle = (e) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const touchMoveHandle = (e) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const touchEndHandle = () => {
+    if (!touchStartX || !touchEndX) return;
+
+    const distance = touchStartX - touchEndX;
+
+    if (distance > 50) {
+      setCurrentIndex((prev) =>
+        prev === imagesPreview.length - 1 ? 0 : prev + 1
+      );
+    } else if (distance < -50) {
+      setCurrentIndex((prev) =>
+        prev === 0 ? imagesPreview.length - 1 : prev - 1
+      );
+    }
+
+    setTouchEndX(0);
+    setTouchStartX(0);
+  };
   return (
     <div className="bg-[#ECF4E8] h-screen ">
       <form className="">
@@ -68,20 +99,15 @@ export const EditSchool = () => {
             onClick={imageClickHandle}
             className="text-[#4C763B] rounded-full text-2xl absolute right-3 top-3 bg-white z-10"
           />
-          {imagesPreview ? (
-            <div className="h-full w-full relative">
-              <div className="absolute top-30 left-3">
-                <FaArrowAltCircleLeft className="text-3xl text-[#4C763B] bg-white rounded-full" />
-              </div>
+          {imagesPreview.length > 0 ? (
               <img
                 className="h-full w-full object-cover"
-                src={imagesPreview}
+                src={imagesPreview[currentIndex]}
                 alt="School images"
+                onTouchStart={touchStartHandle}
+                onTouchEnd={touchEndHandle}
+                onTouchMove={touchMoveHandle}
               />
-              <div className="absolute top-30 right-3">
-                <FaArrowAltCircleLeft className="text-3xl text-[#4C763B] bg-white rounded-full rotate-180" />
-              </div>
-            </div>
           ) : (
             <p className="text-center text-[#4C763B] font-semibold">
               Click here to get images
