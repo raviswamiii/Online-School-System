@@ -61,6 +61,16 @@ export const EditSchool = () => {
     setTouchEndX(0);
     setTouchStartX(0);
   };
+
+  const getDotSize = (i) => {
+    const distance = Math.abs(i - currentIndex);
+
+    if (distance === 0) return "w-6 opacity-100";
+    if (distance === 1) return "w-4 opacity-70";
+    if (distance === 0) return "w-2 opacity-50";
+    return "w-1 opacity-30";
+  };
+
   return (
     <div className="bg-[#ECF4E8] h-screen ">
       <form className="">
@@ -94,25 +104,34 @@ export const EditSchool = () => {
           </div>
         </div>
 
-        <div className="relative flex justify-center items-center bg-white h-[40vh] shadow-sm border border-[#B0CE88]/40 overflow-hidden">
+        <div className="relative flex flex-col justify-center items-center bg-white h-[40vh] shadow-sm border border-[#B0CE88]/40 overflow-hidden">
           <IoAddCircleSharp
             onClick={imageClickHandle}
             className="text-[#4C763B] rounded-full text-2xl absolute right-3 top-3 bg-white z-10"
           />
           {imagesPreview.length > 0 ? (
-              <img
-                className="h-full w-full object-cover"
-                src={imagesPreview[currentIndex]}
-                alt="School images"
-                onTouchStart={touchStartHandle}
-                onTouchEnd={touchEndHandle}
-                onTouchMove={touchMoveHandle}
-              />
+            <div
+              className="h-full w-full flex transition-transform duration-300 ease-out"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              onTouchStart={touchStartHandle}
+              onTouchMove={touchMoveHandle}
+              onTouchEnd={touchEndHandle}
+            >
+              {imagesPreview.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img}
+                  className="h-full w-full object-cover shrink-0"
+                  alt="School"
+                />
+              ))}
+            </div>
           ) : (
             <p className="text-center text-[#4C763B] font-semibold">
               Click here to get images
             </p>
           )}
+
           <input
             onChange={getImageHandle}
             ref={imageInputRef}
@@ -120,6 +139,25 @@ export const EditSchool = () => {
             accept="image/*"
             type="file"
           />
+
+          {imagesPreview.length > 1 && (
+            <div className="absolute bottom-3 w-full flex justify-center gap-1 px-4">
+              {imagesPreview.map((_, index) => {
+                const style = getDotSize(index);
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`h-1 rounded-full transition-all duration-300 ${style} ${
+                      index === currentIndex
+                        ? "bg-[#4C763B]"
+                        : "bg-[#B0CE88]/70 hover:bg-[#B0CE88]"
+                    }`}
+                  ></button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <div className="flex justify-center items-center bg-white p-4 h-[40vh] shadow-sm border border-[#B0CE88]/40">
