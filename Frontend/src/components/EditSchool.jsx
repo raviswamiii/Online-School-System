@@ -161,7 +161,10 @@ export const EditSchool = () => {
         </div>
 
         <div className="flex justify-center items-center bg-white p-4 h-[40vh] shadow-sm border border-[#B0CE88]/40">
-          <p className="text-center text-[#4C763B] font-semibold">About us</p>
+          <textarea
+            className="h-full w-full border border-gray-300 rounded-md p-3 outline-none focus:border-[#B0CE88] resize-none"
+            placeholder="About Us"
+          />
         </div>
 
         <div className="flex justify-center items-center bg-white p-4 h-[40vh]  shadow-sm border border-[#B0CE88]/40">
