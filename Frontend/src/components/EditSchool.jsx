@@ -1,16 +1,18 @@
 import React, { useRef, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
-import { FaArrowAltCircleLeft } from "react-icons/fa";
+import { MdAdd } from "react-icons/md";
 
 export const EditSchool = () => {
   const [logoPreview, setLogoPreview] = useState(null);
   const [imagesPreview, setImagesPreview] = useState([]);
+  const [teamMembers, setTeamMembers] = useState(null);
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchEndX, setTouchEndX] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const logoInputRef = useRef();
   const imageInputRef = useRef();
+  const teamInputRef = useRef();
 
   const logoClickHandle = () => {
     logoInputRef.current.click();
@@ -18,6 +20,10 @@ export const EditSchool = () => {
 
   const imageClickHandle = () => {
     imageInputRef.current.click();
+  };
+
+  const teamClickHandle = () => {
+    teamInputRef.current.click();
   };
 
   const getLogoHandle = (e) => {
@@ -33,6 +39,11 @@ export const EditSchool = () => {
       const newPreview = files.map((file) => URL.createObjectURL(file));
       setImagesPreview((prev) => [...prev, ...newPreview]);
     }
+  };
+
+  const getTeamHandle = (e) => {
+    const file = e.target.files[0];
+    setTeamMembers(URL.createObjectURL(file));
   };
 
   const touchStartHandle = (e) => {
@@ -167,10 +178,45 @@ export const EditSchool = () => {
           />
         </div>
 
-        <div className="flex justify-center items-center bg-white p-4 h-[40vh]  shadow-sm border border-[#B0CE88]/40">
-          <p className="text-center text-[#4C763B] font-semibold">
-            Meet our team
+        <div className="bg-white p-4 min-h-[40vh] shadow-sm border border-[#B0CE88]/40">
+          <p className="text-center text-[#4C763B] font-semibold mb-4">
+            Add Team Members
           </p>
+
+          <div className=" grid grid-cols-2 gap-y-6 place-items-center ">
+            <div
+              className="bg-[#ECF4E8] rounded-2xl p-6 flex flex-col items-center text-center 
+                  border border-[#B0CE88]/40 w-36 shadow-sm hover:shadow-md 
+                  transition-all cursor-pointer"
+            >
+              <div className="bg-[#4C763B] text-white rounded-full h-20 w-20 flex justify-center items-center shadow-md overflow-hidden">
+                {teamMembers ? (
+                  <img
+                    className="h-full w-full object-cover"
+                    src={teamMembers}
+                    alt="Team Member"
+                  />
+                ) : (
+                  <MdAdd onClick={teamClickHandle} className="text-3xl" />
+                )}
+              </div>
+
+              <div className="mt-3 space-y-1">
+                <p className="font-semibold text-gray-800 text-sm">
+                  Ravi Swami
+                </p>
+                <p className="text-gray-600 text-xs">Web Developer</p>
+              </div>
+            </div>
+          </div>
+
+          <input
+            onChange={getTeamHandle}
+            ref={teamInputRef}
+            className="hidden"
+            type="file"
+            accept="image/*"
+          />
         </div>
 
         <div className="flex justify-center items-center bg-white p-4 h-[40vh]  shadow-sm border border-[#B0CE88]/40">
