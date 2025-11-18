@@ -178,10 +178,12 @@ export const EditSchool = () => {
           />
         </div>
 
-        <div className="bg-white p-4 min-h-[40vh] shadow-sm border border-[#B0CE88]/40">
+        <div className="relative bg-white p-4 min-h-[40vh] shadow-sm border border-[#B0CE88]/40">
           <p className="text-center text-[#4C763B] font-semibold mb-4">
             Add Team Members
           </p>
+
+          <IoAddCircleSharp className="text-[#4C763B] rounded-full text-2xl absolute right-3 top-3 bg-white z-10" />
 
           <div className=" grid grid-cols-2 gap-y-6 place-items-center ">
             <div
