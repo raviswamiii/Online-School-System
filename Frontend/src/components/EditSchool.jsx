@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
-import { MdAdd, MdDelete } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 
 export const EditSchool = () => {
   const [logoPreview, setLogoPreview] = useState(null);
@@ -171,7 +171,6 @@ export const EditSchool = () => {
           )}
         </div>
 
-        {/* ABOUT SECTION */}
         <div className="bg-white p-4 h-[40vh] shadow-sm border border-[#B0CE88]/40">
           <textarea
             className="h-full w-full border border-gray-300 rounded-md p-3 outline-none focus:border-[#B0CE88] resize-none"

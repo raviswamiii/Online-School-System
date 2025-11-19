@@ -2,12 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaTwitter,
-  FaLinkedinIn,
-} from "react-icons/fa";
 
 export const PrincipalHome = () => {
   const [schoolData, setSchoolData] = useState(null);
