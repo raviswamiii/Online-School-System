@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdDelete } from "react-icons/md";
 
 export const EditSchool = () => {
   const [logoPreview, setLogoPreview] = useState(null);
@@ -81,10 +81,12 @@ export const EditSchool = () => {
     ]);
   };
 
+  const removeMember = (index) => {
+    setTeamMembers((prev) => prev.filter((_, i) => i !== index));
+  };
   return (
     <div className="bg-[#ECF4E8] min-h-screen">
       <form>
-        {/* LOGO SECTION */}
         <div className="bg-[#4C763B] p-4 shadow-sm">
           <div className="relative h-[60px] w-[60px]">
             <div
@@ -113,11 +115,10 @@ export const EditSchool = () => {
           </div>
         </div>
 
-        {/* IMAGES SECTION */}
         <div className="relative flex flex-col justify-center items-center bg-white h-[40vh] shadow-sm border border-[#B0CE88]/40 overflow-hidden">
           <IoAddCircleSharp
             onClick={imageClickHandle}
-            className="text-[#4C763B] text-2xl absolute right-3 top-3 bg-white rounded-full cursor-pointer"
+            className="text-[#4C763B] text-2xl absolute right-3 top-3 bg-white rounded-full cursor-pointer z-10"
           />
 
           {imagesPreview.length > 0 ? (
@@ -132,7 +133,7 @@ export const EditSchool = () => {
                 <img
                   key={idx}
                   src={img}
-                  className="h-full w-full object-cover shrink-0"
+                  className="h-full w-full object-cover shrink-0 z-9"
                 />
               ))}
             </div>
@@ -178,7 +179,6 @@ export const EditSchool = () => {
           />
         </div>
 
-        {/* TEAM SECTION */}
         <div className="relative bg-white p-4 min-h-[40vh] shadow-sm border border-[#B0CE88]/40">
           <p className="text-center text-[#4C763B] font-semibold mb-4">
             Add Team Members
@@ -193,9 +193,15 @@ export const EditSchool = () => {
             {teamMembers.map((member, index) => (
               <div
                 key={index}
-                className="bg-[#ECF4E8] rounded-2xl p-6 flex flex-col items-center text-center 
+                className="relative bg-[#ECF4E8] rounded-2xl p-6 flex flex-col items-center text-center 
                 border border-[#B0CE88]/40 w-36 shadow-sm hover:shadow-md cursor-pointer"
               >
+                <div
+                  className="absolute right-2 top-0 text-2xl rotate-45 text-red-500"
+                  onClick={() => removeMember(index)}
+                >
+                  +
+                </div>
                 <div className="bg-[#4C763B] text-white rounded-full h-20 w-20 flex justify-center items-center shadow-md overflow-hidden">
                   {member.img ? (
                     <img
