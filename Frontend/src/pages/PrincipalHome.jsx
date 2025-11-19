@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaTwitter,
+  FaLinkedinIn,
+} from "react-icons/fa";
 
 export const PrincipalHome = () => {
   const [schoolData, setSchoolData] = useState(null);
@@ -56,7 +61,10 @@ export const PrincipalHome = () => {
           )}
         </div>
         <div className="flex gap-3">
-          <Link to={"/editSchool"} className="bg-[#4C763B] text-white px-4 py-2 rounded-xl hover:bg-[#043915] transition-all">
+          <Link
+            to={"/editSchool"}
+            className="bg-[#4C763B] text-white px-4 py-2 rounded-xl hover:bg-[#043915] transition-all"
+          >
             Edit
           </Link>
           <button className="bg-[#4C763B] text-white px-4 py-2 rounded-xl hover:bg-[#043915] transition-all">
@@ -72,9 +80,7 @@ export const PrincipalHome = () => {
 
       {/* Description Section */}
       <div className="bg-white rounded-2xl shadow-sm p-6 border border-[#B0CE88]/40 leading-relaxed">
-        <p>
-         About Us
-        </p>
+        <p>About Us</p>
       </div>
 
       {/* Team Section */}
@@ -98,87 +104,30 @@ export const PrincipalHome = () => {
 
       {/* 🌿 Detailed Footer */}
       <footer className="bg-[#4C763B] text-[#ECF4E8] mt-10 rounded-t-3xl pt-10 pb-6 px-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 border-b border-[#B0CE88]/40 pb-8">
-          {/* About */}
-          <div>
-            <h3 className="font-semibold text-lg mb-3 text-[#FFE797]">
-              About Us
-            </h3>
-            <p className="text-sm leading-relaxed text-[#ECF4E8]/80">
-              {schoolData?.schoolName || "Our School"} is dedicated to nurturing
-              young minds with knowledge, creativity, and values. We aim to
-              inspire lifelong learning and curiosity in every student.
-            </p>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-semibold text-lg mb-3 text-[#FFE797]">
-              Quick Links
-            </h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link to="/" className="hover:text-[#B0CE88] transition">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={`/principalDashboard/${schoolData?._id}`}
-                  className="hover:text-[#B0CE88] transition"
-                >
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="hover:text-[#B0CE88] transition">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="hover:text-[#B0CE88] transition">
-                  Contact
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h3 className="font-semibold text-lg mb-3 text-[#FFE797]">
-              Contact Info
-            </h3>
-            <ul className="space-y-2 text-sm text-[#ECF4E8]/80">
-              <li>📍 {schoolData?.schoolLocation || "Jaipur, Rajasthan"}</li>
-              <li>📧 {schoolData?.schoolEmail || "info@yourschool.com"}</li>
-              <li>📞 +91 98765 43210</li>
-            </ul>
-          </div>
-
-          {/* Social Media */}
-          <div>
-            <h3 className="font-semibold text-lg mb-3 text-[#FFE797]">
-              Follow Us
-            </h3>
-            <div className="flex space-x-4 text-xl">
-              <a href="#" className="hover:text-[#B0CE88] transition">
-                <FaFacebookF />
-              </a>
-              <a href="#" className="hover:text-[#B0CE88] transition">
-                <FaInstagram />
-              </a>
-              <a href="#" className="hover:text-[#B0CE88] transition">
-                <FaTwitter />
-              </a>
-              <a href="#" className="hover:text-[#B0CE88] transition">
-                <FaLinkedinIn />
-              </a>
+        <div className="max-w-6xl mx-auto">
+          {/* Contact Info Only */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-8 border-b border-[#ECF4E8]/20">
+            <div>
+              <h3 className="font-semibold text-lg mb-4 text-[#FFE797] tracking-wide">
+                Contact Info
+              </h3>
+              <ul className="space-y-2 text-sm text-[#ECF4E8]/90 leading-relaxed">
+                <li>📍 Ajmer Road, Jaipur, Rajasthan</li>
+                <li>📞 +91 98765 43210</li>
+                <li>✉️ info@gvpschool.edu.in</li>
+                <li>🕒 Mon–Sat, 8:00 AM – 2:00 PM</li>
+              </ul>
             </div>
           </div>
-        </div>
 
-        <div className="text-center text-sm text-[#ECF4E8]/70 pt-6">
-          © {new Date().getFullYear()} {schoolData?.schoolName || "Your School"}. All rights reserved.
+          {/* Copyright */}
+          <div className="text-center text-sm text-[#ECF4E8]/70 pt-6 tracking-wide">
+            © {new Date().getFullYear()}{" "}
+            <span className="font-semibold">
+              {schoolData?.schoolName || "Your School"}
+            </span>
+            . All rights reserved.
+          </div>
         </div>
       </footer>
 
