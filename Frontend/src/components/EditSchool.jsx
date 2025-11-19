@@ -5,7 +5,7 @@ import { MdAdd } from "react-icons/md";
 export const EditSchool = () => {
   const [logoPreview, setLogoPreview] = useState(null);
   const [imagesPreview, setImagesPreview] = useState([]);
-  const [teamMembers, setTeamMembers] = useState(null);
+  const [teamMembers, setTeamMembers] = useState([]);
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchEndX, setTouchEndX] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,7 +22,8 @@ export const EditSchool = () => {
     imageInputRef.current.click();
   };
 
-  const teamClickHandle = () => {
+  const teamClickHandle = (index) => {
+    teamInputRef.current.dataset.index = index;
     teamInputRef.current.click();
   };
 
@@ -43,7 +44,13 @@ export const EditSchool = () => {
 
   const getTeamHandle = (e) => {
     const file = e.target.files[0];
-    setTeamMembers(URL.createObjectURL(file));
+    const index = teamInputRef.current.dataset.index;
+    const imageURL = URL.createObjectURL(file);
+    setTeamMembers((prev) => {
+      const updated = [...prev];
+      updated[index].img = imageURL;
+      return updated;
+    });
   };
 
   const touchStartHandle = (e) => {
@@ -80,6 +87,13 @@ export const EditSchool = () => {
     if (distance === 1) return "w-4 opacity-70";
     if (distance === 0) return "w-2 opacity-50";
     return "w-1 opacity-30";
+  };
+
+  const teamCardHandle = () => {
+    setTeamMembers((prev) => [
+      ...prev,
+      { img: null, name: "Ravi Swami", role: "Web Developer" },
+    ]);
   };
 
   return (
@@ -183,33 +197,43 @@ export const EditSchool = () => {
             Add Team Members
           </p>
 
-          <IoAddCircleSharp className="text-[#4C763B] rounded-full text-2xl absolute right-3 top-3 bg-white z-10" />
+          <IoAddCircleSharp
+            onClick={teamCardHandle}
+            className="text-[#4C763B] rounded-full text-2xl absolute right-3 top-3 bg-white z-10"
+          />
 
           <div className=" grid grid-cols-2 gap-y-6 place-items-center ">
-            <div
-              className="bg-[#ECF4E8] rounded-2xl p-6 flex flex-col items-center text-center 
+            {teamMembers.map((member, index) => {
+              return (
+                <div
+                  className="bg-[#ECF4E8] rounded-2xl p-6 flex flex-col items-center text-center 
                   border border-[#B0CE88]/40 w-36 shadow-sm hover:shadow-md 
                   transition-all cursor-pointer"
-            >
-              <div className="bg-[#4C763B] text-white rounded-full h-20 w-20 flex justify-center items-center shadow-md overflow-hidden">
-                {teamMembers ? (
-                  <img
-                    className="h-full w-full object-cover"
-                    src={teamMembers}
-                    alt="Team Member"
-                  />
-                ) : (
-                  <MdAdd onClick={teamClickHandle} className="text-3xl" />
-                )}
-              </div>
-
-              <div className="mt-3 space-y-1">
-                <p className="font-semibold text-gray-800 text-sm">
-                  Ravi Swami
-                </p>
-                <p className="text-gray-600 text-xs">Web Developer</p>
-              </div>
-            </div>
+                  key={index}
+                >
+                  <div className="bg-[#4C763B] text-white rounded-full h-20 w-20 flex justify-center items-center shadow-md overflow-hidden">
+                    {member.img ? (
+                      <img
+                        className="h-full w-full object-cover"
+                        src={member.img}
+                        alt="Team Member"
+                      />
+                    ) : (
+                      <MdAdd
+                        onClick={() => teamClickHandle(index)}
+                        className="text-3xl"
+                      />
+                    )}
+                  </div>
+                  <div className="mt-3 space-y-1">
+                    <p className="font-semibold text-gray-800 text-sm">
+                      {member.name}
+                    </p>
+                    <p className="text-gray-600 text-xs">{member.role}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           <input
