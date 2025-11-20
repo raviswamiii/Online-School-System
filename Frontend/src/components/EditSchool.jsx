@@ -1,11 +1,24 @@
+import axios from "axios";
 import React, { useRef, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { MdAdd } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 export const EditSchool = () => {
+  const [logo, setLogo] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
+
+  const [images, setImages] = useState([]);
   const [imagesPreview, setImagesPreview] = useState([]);
+
+  const [aboutUs, setAboutUs] = useState("");
+
   const [teamMembers, setTeamMembers] = useState([]);
+
+  const [address, setAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [workingPeriod, setWorkingPeriod] = useState("");
 
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchEndX, setTouchEndX] = useState(0);
@@ -14,6 +27,9 @@ export const EditSchool = () => {
   const logoInputRef = useRef();
   const imageInputRef = useRef();
   const teamInputRef = useRef();
+
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+  const navigate = useNavigate();
 
   const logoClickHandle = () => logoInputRef.current.click();
   const imageClickHandle = () => imageInputRef.current.click();
@@ -25,32 +41,52 @@ export const EditSchool = () => {
 
   const getLogoHandle = (e) => {
     const file = e.target.files[0];
-    if (file) setLogoPreview(URL.createObjectURL(file));
+    if (!file) return;
+
+    setLogo(file);
+    setLogoPreview(URL.createObjectURL(file));
   };
 
   const getImageHandle = (e) => {
     const files = Array.from(e.target.files);
     const newPreview = files.map((file) => URL.createObjectURL(file));
+
     setImagesPreview((prev) => [...prev, ...newPreview]);
+    setImages((prev) => [...prev, ...files]);
   };
 
   const getTeamHandle = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+
     const index = teamInputRef.current.dataset.index;
-    const imageURL = URL.createObjectURL(file);
 
     setTeamMembers((prev) => {
       const updated = [...prev];
-      updated[index].img = imageURL;
+      updated[index].file = file;
+      updated[index].img = URL.createObjectURL(file);
       return updated;
     });
   };
 
+  const teamCardHandle = () => {
+    setTeamMembers((prev) => [
+      ...prev,
+      { img: "", file: null, name: "", role: "" },
+    ]);
+  };
+
+  const removeMember = (index) => {
+    setTeamMembers((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const touchStartHandle = (e) => setTouchStartX(e.targetTouches[0].clientX);
+
   const touchMoveHandle = (e) => setTouchEndX(e.targetTouches[0].clientX);
 
   const touchEndHandle = () => {
     if (!touchStartX || !touchEndX) return;
+
     const distance = touchStartX - touchEndX;
 
     if (distance > 50) {
@@ -74,19 +110,58 @@ export const EditSchool = () => {
     return "w-2 opacity-50";
   };
 
-  const teamCardHandle = () => {
-    setTeamMembers((prev) => [
-      ...prev,
-      { img: null, name: "Ravi Swami", role: "Web Developer" },
-    ]);
+  const onSubmitHandle = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formdata = new FormData();
+
+      formdata.append("logo", logo);
+
+      images.forEach((file) => formdata.append("images", file));
+
+      formdata.append("aboutUs", aboutUs);
+
+      const memberDetails = teamMembers.map((m) => ({
+        name: m.name,
+        role: m.role,
+      }));
+
+      formdata.append("teamMembers", JSON.stringify(memberDetails));
+
+      teamMembers.forEach((member) => {
+        if (member.file) formdata.append("teamImages", member.file);
+      });
+
+      formdata.append("address", address);
+      formdata.append("phoneNumber", phoneNumber);
+      formdata.append("email", email);
+      formdata.append("workingPeriod", workingPeriod);
+
+      const response = await axios.post(
+        `${backendURL}/school/schoolEdit`,
+        formdata,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.success) {
+        navigate("/principalHome");
+      } else {
+        console.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error.response?.data?.message || "Something went wrong.");
+    }
   };
 
-  const removeMember = (index) => {
-    setTeamMembers((prev) => prev.filter((_, i) => i !== index));
-  };
   return (
     <div className="bg-[#ECF4E8] min-h-screen">
-      <form>
+      <form onSubmit={onSubmitHandle}>
         <div className="bg-[#4C763B] p-4 shadow-sm">
           <div className="relative h-[60px] w-[60px]">
             <div
@@ -133,7 +208,7 @@ export const EditSchool = () => {
                 <img
                   key={idx}
                   src={img}
-                  className="h-full w-full object-cover shrink-0 z-9"
+                  className="h-full w-full object-cover shrink-0"
                 />
               ))}
             </div>
@@ -175,6 +250,8 @@ export const EditSchool = () => {
           <textarea
             className="h-full w-full border border-gray-300 rounded-md p-3 outline-none focus:border-[#B0CE88] resize-none"
             placeholder="About Us"
+            value={aboutUs}
+            onChange={(e) => setAboutUs(e.target.value)}
           />
         </div>
 
@@ -201,6 +278,7 @@ export const EditSchool = () => {
                 >
                   +
                 </div>
+
                 <div className="bg-[#4C763B] text-white rounded-full h-20 w-20 flex justify-center items-center shadow-md overflow-hidden">
                   {member.img ? (
                     <img
@@ -214,11 +292,33 @@ export const EditSchool = () => {
                     />
                   )}
                 </div>
-                <div className="mt-3 space-y-1">
-                  <p className="font-semibold text-gray-800 text-sm">
-                    {member.name}
-                  </p>
-                  <p className="text-gray-600 text-xs">{member.role}</p>
+
+                <div className="mt-3 space-y-1 w-full">
+                  <input
+                    className="font-semibold text-gray-800 text-sm w-full text-center"
+                    placeholder="name..."
+                    value={member.name}
+                    onChange={(e) =>
+                      setTeamMembers((prev) => {
+                        const updated = [...prev];
+                        updated[index].name = e.target.value;
+                        return updated;
+                      })
+                    }
+                  />
+
+                  <input
+                    className="text-gray-600 text-xs w-full text-center"
+                    placeholder="role..."
+                    value={member.role}
+                    onChange={(e) =>
+                      setTeamMembers((prev) => {
+                        const updated = [...prev];
+                        updated[index].role = e.target.value;
+                        return updated;
+                      })
+                    }
+                  />
                 </div>
               </div>
             ))}
@@ -239,10 +339,30 @@ export const EditSchool = () => {
           </h2>
 
           <div className="space-y-3">
-            <input className="w-full border p-2 rounded" />
-            <input className="w-full border p-2 rounded" />
-            <input className="w-full border p-2 rounded" />
-            <input className="w-full border p-2 rounded" />
+            <input
+              className="w-full border p-2 rounded"
+              placeholder="Address..."
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+            <input
+              className="w-full border p-2 rounded"
+              placeholder="Phone no."
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+            <input
+              className="w-full border p-2 rounded"
+              placeholder="Email..."
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              className="w-full border p-2 rounded"
+              placeholder="Working period..."
+              value={workingPeriod}
+              onChange={(e) => setWorkingPeriod(e.target.value)}
+            />
           </div>
         </div>
       </form>
