@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { MdEdit } from "react-icons/md";
+import { BsChatRightFill } from "react-icons/bs";
 
 export const PrincipalHome = () => {
   const [schoolData, setSchoolData] = useState(null);
@@ -40,8 +42,7 @@ export const PrincipalHome = () => {
   if (!schoolData) return <p>Loading...</p>;
 
   return (
-    <div className="min-h-screen bg-[#ECF4E8] text-[#043915] flex flex-col gap-6 p-4 overflow-auto">
-      {/* Header */}
+    <div className="relative h-screen bg-[#ECF4E8] text-[#043915] flex flex-col gap-6 px-4 pt-4 overflow-auto">
       <div className="flex justify-between items-center bg-white rounded-2xl shadow-sm p-4 border border-[#B0CE88]/40">
         <div className="rounded-full h-[60px] w-[60px] flex justify-center items-center overflow-hidden border border-[#B0CE88]">
           {schoolData?.schoolLogo ? (
@@ -57,75 +58,58 @@ export const PrincipalHome = () => {
         <div className="flex gap-3">
           <Link
             to={"/editSchool"}
-            className="bg-[#4C763B] text-white px-4 py-2 rounded-xl hover:bg-[#043915] transition-all"
+            className="bg-[#4C763B] text-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
           >
-            Edit
+            <MdEdit />
           </Link>
-          <button className="bg-[#4C763B] text-white px-4 py-2 rounded-xl hover:bg-[#043915] transition-all">
-            Chat
+          <button className="bg-[#4C763B] text-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all">
+            <BsChatRightFill />
           </button>
         </div>
       </div>
 
-      {/* School Media Section */}
       <div className="bg-white rounded-2xl shadow-sm flex justify-center items-center p-6 border border-[#B0CE88]/40 text-[#4C763B] font-semibold">
         School's images/videos
       </div>
 
-      {/* Description Section */}
-      <div className="bg-white rounded-2xl shadow-sm p-6 border border-[#B0CE88]/40 leading-relaxed">
-        <p>About Us</p>
+      <div className="bg-white rounded-2xl shadow-sm p-6 border border-[#B0CE88]/40 leading-relaxed flex justify-center items-center">
+        <p className="text-center text-[#4C763B] font-semibold text-lg">
+          About Us
+        </p>
       </div>
 
-      {/* Team Section */}
       <div className="bg-white rounded-2xl shadow-sm p-6 border border-[#B0CE88]/40">
-        <h2 className="text-center text-[#4C763B] font-semibold mb-4 text-lg">
+        <h2 className="text-center text-[#4C763B] font-semibold text-lg">
           Meet Our Team
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <div
-              key={index}
-              className="bg-[#B0CE88]/20 rounded-xl p-6 flex flex-col items-center border border-[#B0CE88]/40"
-            >
-              <div className="bg-[#4C763B] text-white rounded-full h-16 w-16 flex justify-center items-center font-bold">
-                Img
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
 
-      {/* 🌿 Detailed Footer */}
-      <footer className="bg-[#4C763B] text-[#ECF4E8] mt-10 rounded-t-3xl pt-10 pb-6 px-6">
+      <footer className="bg-[#4C763B] text-[#ECF4E8] rounded-t-3xl pt-10 pb-6 px-6">
         <div className="max-w-6xl mx-auto">
-          {/* Contact Info Only */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-8 border-b border-[#ECF4E8]/20">
             <div>
               <h3 className="font-semibold text-lg mb-4 text-[#FFE797] tracking-wide">
                 Contact Info
               </h3>
               <ul className="space-y-2 text-sm text-[#ECF4E8]/90 leading-relaxed">
-                <li>📍 Ajmer Road, Jaipur, Rajasthan</li>
-                <li>📞 +91 98765 43210</li>
-                <li>✉️ info@gvpschool.edu.in</li>
+                <li>📍 Location XYZ</li>
+                <li>📞 +91 0000000000</li>
+                <li>✉️ info@xyzschool.edu.in</li>
                 <li>🕒 Mon–Sat, 8:00 AM – 2:00 PM</li>
               </ul>
             </div>
           </div>
 
-          {/* Copyright */}
           <div className="text-center text-sm text-[#ECF4E8]/70 pt-6 tracking-wide">
             © {new Date().getFullYear()}{" "}
             <span className="font-semibold">
-              {schoolData?.schoolName || "Your School"}
+              {"XYZ School"}
             </span>
             . All rights reserved.
           </div>
         </div>
       </footer>
 
-      {/* Bottom Navigation */}
       {loggedInPrincipalId === principalId && (
         <div className="sticky bottom-0 w-full flex border-t border-[#B0CE88]/50 bg-white rounded-t-2xl shadow-inner">
           <Link
