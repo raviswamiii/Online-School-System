@@ -42,76 +42,79 @@ export const PrincipalHome = () => {
   if (!schoolData) return <p>Loading...</p>;
 
   return (
-    <div className="relative h-screen bg-[#ECF4E8] text-[#043915] flex flex-col gap-6 px-4 pt-4 overflow-auto">
-      <div className="flex justify-between items-center bg-white rounded-2xl shadow-sm p-4 border border-[#B0CE88]/40">
-        <div className="rounded-full h-[60px] w-[60px] flex justify-center items-center overflow-hidden border border-[#B0CE88]">
-          {schoolData?.schoolLogo ? (
-            <img
-              className="h-full w-full object-cover"
-              src={`${backendURL}${schoolData.schoolLogo}`}
-              alt="school logo"
-            />
-          ) : (
-            <span className="text-[#4C763B] font-semibold">Logo</span>
-          )}
+    <div className="relative ">
+      <div className="min-h-screen bg-[#ECF4E8] text-[#043915] flex flex-col overflow-auto">
+        <div className="flex justify-between items-center bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
+          <div className="rounded-full h-[60px] w-[60px] flex justify-center items-center overflow-hidden border border-[#B0CE88]">
+            {schoolData?.schoolLogo ? (
+              <img
+                className="h-full w-full object-cover"
+                src={`${backendURL}${schoolData.schoolLogo}`}
+                alt="school logo"
+              />
+            ) : (
+              <span className="text-[#4C763B] font-semibold">Logo</span>
+            )}
+          </div>
+          <div className="text-white w-[45vw] h-[4vh] text-md font-semibold overflow-x-auto whitespace-nowrap scrollbar-hide">
+            Sadachar Public School
+          </div>
+          <div className="flex gap-3">
+            <Link
+              to={"/editSchool"}
+              className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
+            >
+              <MdEdit className="text-[#4C763B]" />
+            </Link>
+            <button className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all">
+              <BsChatRightFill className="text-[#4C763B]" />
+            </button>
+          </div>
         </div>
-        <div className="flex gap-3">
-          <Link
-            to={"/editSchool"}
-            className="bg-[#4C763B] text-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
-          >
-            <MdEdit />
-          </Link>
-          <button className="bg-[#4C763B] text-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all">
-            <BsChatRightFill />
-          </button>
+
+        <div className="bg-white shadow-sm flex justify-center items-center p-6 h-[40vh] border border-[#B0CE88]/40 text-[#4C763B]/50 font-semibold">
+          School's images/videos
         </div>
-      </div>
 
-      <div className="bg-white rounded-2xl shadow-sm flex justify-center items-center p-6 border border-[#B0CE88]/40 text-[#4C763B] font-semibold">
-        School's images/videos
-      </div>
+        <div className="bg-white shadow-sm p-6 h-[40vh] border border-[#B0CE88]/40 leading-relaxed flex justify-center items-center">
+          <p className="text-center text-[#4C763B]/50 font-semibold">
+            About Us
+          </p>
+        </div>
 
-      <div className="bg-white rounded-2xl shadow-sm p-6 border border-[#B0CE88]/40 leading-relaxed flex justify-center items-center">
-        <p className="text-center text-[#4C763B] font-semibold text-lg">
-          About Us
-        </p>
-      </div>
+        <div className="bg-white shadow-sm p-6 h-[40vh] border border-[#B0CE88]/40 flex justify-center items-center">
+          <h2 className="text-center text-[#4C763B]/50 font-semibold">
+            Meet Our Team
+          </h2>
+        </div>
 
-      <div className="bg-white rounded-2xl shadow-sm p-6 border border-[#B0CE88]/40">
-        <h2 className="text-center text-[#4C763B] font-semibold text-lg">
-          Meet Our Team
-        </h2>
-      </div>
+        <footer className="bg-[#4C763B]/50 text-[#ECF4E8] pt-10 pb-6 px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-8 border-b border-[#ECF4E8]/20">
+              <div>
+                <h3 className="font-semibold text-lg mb-4 text-[#FFE797] tracking-wide">
+                  Contact Info
+                </h3>
+                <ul className="space-y-2 text-sm text-white leading-relaxed">
+                  <li>📍 Location XYZ</li>
+                  <li>📞 +91 0000000000</li>
+                  <li>✉️ info@xyzschool.edu.in</li>
+                  <li>🕒 Mon–Sat, 8:00 AM – 2:00 PM</li>
+                </ul>
+              </div>
+            </div>
 
-      <footer className="bg-[#4C763B] text-[#ECF4E8] rounded-t-3xl pt-10 pb-6 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-8 border-b border-[#ECF4E8]/20">
-            <div>
-              <h3 className="font-semibold text-lg mb-4 text-[#FFE797] tracking-wide">
-                Contact Info
-              </h3>
-              <ul className="space-y-2 text-sm text-[#ECF4E8]/90 leading-relaxed">
-                <li>📍 Location XYZ</li>
-                <li>📞 +91 0000000000</li>
-                <li>✉️ info@xyzschool.edu.in</li>
-                <li>🕒 Mon–Sat, 8:00 AM – 2:00 PM</li>
-              </ul>
+            <div className="text-center text-sm text-white pt-6 tracking-wide">
+              © {new Date().getFullYear()}{" "}
+              <span className="font-semibold">{"XYZ School"}</span>. All rights
+              reserved.
             </div>
           </div>
-
-          <div className="text-center text-sm text-[#ECF4E8]/70 pt-6 tracking-wide">
-            © {new Date().getFullYear()}{" "}
-            <span className="font-semibold">
-              {"XYZ School"}
-            </span>
-            . All rights reserved.
-          </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
 
       {loggedInPrincipalId === principalId && (
-        <div className="sticky bottom-0 w-full flex border-t border-[#B0CE88]/50 bg-white rounded-t-2xl shadow-inner">
+        <div className="sticky bottom-0 w-full flex border-t border-[#B0CE88]/50 bg-white shadow-inner">
           <Link
             to={`/principalHome/${schoolData._id}`}
             className="w-full text-center py-3 border-r border-[#B0CE88]/50 text-[#043915] font-semibold hover:bg-[#B0CE88]/30 transition-all"
