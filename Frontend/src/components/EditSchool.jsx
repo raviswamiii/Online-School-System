@@ -8,6 +8,8 @@ export const EditSchool = () => {
   const [logo, setLogo] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
 
+  const [schoolName, setSchoolName] = useState("");
+
   const [images, setImages] = useState([]);
   const [imagesPreview, setImagesPreview] = useState([]);
 
@@ -118,6 +120,8 @@ export const EditSchool = () => {
 
       formdata.append("logo", logo);
 
+      formdata.append("schoolName", schoolName);
+
       images.forEach((file) => formdata.append("images", file));
 
       formdata.append("aboutUs", aboutUs);
@@ -162,22 +166,35 @@ export const EditSchool = () => {
   return (
     <div className="bg-[#ECF4E8] min-h-screen">
       <form onSubmit={onSubmitHandle}>
-        <div className="bg-[#4C763B] p-4 shadow-sm">
-          <div className="relative h-[60px] w-[60px]">
-            <div
-              onClick={logoClickHandle}
-              className="border-[#B0CE88]/40 bg-white h-[60px] w-[60px] rounded-full flex justify-center items-center overflow-hidden cursor-pointer"
-            >
-              {logoPreview ? (
-                <img className="h-full w-full object-cover" src={logoPreview} />
-              ) : (
-                <p>Logo</p>
-              )}
+        <div className="bg-[#4C763B]/50 p-4 shadow-sm">
+          <div className="relative h-[60px] w-[60px] flex gap-5 items-center">
+            <div>
+              <div
+                onClick={logoClickHandle}
+                className="border-[#B0CE88]/40 bg-white h-[60px] w-[60px] rounded-full flex justify-center items-center overflow-hidden cursor-pointer"
+              >
+                {logoPreview ? (
+                  <img
+                    className="h-full w-full object-cover"
+                    src={logoPreview}
+                  />
+                ) : (
+                  <p>Logo</p>
+                )}
+              </div>
+
+              <IoAddCircleSharp
+                onClick={logoClickHandle}
+                className="text-xl absolute right-0 bottom-0 bg-white rounded-full cursor-pointer"
+              />
             </div>
 
-            <IoAddCircleSharp
-              onClick={logoClickHandle}
-              className="text-xl absolute right-0 bottom-0 bg-white rounded-full cursor-pointer"
+            <input
+              className="w-[45vw] h-[4vh] outline-none text-white font-semibold text-md"
+              type="text"
+              placeholder="School name..."
+              value={schoolName}
+              onChange={(e) => setSchoolName(e.target.value)}
             />
 
             <input
@@ -213,7 +230,7 @@ export const EditSchool = () => {
               ))}
             </div>
           ) : (
-            <p className="text-center text-[#4C763B] font-semibold">
+            <p className="text-center text-[#4C763B]/50 font-semibold">
               Click here to get images
             </p>
           )}
@@ -255,8 +272,8 @@ export const EditSchool = () => {
           />
         </div>
 
-        <div className="relative bg-white p-4 min-h-[40vh] shadow-sm border border-[#B0CE88]/40">
-          <p className="text-center text-[#4C763B] font-semibold mb-4">
+        <div className="relative bg-white p-4 min-h-[40vh] shadow-sm border border-[#B0CE88]/40 flex justify-center items-center">
+          <p className="text-center text-[#4C763B]/50 font-semibold mb-4">
             Add Team Members
           </p>
 
@@ -334,31 +351,31 @@ export const EditSchool = () => {
         </div>
 
         <div className="bg-white p-4 shadow-sm border border-[#B0CE88]/40 mt-4">
-          <h2 className="text-lg font-semibold text-[#4C763B] mb-3">
+          <h2 className="font-semibold text-[#4C763B]/50 mb-3">
             Edit Footer Info
           </h2>
 
           <div className="space-y-3">
             <input
-              className="w-full border p-2 rounded"
-              placeholder="Address..."
+              className="w-full border border-[#4C763B]/50 outline-[#4C763B] p-2 rounded"
+              placeholder="Location..."
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
             <input
-              className="w-full border p-2 rounded"
+              className="w-full border border-[#4C763B]/50 outline-[#4C763B] p-2 rounded"
               placeholder="Phone no."
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
             <input
-              className="w-full border p-2 rounded"
+              className="w-full border border-[#4C763B]/50 outline-[#4C763B] p-2 rounded"
               placeholder="Email..."
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
-              className="w-full border p-2 rounded"
+              className="w-full border border-[#4C763B]/50 outline-[#4C763B] p-2 rounded"
               placeholder="Working period..."
               value={workingPeriod}
               onChange={(e) => setWorkingPeriod(e.target.value)}
