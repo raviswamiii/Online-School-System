@@ -12,7 +12,7 @@ import { SchoolSignIn } from "./pages/SchoolSignIn";
 import { CollegeSignIn } from "./pages/CollegeSignIn";
 import { SoloSignIn } from "./pages/SoloSignIn";
 import { ProtectRoutes } from "./pages/ProtectRoutes";
-import { UpdateSchool } from "./components/UpdateSchool";
+import { UpdateAuthentication } from "./components/UpdateAuthentication";
 import { EditSchool } from "./components/EditSchool";
 
 export const App = () => {
@@ -37,7 +37,7 @@ export const App = () => {
           }
         />
         <Route path="/principalHome/:principalId" element={<PrincipalHome />} />
-        <Route path="/edit" element={<UpdateSchool />} />
+        <Route path="/updateAuthentication" element={<UpdateAuthentication />} />
         <Route path="/editSchool" element={<EditSchool />} />
       </Routes>
     </div>

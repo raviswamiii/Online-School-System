@@ -277,35 +277,102 @@ const editSchool = async (req, res) => {
     const teamFiles = files.teamImages || [];
     let imageIndex = 0;
 
-    const updatedTeamMembers = parsedMembers.map((member) => {
-      const updated = { ...member };
+    const editedTeamMembers = parsedMembers.map((member) => {
+      const edited = { ...member };
 
       // Assign uploaded team image (in order)
       if (teamFiles[imageIndex]) {
-        updated.img = `/uploads/${teamFiles[imageIndex].filename}`;
+        edited.img = `/uploads/${teamFiles[imageIndex].filename}`;
         imageIndex++;
       }
 
-      return updated;
+      return edited;
     });
 
-    if (updatedTeamMembers.length > 0) {
-      school.teamMembers = updatedTeamMembers;
+    if (editedTeamMembers.length > 0) {
+      school.teamMembers = editedTeamMembers;
     }
 
     // ------ SAVE UPDATED SCHOOL ------
-    const updatedSchool = await school.save();
+    const editedSchool = await school.save();
 
     return res.status(200).json({
       success: true,
-      message: "School updated successfully.",
-      school: updatedSchool,
+      message: "School edited successfully.",
+      school: editedSchool,
     });
   } catch (error) {
-    console.log("Error updating school:", error.message);
+    console.log("Error editing school:", error.message);
     return res.status(500).json({
       success: false,
-      message: "Error during update.",
+      message: "Error during edit.",
+    });
+  }
+};
+
+const updateAuthentication = async (req, res) => {
+  try {
+    // -------- AUTH ----------
+    const schoolId = req.school?._id; // from schoolAuth middleware
+
+    if (!schoolId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: School not found",
+      });
+    }
+
+    const { changeEmail, changePassword } = req.body;
+
+    if (!changeEmail && !changePassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Nothing to update",
+      });
+    }
+
+    // -------- VALIDATION ----------
+    const school = await schoolModel.findById(schoolId);
+
+    if (!school) {
+      return res.status(404).json({
+        success: false,
+        message: "School not found",
+      });
+    }
+
+    // -- if user wants to change email
+    if (changeEmail) {
+      const emailExists = await schoolModel.findOne({ schoolEmail: changeEmail });
+
+      if (emailExists && emailExists._id.toString() !== schoolId.toString()) {
+        return res.status(400).json({
+          success: false,
+          message: "Email already taken",
+        });
+      }
+      school.schoolEmail = changeEmail;
+    }
+
+    // -- if user wants to change password
+    if (changePassword) {
+      const hashedPass = await bcrypt.hash(changePassword, 10);
+      school.schoolPassword = hashedPass;
+    }
+
+    await school.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Authentication updated successfully",
+      school,
+    });
+  } catch (error) {
+    console.error("Update authentication error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
     });
   }
 };
@@ -318,4 +385,5 @@ export {
   schoolLogOut,
   deleteSchool,
   editSchool,
+  updateAuthentication
 };

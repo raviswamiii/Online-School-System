@@ -90,7 +90,7 @@ export const PrincipalDashboard = () => {
             >
               <DeleteAccount setDeleteAccountPopUp={setDeleteAccountPopUp} />
             </div>
-            <Link to={"/edit"}>Edit</Link>
+            <Link to={"/updateAuthentication"}>Update Authentication</Link>
           </div>
         </div>
 

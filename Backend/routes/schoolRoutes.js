@@ -8,6 +8,7 @@ import {
   schoolLogOut,
   schoolSignIn,
   editSchool,
+  updateAuthentication,
 } from "../controllers/schoolController.js";
 import schoolAuth from "../middleware/schoolAuth.js";
 
@@ -47,5 +48,7 @@ schoolRouter.put(
   schoolAuth,
   editSchool
 );
+
+schoolRouter.put("/updateAuthentication", schoolAuth, updateAuthentication);
 
 export default schoolRouter;
