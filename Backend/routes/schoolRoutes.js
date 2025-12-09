@@ -7,7 +7,7 @@ import {
   registerSchool,
   schoolLogOut,
   schoolSignIn,
-  updateSchool,
+  editSchool,
 } from "../controllers/schoolController.js";
 import schoolAuth from "../middleware/schoolAuth.js";
 
@@ -38,14 +38,14 @@ schoolRouter.delete("/deleteSchoolAccount", schoolAuth, deleteSchool);
 
 // UPDATE SCHOOL (Logo, Images, Team Images, Text Fields)
 schoolRouter.put(
-  "/updateSchool",
+  "/editSchool",
   upload.fields([
     { name: "logo", maxCount: 1 },
     { name: "images", maxCount: 20 },
     { name: "teamImages", maxCount: 20 },
   ]),
   schoolAuth,
-  updateSchool
+  editSchool
 );
 
 export default schoolRouter;

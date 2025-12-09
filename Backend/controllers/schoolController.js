@@ -208,7 +208,7 @@ const deleteSchool = async (req, res) => {
   }
 };
 
-const updateSchool = async (req, res) => {
+const editSchool = async (req, res) => {
   try {
     // ------ AUTH ------
     const token =
@@ -317,5 +317,5 @@ export {
   schoolSignIn,
   schoolLogOut,
   deleteSchool,
-  updateSchool,
+  editSchool,
 };

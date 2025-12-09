@@ -143,7 +143,7 @@ export const EditSchool = () => {
       formdata.append("workingPeriod", workingPeriod);
 
       const response = await axios.put(
-        `${backendURL}/schools/updateSchool`,
+        `${backendURL}/schools/editSchool`,
         formdata,
         {
           headers: {
