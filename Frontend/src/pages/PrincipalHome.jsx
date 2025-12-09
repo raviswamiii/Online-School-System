@@ -23,24 +23,23 @@ export const PrincipalHome = () => {
   const touchMoveHandle = (e) => setTouchEndX(e.targetTouches[0].clientX);
 
   const touchEndHandle = () => {
-  if (!touchStartX || !touchEndX || !schoolData?.images) return;
+    if (!touchStartX || !touchEndX || !schoolData?.images) return;
 
-  const distance = touchStartX - touchEndX;
+    const distance = touchStartX - touchEndX;
 
-  if (distance > 50) {
-    setCurrentIndex((prev) =>
-      prev === schoolData.images.length - 1 ? 0 : prev + 1
-    );
-  } else if (distance < -50) {
-    setCurrentIndex((prev) =>
-      prev === 0 ? schoolData.images.length - 1 : prev - 1
-    );
-  }
+    if (distance > 50) {
+      setCurrentIndex((prev) =>
+        prev === schoolData.images.length - 1 ? 0 : prev + 1
+      );
+    } else if (distance < -50) {
+      setCurrentIndex((prev) =>
+        prev === 0 ? schoolData.images.length - 1 : prev - 1
+      );
+    }
 
-  setTouchStartX(0);
-  setTouchEndX(0);
-};
-
+    setTouchStartX(0);
+    setTouchEndX(0);
+  };
 
   const getDotSize = (i) => {
     const distance = Math.abs(i - currentIndex);
@@ -100,12 +99,14 @@ export const PrincipalHome = () => {
           </div>
 
           <div className="flex gap-3">
-            <Link
-              to={"/editSchool"}
-              className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
-            >
-              <MdEdit className="text-[#4C763B]" />
-            </Link>
+            {loggedInPrincipalId === principalId && (
+              <Link
+                to={"/editSchool"}
+                className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
+              >
+                <MdEdit className="text-[#4C763B]" />
+              </Link>
+            )}
 
             <button className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all">
               <BsChatRightFill className="text-[#4C763B]" />

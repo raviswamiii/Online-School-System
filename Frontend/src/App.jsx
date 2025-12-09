@@ -28,7 +28,14 @@ export const App = () => {
         <Route path="/schoolSignIn" element={<SchoolSignIn />} />
         <Route path="/collegeSignIn" element={<CollegeSignIn />} />
         <Route path="/soloSignIn" element={<SoloSignIn />} />
-        <Route path="/principalDashboard/:principalId" element={ <ProtectRoutes><PrincipalDashboard /></ProtectRoutes>} />
+        <Route
+          path="/principalDashboard/:principalId"
+          element={
+            <ProtectRoutes>
+              <PrincipalDashboard />
+            </ProtectRoutes>
+          }
+        />
         <Route path="/principalHome/:principalId" element={<PrincipalHome />} />
         <Route path="/edit" element={<UpdateSchool />} />
         <Route path="/editSchool" element={<EditSchool />} />
