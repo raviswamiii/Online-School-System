@@ -142,8 +142,8 @@ export const EditSchool = () => {
       formdata.append("email", email);
       formdata.append("workingPeriod", workingPeriod);
 
-      const response = await axios.post(
-        `${backendURL}/school/schoolEdit`,
+      const response = await axios.put(
+        `${backendURL}/schools/updateSchool`,
         formdata,
         {
           headers: {
@@ -154,7 +154,7 @@ export const EditSchool = () => {
       );
 
       if (response.data.success) {
-        navigate("/principalHome");
+        navigate(`/principalHome/${response.data.school._id}`);
       } else {
         console.error(response.data.message);
       }
@@ -272,7 +272,7 @@ export const EditSchool = () => {
           />
         </div>
 
-        <div className="relative bg-white p-4 min-h-[40vh] shadow-sm border border-[#B0CE88]/40 flex justify-center items-center">
+        <div className="relative bg-white p-4 min-h-[40vh] shadow-sm border border-[#B0CE88]/40 flex flex-col justify-center items-center">
           <p className="text-center text-[#4C763B]/50 font-semibold mb-4">
             Add Team Members
           </p>
@@ -282,7 +282,7 @@ export const EditSchool = () => {
             className="text-[#4C763B] text-2xl absolute right-3 top-3 bg-white rounded-full cursor-pointer"
           />
 
-          <div className="grid grid-cols-2 gap-y-6 place-items-center">
+          <div className="grid grid-cols-2 gap-6 place-items-center">
             {teamMembers.map((member, index) => (
               <div
                 key={index}
@@ -382,6 +382,7 @@ export const EditSchool = () => {
             />
           </div>
         </div>
+        <button type="submit" className="bg-green-500 text-white w-full p-2 text-xl font-semibold">Save Changes</button>
       </form>
     </div>
   );

@@ -1,12 +1,33 @@
 import mongoose from "mongoose";
 
+const teamMemberSchema = new mongoose.Schema({
+  name: { type: String },
+  role: { type: String },
+  img: { type: String }, // image URL
+});
+
 const schoolSchema = new mongoose.Schema(
   {
     schoolName: { type: String, required: true },
+
     schoolEmail: { type: String, required: true, unique: true },
     schoolPassword: { type: String, required: true },
+
     schoolLocation: { type: String, required: true },
-    schoolLogo: { type: String },
+
+    schoolLogo: { type: String }, // logo
+
+    // NEW FIELDS BASED ON YOUR REACT COMPONENT
+    images: [{ type: String }], // multiple images
+
+    aboutUs: { type: String },
+
+    teamMembers: [teamMemberSchema], // array of objects
+
+    address: { type: String },
+    phoneNumber: { type: String },
+    email: { type: String },
+    workingPeriod: { type: String },
   },
   { timestamps: true }
 );

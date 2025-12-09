@@ -210,7 +210,11 @@ const deleteSchool = async (req, res) => {
 
 const updateSchool = async (req, res) => {
   try {
-    const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+    // ------ AUTH ------
+    const token =
+      req.cookies.token ||
+      req.headers.authorization?.split(" ")[1];
+
     if (!token)
       return res
         .status(401)
@@ -218,34 +222,91 @@ const updateSchool = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const { changeName, changeLocation } = req.body;
-    const changeLogo = req.file ? `/uploads/${req.file.filename}` : null;
+    // ------ FIND SCHOOL ------
+    const school = await schoolModel.findById(decoded.id);
 
-    const updateData = {};
-    if (changeName) updateData.schoolName = changeName;
-    if (changeLocation) updateData.schoolLocation = changeLocation;
-    if (changeLogo) updateData.schoolLogo = changeLogo;
-
-    const updatedSchool = await schoolModel.findByIdAndUpdate(
-      decoded.id,
-      updateData,
-      { new: true }
-    );
-
-    if (!updatedSchool)
+    if (!school)
       return res
         .status(404)
         .json({ success: false, message: "School not found." });
+
+    // ------ EXTRACT FIELDS ------
+    const {
+      schoolName,
+      aboutUs,
+      address,
+      phoneNumber,
+      email,
+      workingPeriod,
+      teamMembers,
+    } = req.body;
+
+    // Parse member details (stringified JSON)
+    const parsedMembers = teamMembers ? JSON.parse(teamMembers) : [];
+
+    // ------ UPDATE BASIC FIELDS ------
+    if (schoolName) school.schoolName = schoolName;
+    if (aboutUs) school.aboutUs = aboutUs;
+    if (address) school.address = address;
+    if (phoneNumber) school.phoneNumber = phoneNumber;
+    if (email) school.email = email;
+    if (workingPeriod) school.workingPeriod = workingPeriod;
+
+    // ------ FILE HANDLING ------
+
+    const files = req.files || {};
+
+    // ----- 1. UPDATE LOGO -----
+    if (files.logo && files.logo.length > 0) {
+      const logoFile = `/uploads/${files.logo[0].filename}`;
+      school.schoolLogo = logoFile;
+    }
+
+    // ----- 2. UPDATE GALLERY IMAGES -----
+    if (files.images && files.images.length > 0) {
+      const newImages = files.images.map((file) => `/uploads/${file.filename}`);
+
+      // If you want to *append* instead of replace:
+      school.images = [...(school.images || []), ...newImages];
+
+      // If you want to *replace* old images:
+      // school.images = newImages;
+    }
+
+    // ----- 3. UPDATE TEAM MEMBER IMAGES -----
+    const teamFiles = files.teamImages || [];
+    let imageIndex = 0;
+
+    const updatedTeamMembers = parsedMembers.map((member) => {
+      const updated = { ...member };
+
+      // Assign uploaded team image (in order)
+      if (teamFiles[imageIndex]) {
+        updated.img = `/uploads/${teamFiles[imageIndex].filename}`;
+        imageIndex++;
+      }
+
+      return updated;
+    });
+
+    if (updatedTeamMembers.length > 0) {
+      school.teamMembers = updatedTeamMembers;
+    }
+
+    // ------ SAVE UPDATED SCHOOL ------
+    const updatedSchool = await school.save();
+
     return res.status(200).json({
       success: true,
-      message: "School updated successfull.",
+      message: "School updated successfully.",
       school: updatedSchool,
     });
   } catch (error) {
-    console.log("Error during updating school:", error.message);
-    return res
-      .status(500)
-      .json({ success: false, message: "Error during update." });
+    console.log("Error updating school:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Error during update.",
+    });
   }
 };
 
