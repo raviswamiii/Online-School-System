@@ -19,19 +19,16 @@ export const PrincipalDashboard = () => {
   const fetchSchool = async () => {
     try {
       const token = localStorage.getItem("token");
-
       if (!token) {
         navigate("/schoolSignIn");
         return;
       }
+
       const response = await axios.get(
         `${backendURL}/schools/getPrincipalDashboard/${principalId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
+
       if (response.data.success) {
         setSchoolData(response.data.school);
       } else {
@@ -46,15 +43,21 @@ export const PrincipalDashboard = () => {
     if (principalId) fetchSchool();
   }, [principalId]);
 
-  if (error) return <p className="text-red-500">{error}</p>;
-  if (!schoolData) return <p>Loading...</p>;
+  if (error) return <p className="text-red-500 text-center mt-10">{error}</p>;
+
+  if (!schoolData) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="h-screen w-screen px-4 py-2 relative overflow-hidden">
-      <div className="h-full">
+    <div className="min-h-screen bg-[#ECF4E8] flex flex-col relative overflow-hidden">
+      <div className="bg-white px-4 py-3 shadow-sm border-b border-[#B0CE88]/50">
         <div className="mb-8 flex justify-between items-center">
-          <p>{schoolData.schoolName}</p>
-          <FaBars onClick={() => setShowMenuPage(true)} />
+          <p className="font-semibold text-[#043915] truncate">
+            {schoolData.schoolName}
+          </p>
+          <FaBars
+            className="text-xl text-[#4C763B] cursor-pointer"
+            onClick={() => setShowMenuPage(true)}
+          />
 
           <div
             className={`absolute bg-white border top-0 h-full w-full z-10 px-4 py-2 flex flex-col gap-2 transition-all duration-300 ease-in-out ${
@@ -93,45 +96,57 @@ export const PrincipalDashboard = () => {
             <Link to={"/updateAuthentication"}>Update Authentication</Link>
           </div>
         </div>
+      </div>
 
-        <div className="flex border-b pb-5">
-          <div className="rounded-full border h-20 w-20 flex justify-center items-center overflow-hidden">
+      <main className="flex-1 px-4 py-6 space-y-6">
+        <div className="bg-white rounded-xl shadow-sm border border-[#B0CE88]/50 p-5 flex items-center gap-6">
+          <div className="h-20 w-20 rounded-full overflow-hidden border border-[#4C763B]">
             {schoolData.schoolLogo ? (
               <img
-                className="h-full w-full object-cover"
                 src={`${backendURL}${schoolData.schoolLogo}`}
                 alt="School Logo"
+                className="h-full w-full object-cover"
               />
             ) : (
-              "Logo"
+              <div className="h-full w-full flex items-center justify-center text-sm">
+                Logo
+              </div>
             )}
           </div>
 
-          <div>
-            <p className="text-center">00</p>
-            <p className="text-center">Teacher's Requests</p>
-          </div>
-          <div>
-            <p className="text-center">00</p>
-            <p className="text-center">Students' Requests</p>
+          <div className="flex flex-1 justify-around text-center">
+            <div>
+              <p className="text-xl font-semibold">00</p>
+              <p className="text-sm text-[#4C763B]/70">Teacher Requests</p>
+            </div>
+            <div>
+              <p className="text-xl font-semibold">00</p>
+              <p className="text-sm text-[#4C763B]/70">Student Requests</p>
+            </div>
           </div>
         </div>
-        <div className="flex border-b">
-          <div className="text-center w-full border-r">Teachers(00)</div>
-          <div className="text-center w-full">Students(00)</div>
-        </div>
-      </div>
 
-      <div className="flex sticky bottom-0 border-t w-full">
+        <div className="bg-white rounded-xl shadow-sm border border-[#B0CE88]/50 overflow-hidden">
+          <div className="flex text-center font-semibold text-[#043915]">
+            <div className="w-1/2 py-3 border-r border-[#B0CE88]/50">
+              Teachers (00)
+            </div>
+            <div className="w-1/2 py-3">Students (00)</div>
+          </div>
+        </div>
+      </main>
+
+      <div className="sticky bottom-0 w-full flex border-t border-[#B0CE88]/50 bg-white shadow-inner">
         <Link
           to={`/principalHome/${schoolData._id}`}
-          className="w-full text-center border-r bg-white"
+          className="w-full text-center py-3 border-r border-[#B0CE88]/50 text-[#043915] font-semibold hover:bg-[#B0CE88]/30 transition-all"
         >
           Home
         </Link>
+
         <Link
           to={`/principalDashboard/${schoolData._id}`}
-          className="w-full text-center bg-white"
+          className="w-full text-center py-3 text-[#043915] font-semibold hover:bg-[#B0CE88]/30 transition-all"
         >
           My Profile
         </Link>
