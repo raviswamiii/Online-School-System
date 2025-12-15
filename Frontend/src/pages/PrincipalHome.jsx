@@ -85,7 +85,7 @@ export const PrincipalHome = () => {
               {schoolData?.schoolLogo ? (
                 <img
                   src={`${backendURL}${schoolData.schoolLogo}`}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover bg-white"
                   alt="school logo"
                 />
               ) : (
@@ -196,8 +196,8 @@ export const PrincipalHome = () => {
                     className="h-24 w-24 rounded-full object-cover mb-3 border border-[#4C763B]"
                     alt={member.name}
                   />
-                  <p className="font-semibold text-[#043915]">{member.name}</p>
-                  <p className="text-sm text-[#4C763B]/70">{member.role}</p>
+                  <p className="font-semibold text-[#043915] text-center">{member.name}</p>
+                  <p className="text-sm text-[#4C763B]/70 text-center">{member.role}</p>
                 </div>
               ))}
             </div>
