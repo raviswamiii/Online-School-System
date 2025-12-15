@@ -79,7 +79,6 @@ export const PrincipalHome = () => {
   return (
     <div className="relative">
       <div className="min-h-screen bg-[#ECF4E8] text-[#043915] flex flex-col overflow-auto">
-        {/* ------------------ TOP HEADER ------------------ */}
         <div className="flex justify-between items-center bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
           <div className="rounded-full h-[60px] w-[60px] flex justify-center items-center overflow-hidden border border-[#B0CE88]">
             {schoolData?.schoolLogo ? (
@@ -93,7 +92,6 @@ export const PrincipalHome = () => {
             )}
           </div>
 
-          {/* ---------- Dynamic School Name ---------- */}
           <div className="text-white w-[45vw] h-[4vh] text-md font-semibold overflow-x-auto whitespace-nowrap scrollbar-hide">
             {schoolData.schoolName}
           </div>
@@ -114,11 +112,10 @@ export const PrincipalHome = () => {
           </div>
         </div>
 
-        {/* ------------------ GALLERY ------------------ */}
-        <div className="relative flex flex-col justify-center items-center bg-white h-[40vh] shadow-sm border border-[#B0CE88]/40 overflow-hidden">
+        <div className="relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden">
           {schoolData?.images?.length > 0 ? (
             <div
-              className="h-full w-full flex transition-transform duration-300 ease-out"
+              className="h-70 w-full flex transition-transform duration-300 ease-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
               onTouchStart={touchStartHandle}
               onTouchMove={touchMoveHandle}
@@ -134,12 +131,16 @@ export const PrincipalHome = () => {
               ))}
             </div>
           ) : (
-            <p className="text-center text-[#4C763B]/50 font-semibold pt-8">
-              No images uploaded
-            </p>
+            <div>
+              <h2 className="text-[#4C763B] font-semibold text-center my-6">
+                Gallery
+              </h2>
+              <p className="text-center text-[#4C763B]/50 font-semibold mb-6">
+                No images uploaded
+              </p>
+            </div>
           )}
 
-          {/* Dots */}
           {schoolData?.images?.length > 1 && (
             <div className="absolute bottom-3 w-full flex justify-center gap-1 px-4">
               {schoolData.images.map((_, index) => {
@@ -160,7 +161,6 @@ export const PrincipalHome = () => {
           )}
         </div>
 
-        {/* ------------------ ABOUT US ------------------ */}
         <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40 w-full">
           <h2 className="text-[#4C763B] font-semibold text-center mb-4">
             About Us
@@ -177,7 +177,6 @@ export const PrincipalHome = () => {
           )}
         </div>
 
-        {/* ------------------ TEAM MEMBERS ------------------ */}
         <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40">
           <h2 className="text-[#4C763B] font-semibold text-center mb-6">
             Meet Our Team
@@ -207,7 +206,6 @@ export const PrincipalHome = () => {
           )}
         </div>
 
-        {/* ------------------ FOOTER (DYNAMIC DATA) ------------------ */}
         <footer className="bg-[#4C763B]/50 text-[#ECF4E8] pt-10 pb-6 px-6">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-8 border-b border-[#ECF4E8]/20">
@@ -234,7 +232,6 @@ export const PrincipalHome = () => {
         </footer>
       </div>
 
-      {/* ------------------ BOTTOM NAV ------------------ */}
       {loggedInPrincipalId === principalId && (
         <div className="sticky bottom-0 w-full flex border-t border-[#B0CE88]/50 bg-white shadow-inner">
           <Link
