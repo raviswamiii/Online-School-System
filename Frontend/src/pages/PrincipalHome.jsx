@@ -108,9 +108,9 @@ export const PrincipalHome = () => {
               </Link>
             )}
 
-            <button className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all">
+            <Link to={"/allMessages"} className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all">
               <BsChatRightFill className="text-[#4C763B]" />
-            </button>
+            </Link>
           </div>
         </div>
 

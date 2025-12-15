@@ -14,6 +14,8 @@ import { SoloSignIn } from "./pages/SoloSignIn";
 import { ProtectRoutes } from "./pages/ProtectRoutes";
 import { UpdateAuthentication } from "./components/UpdateAuthentication";
 import { EditSchool } from "./components/EditSchool";
+import { AllMessages } from "./components/AllMessages";
+import { ChatSection } from "./components/ChatSection";
 
 export const App = () => {
   return (
@@ -39,6 +41,8 @@ export const App = () => {
         <Route path="/principalHome/:principalId" element={<PrincipalHome />} />
         <Route path="/updateAuthentication" element={<UpdateAuthentication />} />
         <Route path="/editSchool" element={<EditSchool />} />
+        <Route path="/allMessages" element={<AllMessages />} />
+        <Route path="/chatSection" element={<ChatSection />} />
       </Routes>
     </div>
   );
