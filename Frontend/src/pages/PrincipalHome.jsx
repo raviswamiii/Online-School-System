@@ -80,20 +80,22 @@ export const PrincipalHome = () => {
     <div className="relative">
       <div className="min-h-screen bg-[#ECF4E8] text-[#043915] flex flex-col overflow-auto">
         <div className="flex justify-between items-center bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
-          <div className="rounded-full h-[60px] w-[60px] flex justify-center items-center overflow-hidden border border-[#B0CE88]">
-            {schoolData?.schoolLogo ? (
-              <img
-                src={`${backendURL}${schoolData.schoolLogo}`}
-                className="h-full w-full object-cover"
-                alt="school logo"
-              />
-            ) : (
-              <span className="text-[#4C763B] font-semibold">Logo</span>
-            )}
-          </div>
+          <div className="flex items-center gap-5">
+            <div className="rounded-full h-[60px] w-[60px] flex justify-center items-center overflow-hidden border border-[#B0CE88]">
+              {schoolData?.schoolLogo ? (
+                <img
+                  src={`${backendURL}${schoolData.schoolLogo}`}
+                  className="h-full w-full object-cover"
+                  alt="school logo"
+                />
+              ) : (
+                <span className="text-[#4C763B] font-semibold">Logo</span>
+              )}
+            </div>
 
-          <div className="text-white w-[45vw] h-[4vh] text-md font-semibold overflow-x-auto whitespace-nowrap scrollbar-hide">
-            {schoolData.schoolName}
+            <div className="text-white w-[45vw] h-[4vh] text-md font-semibold overflow-x-auto whitespace-nowrap scrollbar-hide">
+              {schoolData.schoolName}
+            </div>
           </div>
 
           <div className="flex gap-3">
