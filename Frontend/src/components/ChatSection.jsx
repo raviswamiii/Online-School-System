@@ -1,39 +1,64 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 export const ChatSection = () => {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Hello! How can I help you?", sender: "school" },
-    { id: 2, text: "I have a question regarding my admission.", sender: "user" },
-    { id: 3, text: "Sure! Please tell me.", sender: "school" },
-  ]);
+  const [schoolData, setSchoolData] = useState("");
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const scrollRef = useRef(null);
+  const { chatId } = useParams();
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-  const sendMessage = () => {
-    if (!newMessage.trim()) return;
-    setMessages([...messages, { id: Date.now(), text: newMessage, sender: "user" }]);
-    setNewMessage("");
+  const fetchSchool = async () => {
+    try {
+      const response = await axios.get(
+        `${backendURL}/schools/getSchool/${chatId}`
+      );
+      if (response.data.success) {
+        setSchoolData(response.data.school);
+      } else {
+      }
+    } catch (err) {
+      console.error(err.response?.data?.message || err.message);
+    }
   };
 
   useEffect(() => {
+    if (chatId) fetchSchool();
+  }, [chatId]);
+  useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const sendMessage = () => {
+    if (!newMessage.trim()) return;
+    setMessages([
+      ...messages,
+      { id: Date.now(), text: newMessage, sender: "user" },
+    ]);
+    setNewMessage("");
+  };
 
   return (
     <div className="flex flex-col h-screen bg-[#ECF4E8]">
       <div className="sticky top-0 z-10 bg-[#4C763B]/80 text-[#ECF4E8] px-4 py-3 flex items-center gap-3 border-b">
         <div className="h-10 w-10 rounded-full border-2 border-[#ECF4E8] bg-white shrink-0"></div>
-        <p className="font-semibold text-lg truncate">Sadachar Public School</p>
+        <p className="font-semibold text-lg truncate">
+          {schoolData.schoolName || "Loading..."}
+        </p>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+            className={`flex ${
+              msg.sender === "user" ? "justify-end" : "justify-start"
+            }`}
           >
             <div
-              className={`max-w-[70%] px-4 py-2 rounded-lg wrap-break-word ${
+              className={`max-w-[70%] px-4 py-2 rounded-lg ${
                 msg.sender === "user"
                   ? "bg-[#FFE797] text-[#043915] rounded-br-none"
                   : "bg-[#4C763B] text-[#ECF4E8] rounded-bl-none"

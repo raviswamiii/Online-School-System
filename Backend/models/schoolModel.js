@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const teamMemberSchema = new mongoose.Schema({
   name: { type: String },
   role: { type: String },
-  img: { type: String }, // image URL
+  img: { type: String }, 
 });
 
 const schoolSchema = new mongoose.Schema(
@@ -15,14 +15,12 @@ const schoolSchema = new mongoose.Schema(
 
     schoolLocation: { type: String, required: true },
 
-    schoolLogo: { type: String }, // logo
-
-    // NEW FIELDS BASED ON YOUR REACT COMPONENT
-    images: [{ type: String }], // multiple images
+    schoolLogo: { type: String },
+    images: [{ type: String }], 
 
     aboutUs: { type: String },
 
-    teamMembers: [teamMemberSchema], // array of objects
+    teamMembers: [teamMemberSchema], 
 
     address: { type: String },
     phoneNumber: { type: String },

@@ -42,7 +42,7 @@ export const App = () => {
         <Route path="/updateAuthentication" element={<UpdateAuthentication />} />
         <Route path="/editSchool" element={<EditSchool />} />
         <Route path="/allMessages" element={<AllMessages />} />
-        <Route path="/chatSection" element={<ChatSection />} />
+        <Route path="/chatSection/:chatId" element={<ChatSection />} />
       </Routes>
     </div>
   );

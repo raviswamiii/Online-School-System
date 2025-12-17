@@ -81,11 +81,11 @@ export const PrincipalHome = () => {
       <div className="min-h-screen bg-[#ECF4E8] text-[#043915] flex flex-col overflow-auto">
         <div className="flex justify-between items-center bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
           <div className="flex items-center gap-5">
-            <div className="rounded-full h-[60px] w-[60px] flex justify-center items-center overflow-hidden border border-[#B0CE88]">
+            <div className="rounded-full h-[60px] w-[60px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88]">
               {schoolData?.schoolLogo ? (
                 <img
                   src={`${backendURL}${schoolData.schoolLogo}`}
-                  className="h-full w-full object-cover bg-white"
+                  className="h-full w-full object-cover"
                   alt="school logo"
                 />
               ) : (
@@ -108,7 +108,7 @@ export const PrincipalHome = () => {
               </Link>
             )}
 
-            <Link to={"/allMessages"} className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all">
+            <Link to={`/chatSection/${schoolData._id}`} className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all">
               <BsChatRightFill className="text-[#4C763B]" />
             </Link>
           </div>

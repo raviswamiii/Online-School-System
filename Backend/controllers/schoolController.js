@@ -88,7 +88,6 @@ const getSchoolById = async (req, res) => {
   try {
     const { id } = req.params;
     const school = await schoolModel.findById(id).select("-schoolPassword");
-
     if (!school) {
       return res
         .status(404)
@@ -211,9 +210,7 @@ const deleteSchool = async (req, res) => {
 const editSchool = async (req, res) => {
   try {
     // ------ AUTH ------
-    const token =
-      req.cookies.token ||
-      req.headers.authorization?.split(" ")[1];
+    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
     if (!token)
       return res
@@ -343,7 +340,9 @@ const updateAuthentication = async (req, res) => {
 
     // -- if user wants to change email
     if (changeEmail) {
-      const emailExists = await schoolModel.findOne({ schoolEmail: changeEmail });
+      const emailExists = await schoolModel.findOne({
+        schoolEmail: changeEmail,
+      });
 
       if (emailExists && emailExists._id.toString() !== schoolId.toString()) {
         return res.status(400).json({
@@ -385,5 +384,5 @@ export {
   schoolLogOut,
   deleteSchool,
   editSchool,
-  updateAuthentication
+  updateAuthentication,
 };
