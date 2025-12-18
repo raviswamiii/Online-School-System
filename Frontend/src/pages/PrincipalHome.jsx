@@ -78,9 +78,15 @@ export const PrincipalHome = () => {
   const handleChatClick = () => {
     if (!token) {
       navigate("/schoolSignIn");
-    } else {
-      navigate(`/chatSection/${schoolData._id}`);
+      return;
     }
+
+    if (loggedInPrincipalId === principalId) {
+      navigate("/allMessages");
+      return;
+    }
+
+    navigate(`/chatSection/${schoolData._id}`);
   };
 
   return (
