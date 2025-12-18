@@ -18,7 +18,7 @@ const server = http.createServer(app);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware
+// ---------------- MIDDLEWARE ----------------
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,18 +26,18 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.FRONTEND_URL, // e.g. http://localhost:5173
     credentials: true,
   })
 );
 
-// Routes
+// ---------------- ROUTES ----------------
 app.use("/schools", schoolRouter);
 
-// Initialize socket
-initSocket(server);
+// ---------------- SOCKET INITIALIZATION ----------------
+initSocket(server); // ✅ socket.io attached here
 
-// Start server
+// ---------------- START SERVER ----------------
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

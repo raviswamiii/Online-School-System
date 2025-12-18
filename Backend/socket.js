@@ -1,8 +1,5 @@
 import { Server } from "socket.io";
-import crypto from "crypto";
-
-// userId (schoolId) → socketId
-const onlineUsers = new Map();
+import Message from "./models/messageModel.js"; // adjust path if needed
 
 const initSocket = (server) => {
   const io = new Server(server, {
@@ -13,38 +10,32 @@ const initSocket = (server) => {
   });
 
   io.on("connection", (socket) => {
-    const userId = socket.handshake.auth.userId;
+    console.log("🔌 Socket connected:", socket.id);
 
-    if (userId) {
-      onlineUsers.set(userId, socket.id);
-      console.log("🟢 User connected:", userId);
-    }
+    // join private chat room
+    socket.on("joinChat", (chatId) => {
+      socket.join(chatId);
+      console.log(`👥 Joined chat room: ${chatId}`);
+    });
 
-    socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-      const receiverSocketId = onlineUsers.get(receiverId);
+    // send message
+    socket.on("sendMessage", async (data) => {
+      try {
+        const message = await Message.create({
+          chatId: data.chatId,
+          senderId: data.senderId,
+          text: data.text,
+        });
 
-      const messageData = {
-        _id: crypto.randomUUID(),
-        senderId,
-        receiverId,
-        text,
-        createdAt: new Date(),
-      };
-
-      // Send to receiver only
-      if (receiverSocketId) {
-        io.to(receiverSocketId).emit("receiveMessage", messageData);
+        // emit only to that chat room
+        io.to(data.chatId).emit("receiveMessage", message);
+      } catch (error) {
+        console.error("❌ Socket message error:", error.message);
       }
-
-      // Send back to sender (for UI)
-      socket.emit("receiveMessage", messageData);
     });
 
     socket.on("disconnect", () => {
-      if (userId) {
-        onlineUsers.delete(userId);
-        console.log("🔴 User disconnected:", userId);
-      }
+      console.log("❌ Socket disconnected:", socket.id);
     });
   });
 };

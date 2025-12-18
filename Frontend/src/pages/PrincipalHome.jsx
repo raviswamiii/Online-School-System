@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { MdEdit } from "react-icons/md";
 import { BsChatRightFill } from "react-icons/bs";
@@ -9,6 +9,7 @@ export const PrincipalHome = () => {
   const [schoolData, setSchoolData] = useState(null);
   const [error, setError] = useState("");
   const [loggedInPrincipalId, setLoggedInPrincipalId] = useState(null);
+  const navigate = useNavigate();
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const { principalId } = useParams();
@@ -19,9 +20,7 @@ export const PrincipalHome = () => {
   const [touchEndX, setTouchEndX] = useState(0);
 
   const touchStartHandle = (e) => setTouchStartX(e.targetTouches[0].clientX);
-
   const touchMoveHandle = (e) => setTouchEndX(e.targetTouches[0].clientX);
-
   const touchEndHandle = () => {
     if (!touchStartX || !touchEndX || !schoolData?.images) return;
 
@@ -76,6 +75,14 @@ export const PrincipalHome = () => {
   if (error) return <p className="text-red-500">{error}</p>;
   if (!schoolData) return <p>Loading...</p>;
 
+  const handleChatClick = () => {
+    if (!token) {
+      navigate("/schoolSignIn");
+    } else {
+      navigate(`/chatSection/${schoolData._id}`);
+    }
+  };
+
   return (
     <div className="relative">
       <div className="min-h-screen bg-[#ECF4E8] text-[#043915] flex flex-col overflow-auto">
@@ -108,9 +115,12 @@ export const PrincipalHome = () => {
               </Link>
             )}
 
-            <Link to={`/chatSection/${schoolData._id}`} className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all">
+            <button
+              onClick={handleChatClick}
+              className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
+            >
               <BsChatRightFill className="text-[#4C763B]" />
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -196,8 +206,12 @@ export const PrincipalHome = () => {
                     className="h-24 w-24 rounded-full object-cover mb-3 border border-[#4C763B]"
                     alt={member.name}
                   />
-                  <p className="font-semibold text-[#043915] text-center">{member.name}</p>
-                  <p className="text-sm text-[#4C763B]/70 text-center">{member.role}</p>
+                  <p className="font-semibold text-[#043915] text-center">
+                    {member.name}
+                  </p>
+                  <p className="text-sm text-[#4C763B]/70 text-center">
+                    {member.role}
+                  </p>
                 </div>
               ))}
             </div>
