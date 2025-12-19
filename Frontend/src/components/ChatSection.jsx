@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import socket from "../socket";
 
 export const ChatSection = () => {
   const [schoolData, setSchoolData] = useState("");
