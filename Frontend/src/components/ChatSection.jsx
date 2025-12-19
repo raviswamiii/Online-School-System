@@ -6,7 +6,6 @@ export const ChatSection = () => {
   const [schoolData, setSchoolData] = useState("");
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const scrollRef = useRef(null);
   const { chatId } = useParams();
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -27,18 +26,6 @@ export const ChatSection = () => {
   useEffect(() => {
     if (chatId) fetchSchool();
   }, [chatId]);
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  const sendMessage = () => {
-    if (!newMessage.trim()) return;
-    setMessages([
-      ...messages,
-      { id: Date.now(), text: newMessage, sender: "user" },
-    ]);
-    setNewMessage("");
-  };
 
   return (
     <div className="flex flex-col h-screen bg-[#ECF4E8]">
@@ -68,7 +55,6 @@ export const ChatSection = () => {
             </div>
           </div>
         ))}
-        <div ref={scrollRef}></div>
       </div>
 
       <div className="flex items-center gap-2 px-4 py-2 border-t bg-white">
@@ -78,11 +64,9 @@ export const ChatSection = () => {
           placeholder="Type a message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
         <button
           className="bg-[#4C763B] text-[#ECF4E8] px-4 py-2 rounded-full hover:bg-[#3c5e30] transition"
-          onClick={sendMessage}
         >
           Send
         </button>
