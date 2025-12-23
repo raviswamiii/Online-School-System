@@ -21,7 +21,14 @@ export const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <ProtectRoutes>
+              <Home />
+            </ProtectRoutes>
+          }
+        />
         <Route path="/registerYourself" element={<RegisterYourself />} />
         <Route path="/schoolRegistration" element={<SchoolRegistration />} />
         <Route path="/collegeRegistration" element={<CollegeRegistration />} />
@@ -39,7 +46,10 @@ export const App = () => {
           }
         />
         <Route path="/principalHome/:principalId" element={<PrincipalHome />} />
-        <Route path="/updateAuthentication" element={<UpdateAuthentication />} />
+        <Route
+          path="/updateAuthentication"
+          element={<UpdateAuthentication />}
+        />
         <Route path="/editSchool" element={<EditSchool />} />
         <Route path="/allMessages" element={<AllMessages />} />
         <Route path="/chatSection/:chatId" element={<ChatSection />} />
