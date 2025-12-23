@@ -1,15 +1,38 @@
+import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 
 export const ChatSection = () => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [schoolData, setSchoolData] = useState(null);
   const scrollRef = useRef(null);
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+  const { chatId } = useParams();
+
+  const fetchSchool = async () => {
+    try {
+      const response = await axios.get(
+        `${backendURL}/schools/getSchool/${chatId}`
+      );
+
+      if (response.data.success) {
+        setSchoolData(response.data.school);
+      } else {
+        console.log(response.data.message);
+      }
+    } catch (error) {
+      console.error(error.response?.data?.message);
+    }
+  };
+
+  useEffect(() => {
+    if (chatId) fetchSchool();
+  }, [chatId]);
 
   const sendMessage = () => {
     if (!newMessage.trim()) return;
-
     setMessages((prev) => [...prev, { text: newMessage, sender: "me" }]);
-
     setNewMessage("");
   };
 
@@ -19,8 +42,14 @@ export const ChatSection = () => {
   return (
     <div className="h-screen bg-green-100">
       <div className="flex items-center gap-3 bg-green-800 px-4 py-2">
-        <img className="h-10 w-10 border rounded-full bg-white" />
-        <p className=" text-xl text-white font-semibold">School Name...</p>
+        <img
+          src={`${backendURL}${schoolData?.schoolLogo}`}
+          alt="School Logo"
+          className=" overflow-hidden h-10 w-10 border rounded-full bg-white"
+        />
+        <p className=" text-xl text-white font-semibold">
+          {schoolData?.schoolName || "Loading..."}
+        </p>
       </div>
 
       <div className="h-[82vh] overflow-y-auto">
