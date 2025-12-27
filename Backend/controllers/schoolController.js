@@ -4,8 +4,10 @@ import validator from "validator";
 import schoolModel from "../models/schoolModel.js";
 import blacklistTokenModel from "../models/blacklistToken.js";
 
-const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+const createToken = (id, schoolName) => {
+  return jwt.sign({ id, schoolName }, process.env.JWT_SECRET, {
+    expiresIn: "1d",
+  });
 };
 
 const registerSchool = async (req, res) => {
@@ -128,7 +130,7 @@ const schoolSignIn = async (req, res) => {
         .status(401)
         .json({ success: false, message: "Invalid Credentials." });
 
-    const token = createToken(exists._id);
+    const token = createToken(exists._id, exists.schoolName );
 
     return res.status(200).json({
       success: true,

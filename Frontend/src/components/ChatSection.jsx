@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import socket from "../socket";
+import { jwtDecode } from "jwt-decode";
 
 export const ChatSection = () => {
   const [newMessage, setNewMessage] = useState("");
@@ -10,6 +11,8 @@ export const ChatSection = () => {
   const scrollRef = useRef(null);
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const { chatId } = useParams();
+  const token = localStorage.getItem("token");
+  const user = jwtDecode(token);
 
   const fetchSchool = async () => {
     try {
@@ -33,7 +36,14 @@ export const ChatSection = () => {
 
   const sendMessage = () => {
     if (!newMessage.trim()) return;
-    setMessages((prev) => [...prev, { text: newMessage, sender: "me" }]);
+
+    setMessages((prev) => [...prev, { text: newMessage, sender: user.schoolName }]);
+
+    socket.emit("sendMessage", {
+      text: newMessage,
+      sender: user.schoolName,
+    });
+
     setNewMessage("");
   };
 

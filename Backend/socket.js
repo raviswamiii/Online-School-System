@@ -11,6 +11,10 @@ const socketSetup = (server) => {
   io.on("connection", (socket) => {
     console.log("User Connected:", socket.id);
 
+    socket.on("sendMessage", (data) => {
+        console.log("Message recieved:", data);
+    })
+
     socket.on("disconnect", () => {
       console.log("User Disconnected:", socket.id);
     });
