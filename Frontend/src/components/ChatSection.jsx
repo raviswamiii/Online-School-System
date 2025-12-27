@@ -60,11 +60,12 @@ export const ChatSection = () => {
 
   useEffect(() => {
     socket.on("receiveMessage", (data) => {
-      setMessages((prev) => [...prev, data]);
+      if (data.senderId !== user.id) {
+        setMessages((prev) => [...prev, data]);
+      }
     });
-    return () => {
-      socket.off("receiveMessage");
-    };
+
+    return () => socket.off("receiveMessage");
   }, []);
 
   useEffect(() => {
@@ -86,7 +87,12 @@ export const ChatSection = () => {
       <div className="h-[82vh] overflow-y-auto">
         {messages.map((msg, index) => {
           return (
-            <div key={index} className={`flex p-2 ${msg.senderId === user._id ? "justify-end" : "justify-start"}`}>
+            <div
+              key={index}
+              className={`flex p-2 ${
+                msg.senderId === user.id ? "justify-start" : "justify-end"
+              }`}
+            >
               <p className="bg-orange-200 text-md font-semibold px-3 py-1 rounded-md">
                 {msg.text}
               </p>
