@@ -37,15 +37,35 @@ export const ChatSection = () => {
   const sendMessage = () => {
     if (!newMessage.trim()) return;
 
-    setMessages((prev) => [...prev, { text: newMessage, sender: user.schoolName }]);
-
     socket.emit("sendMessage", {
+      senderId: user.id,
+      receiverId: chatId,
       text: newMessage,
-      sender: user?.schoolName,
     });
+    console.log(user);
+
+    setMessages((prev) => [...prev, { text: newMessage, sender: user.id }]);
 
     setNewMessage("");
   };
+
+  useEffect(() => {
+    if (!chatId || !user?.id) return;
+
+    socket.emit("joinRoom", {
+      senderId: user.id,
+      receiverId: chatId,
+    });
+  }, [chatId]);
+
+  useEffect(() => {
+    socket.on("receiveMessage", (data) => {
+      setMessages((prev) => [...prev, data]);
+    });
+    return () => {
+      socket.off("receiveMessage");
+    };
+  }, []);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });

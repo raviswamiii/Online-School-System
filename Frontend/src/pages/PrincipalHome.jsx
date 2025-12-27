@@ -81,12 +81,14 @@ export const PrincipalHome = () => {
       return;
     }
 
-    if (loggedInPrincipalId === principalId) {
-      navigate("/allMessages");
-      return;
-    }
+    // if (loggedInPrincipalId === principalId) {
+    //   navigate("/allMessages");
+    //   return;
+    // }
 
-    navigate(`/chatSection/${schoolData._id}`);
+    // navigate(`/chatSection/${schoolData._id}`);
+
+    navigate(`/chatSection/${schoolData._id}`)
   };
 
   return (
