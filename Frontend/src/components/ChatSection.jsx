@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import socket from "../socket";
 
 export const ChatSection = () => {
   const [newMessage, setNewMessage] = useState("");
