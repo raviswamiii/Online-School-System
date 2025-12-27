@@ -57,7 +57,7 @@ const registerSchool = async (req, res) => {
 
     const school = await newSchool.save();
 
-    const token = createToken(school._id);
+    const token = createToken(school._id, school.schoolName);
 
     return res.status(201).json({
       success: true,

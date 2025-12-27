@@ -41,7 +41,7 @@ export const ChatSection = () => {
 
     socket.emit("sendMessage", {
       text: newMessage,
-      sender: user.schoolName,
+      sender: user?.schoolName,
     });
 
     setNewMessage("");
