@@ -86,7 +86,7 @@ export const ChatSection = () => {
       <div className="h-[82vh] overflow-y-auto">
         {messages.map((msg, index) => {
           return (
-            <div key={index} className="flex justify-end p-2">
+            <div key={index} className={`flex p-2 ${msg.senderId === user._id ? "justify-end" : "justify-start"}`}>
               <p className="bg-orange-200 text-md font-semibold px-3 py-1 rounded-md">
                 {msg.text}
               </p>
