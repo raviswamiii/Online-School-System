@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import socket from "../socket";
 import { jwtDecode } from "jwt-decode";
 
 export const ChatSection = () => {
@@ -37,40 +36,14 @@ export const ChatSection = () => {
   const sendMessage = () => {
     if (!newMessage.trim()) return;
 
-    socket.emit("sendMessage", {
-      senderId: user.id,
-      receiverId: chatId,
-      text: newMessage,
-    });
-    console.log(user);
-
     setMessages((prev) => [...prev, { text: newMessage, sender: user.id }]);
-
     setNewMessage("");
   };
 
   useEffect(() => {
-    if (!chatId || !user?.id) return;
-
-    socket.emit("joinRoom", {
-      senderId: user.id,
-      receiverId: chatId,
-    });
-  }, [chatId]);
-
-  useEffect(() => {
-    socket.on("receiveMessage", (data) => {
-      if (data.senderId !== user.id) {
-        setMessages((prev) => [...prev, data]);
-      }
-    });
-
-    return () => socket.off("receiveMessage");
-  }, []);
-
-  useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
   return (
     <div className="h-screen bg-green-100">
       <div className="flex items-center gap-3 bg-green-800 px-4 py-2">

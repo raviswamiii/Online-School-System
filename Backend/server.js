@@ -6,15 +6,12 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
-import socketSetup from "./socket.js";
-import http from "http";
 
 dotenv.config();
 databaseConnection();
 
 const PORT = process.env.PORT || 3000;
 const app = express();
-const server = http.createServer(app);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,8 +30,6 @@ app.use(
 
 app.use("/schools", schoolRouter);
 
-socketSetup(server);
-
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
