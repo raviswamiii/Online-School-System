@@ -7,14 +7,17 @@ import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 import messageRouter from "./routes/messageRoute.js";
-// import { createServer } from "http";
+import { createServer } from "http";
 // import { Server } from "socket.io";
+import { initSocket } from "./socket.js";
 
 dotenv.config();
 databaseConnection();
 
 const PORT = process.env.PORT || 3000;
 const app = express();
+const server = createServer(app);
+initSocket(server);
 // const server = new createServer(app);
 // const io = new Server(server, {
 //   cors: {
@@ -55,6 +58,6 @@ app.use("/messages", messageRouter)
 //   });
 // });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

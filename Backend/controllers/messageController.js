@@ -1,4 +1,5 @@
 import Message from "../models/messageModel.js";
+import { getIO } from "../socket.js";
 
 export const sendMessage = async (req, res) => {
   try {
@@ -21,6 +22,10 @@ export const sendMessage = async (req, res) => {
       text,
     });
 
+    const io = getIO();
+    io.to(roomId).emit("receiveMessage", message);
+    io.to(receiverId.toString()).emit("receiveMessage", message);
+    
     return res.status(201).json({
       success: true,
       message,
@@ -33,7 +38,6 @@ export const sendMessage = async (req, res) => {
     });
   }
 };
-
 
 export const getMessages = async (req, res) => {
   try {

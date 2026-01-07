@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import socket from "../socket";
 
 export const ChatSection = () => {
   const [newMessage, setNewMessage] = useState("");
@@ -27,7 +28,7 @@ export const ChatSection = () => {
     }
   };
 
-  /* ---------------- Fetch Messages ---------------- */
+  /* ---------------- Fetch Messages (REST) ---------------- */
   const fetchMessages = async () => {
     try {
       const res = await axios.get(
@@ -52,7 +53,7 @@ export const ChatSection = () => {
     if (!newMessage.trim()) return;
 
     try {
-      const res = await axios.post(
+      await axios.post(
         `${backendURL}/messages/sendMessages`,
         {
           receiverId: chatId,
@@ -65,16 +66,50 @@ export const ChatSection = () => {
         }
       );
 
-      if (res.data.success) {
-        setMessages((prev) => [...prev, res.data.message]);
-        setNewMessage("");
-      }
+      setNewMessage("");
     } catch (err) {
       console.error(err.response?.data?.message);
     }
   };
 
-  /* ---------------- Effects ---------------- */
+  /* ---------------- SOCKET: Join Room ---------------- */
+  useEffect(() => {
+    if (!chatId || !user?.id) return;
+
+    const join = () => {
+      socket.emit("joinRoom", {
+        senderId: user.id,
+        receiverId: chatId,
+      });
+    };
+
+    // join immediately
+    join();
+
+    // re-join on reconnect (VERY IMPORTANT)
+    socket.on("connect", join);
+
+    return () => {
+      socket.off("connect", join);
+    };
+  }, [chatId, user.id]);
+
+  /* ---------------- SOCKET: Receive Message ---------------- */
+  useEffect(() => {
+  const handleReceive = (message) => {
+    setMessages((prev) => {
+      if (prev.some((m) => m._id === message._id)) return prev;
+      return [...prev, message];
+    });
+  };
+
+  socket.on("receiveMessage", handleReceive);
+
+  return () => socket.off("receiveMessage", handleReceive);
+}, []);
+
+
+  /* ---------------- Initial Load ---------------- */
   useEffect(() => {
     if (chatId) {
       fetchSchool();
@@ -82,6 +117,7 @@ export const ChatSection = () => {
     }
   }, [chatId]);
 
+  /* ---------------- Auto Scroll ---------------- */
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
