@@ -6,6 +6,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
+import messageRouter from "./routes/messageRoute.js";
 // import { createServer } from "http";
 // import { Server } from "socket.io";
 
@@ -39,6 +40,7 @@ app.use(
 );
 
 app.use("/schools", schoolRouter);
+app.use("/messages", messageRouter)
 
 // io.on("connection", (socket) => {
 //   console.log("User connected", socket.id);
