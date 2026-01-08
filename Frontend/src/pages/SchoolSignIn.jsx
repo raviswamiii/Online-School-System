@@ -41,46 +41,42 @@ export const SchoolSignIn = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#ECF4E8] flex items-center justify-center px-4">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-sm border border-[#B0CE88]/50 p-8">
-        <div className="flex flex-col items-center mb-6">
-          <div className="h-12 w-12 rounded-full bg-[#4C763B]/10 flex items-center justify-center mb-3">
-            <MdSchool className="text-2xl text-[#4C763B]" />
+    <div className="min-h-screen bg-linear-to-br from-[#ECF4E8] to-[#dfead7] flex items-center justify-center px-4">
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-lg border border-[#B0CE88]/40 p-8 sm:p-10">
+        <div className="flex flex-col items-center mb-8">
+          <div className="h-14 w-14 rounded-full bg-[#4C763B]/10 flex items-center justify-center mb-4">
+            <MdSchool className="text-3xl text-[#4C763B]" />
           </div>
-          <h1 className="text-2xl font-semibold text-[#043915]">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#043915]">
             School Sign In
           </h1>
-          <p className="text-sm text-[#4C763B]/70">
+          <p className="text-sm text-[#4C763B]/70 mt-1">
             Access your school dashboard
           </p>
         </div>
 
-        <form onSubmit={onSubmitHandler} className="space-y-4">
-          <div>
-            <input
-              type="email"
-              placeholder="School Email"
-              value={schoolEmail}
-              onChange={(e) => {
-                setSchoolEmail(e.target.value);
-                setError("");
-              }}
-              className="w-full px-4 py-2.5 rounded-lg border border-[#B0CE88]/50 outline-none focus:ring-2 focus:ring-[#4C763B]/40"
-            />
-          </div>
+        <form onSubmit={onSubmitHandler} className="space-y-5">
+          <input
+            type="email"
+            placeholder="School Email"
+            value={schoolEmail}
+            onChange={(e) => {
+              setSchoolEmail(e.target.value);
+              setError("");
+            }}
+            className="w-full px-4 py-3 rounded-xl border border-[#B0CE88]/50 outline-none focus:ring-2 focus:ring-[#4C763B]/40 transition"
+          />
 
-          <div>
-            <input
-              type="password"
-              placeholder="Password"
-              value={schoolPassword}
-              onChange={(e) => {
-                setSchoolPassword(e.target.value);
-                setError("");
-              }}
-              className="w-full px-4 py-2.5 rounded-lg border border-[#B0CE88]/50 outline-none focus:ring-2 focus:ring-[#4C763B]/40"
-            />
-          </div>
+          <input
+            type="password"
+            placeholder="Password"
+            value={schoolPassword}
+            onChange={(e) => {
+              setSchoolPassword(e.target.value);
+              setError("");
+            }}
+            className="w-full px-4 py-3 rounded-xl border border-[#B0CE88]/50 outline-none focus:ring-2 focus:ring-[#4C763B]/40 transition"
+          />
 
           {error && (
             <p className="text-sm text-red-500 text-center">{error}</p>
@@ -89,13 +85,13 @@ export const SchoolSignIn = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-lg bg-[#4C763B] text-white font-semibold hover:bg-[#043915] transition-all disabled:opacity-50"
+            className="w-full py-3 rounded-xl bg-[#4C763B] text-white font-semibold hover:bg-[#043915] transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
-        <div className="text-center text-sm text-[#4C763B]/70 mt-6">
+        <div className="text-center text-sm text-[#4C763B]/70 mt-8">
           Don’t have a school account?{" "}
           <Link
             to="/schoolRegistration"
