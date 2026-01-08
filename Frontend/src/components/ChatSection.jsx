@@ -16,7 +16,6 @@ export const ChatSection = () => {
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
 
-  /* ---------------- Fetch School ---------------- */
   const fetchSchool = async () => {
     try {
       const res = await axios.get(`${backendURL}/schools/getSchool/${chatId}`);
@@ -28,7 +27,6 @@ export const ChatSection = () => {
     }
   };
 
-  /* ---------------- Fetch Messages (REST) ---------------- */
   const fetchMessages = async () => {
     try {
       const res = await axios.get(
@@ -48,7 +46,6 @@ export const ChatSection = () => {
     }
   };
 
-  /* ---------------- Send Message ---------------- */
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
 
@@ -72,7 +69,6 @@ export const ChatSection = () => {
     }
   };
 
-  /* ---------------- SOCKET: Join Room ---------------- */
   useEffect(() => {
     if (!chatId || !user?.id) return;
 
@@ -83,10 +79,7 @@ export const ChatSection = () => {
       });
     };
 
-    // join immediately
     join();
-
-    // re-join on reconnect (VERY IMPORTANT)
     socket.on("connect", join);
 
     return () => {
@@ -94,22 +87,18 @@ export const ChatSection = () => {
     };
   }, [chatId, user.id]);
 
-  /* ---------------- SOCKET: Receive Message ---------------- */
   useEffect(() => {
-  const handleReceive = (message) => {
-    setMessages((prev) => {
-      if (prev.some((m) => m._id === message._id)) return prev;
-      return [...prev, message];
-    });
-  };
+    const handleReceive = (message) => {
+      setMessages((prev) => {
+        if (prev.some((m) => m._id === message._id)) return prev;
+        return [...prev, message];
+      });
+    };
 
-  socket.on("receiveMessage", handleReceive);
+    socket.on("receiveMessage", handleReceive);
+    return () => socket.off("receiveMessage", handleReceive);
+  }, []);
 
-  return () => socket.off("receiveMessage", handleReceive);
-}, []);
-
-
-  /* ---------------- Initial Load ---------------- */
   useEffect(() => {
     if (chatId) {
       fetchSchool();
@@ -117,55 +106,63 @@ export const ChatSection = () => {
     }
   }, [chatId]);
 
-  /* ---------------- Auto Scroll ---------------- */
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  /* ---------------- UI ---------------- */
   return (
-    <div className="h-screen bg-green-100">
-      <div className="flex items-center gap-3 bg-green-800 px-4 py-2">
+    <div className="h-screen flex flex-col bg-[#efeae2]">
+      <div className="sticky top-0 z-10 flex items-center gap-4 bg-[#075e54] px-5 py-3 shadow">
         <img
           src={`${backendURL}${schoolData?.schoolLogo}`}
           alt="School Logo"
-          className="h-10 w-10 rounded-full bg-white"
+          className="h-11 w-11 rounded-full object-cover bg-white"
         />
-        <p className="text-xl text-white font-semibold">
-          {schoolData?.schoolName || "Loading..."}
-        </p>
+        <div>
+          <p className="text-white text-lg font-semibold">
+            {schoolData?.schoolName || "Loading..."}
+          </p>
+          <p className="text-green-100 text-xs">Online</p>
+        </div>
       </div>
 
-      <div className="h-[82vh] overflow-y-auto px-2">
+      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
         {messages.map((msg) => {
           const isMe = msg.sender?._id === user.id || msg.sender === user.id;
 
           return (
             <div
               key={msg._id}
-              className={`flex p-2 ${isMe ? "justify-end" : "justify-start"}`}
+              className={`flex ${isMe ? "justify-end" : "justify-start"}`}
             >
-              <p className="bg-orange-200 px-3 py-1 rounded-md max-w-[70%]">
+              <div
+                className={`px-3 py-2 rounded-lg shadow max-w-[70%] text-sm
+                  ${
+                    isMe
+                      ? "bg-[#dcf8c6] rounded-br-none"
+                      : "bg-white rounded-bl-none"
+                  }`}
+              >
                 {msg.text}
-              </p>
+              </div>
             </div>
           );
         })}
         <div ref={scrollRef} />
       </div>
 
-      <div className="flex gap-2 p-2 fixed bottom-0 w-full border-t bg-white">
+      <div className="sticky bottom-0 bg-[#f0f0f0] px-4 py-2 border-t flex items-center gap-2">
         <input
-          className="outline-none border w-full rounded-full px-4"
+          className="flex-1 rounded-full px-4 py-2 outline-none border bg-white focus:ring-2 focus:ring-green-500"
           type="text"
-          placeholder="message..."
+          placeholder="Type a message"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
         <button
           onClick={sendMessage}
-          className="bg-green-800 px-8 py-2 rounded-full text-white"
+          className="bg-[#075e54] hover:bg-[#064c44] text-white px-6 py-2 rounded-full font-medium transition"
         >
           Send
         </button>

@@ -16,7 +16,7 @@ const messageSchema = new mongoose.Schema(
 
     roomId: {
       type: String,
-      required: true, // senderId_receiverId (sorted)
+      required: true, 
       index: true,
     },
 
@@ -32,7 +32,7 @@ const messageSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // adds createdAt & updatedAt
+    timestamps: true, 
   }
 );
 

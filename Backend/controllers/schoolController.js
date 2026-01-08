@@ -211,7 +211,6 @@ const deleteSchool = async (req, res) => {
 
 const editSchool = async (req, res) => {
   try {
-    // ------ AUTH ------
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
     if (!token)
@@ -221,7 +220,6 @@ const editSchool = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // ------ FIND SCHOOL ------
     const school = await schoolModel.findById(decoded.id);
 
     if (!school)
@@ -229,7 +227,6 @@ const editSchool = async (req, res) => {
         .status(404)
         .json({ success: false, message: "School not found." });
 
-    // ------ EXTRACT FIELDS ------
     const {
       schoolName,
       aboutUs,
@@ -240,10 +237,8 @@ const editSchool = async (req, res) => {
       teamMembers,
     } = req.body;
 
-    // Parse member details (stringified JSON)
     const parsedMembers = teamMembers ? JSON.parse(teamMembers) : [];
 
-    // ------ UPDATE BASIC FIELDS ------
     if (schoolName) school.schoolName = schoolName;
     if (aboutUs) school.aboutUs = aboutUs;
     if (address) school.address = address;
@@ -251,35 +246,25 @@ const editSchool = async (req, res) => {
     if (email) school.email = email;
     if (workingPeriod) school.workingPeriod = workingPeriod;
 
-    // ------ FILE HANDLING ------
-
     const files = req.files || {};
 
-    // ----- 1. UPDATE LOGO -----
     if (files.logo && files.logo.length > 0) {
       const logoFile = `/uploads/${files.logo[0].filename}`;
       school.schoolLogo = logoFile;
     }
 
-    // ----- 2. UPDATE GALLERY IMAGES -----
     if (files.images && files.images.length > 0) {
       const newImages = files.images.map((file) => `/uploads/${file.filename}`);
 
-      // If you want to *append* instead of replace:
       school.images = [...(school.images || []), ...newImages];
-
-      // If you want to *replace* old images:
-      // school.images = newImages;
     }
 
-    // ----- 3. UPDATE TEAM MEMBER IMAGES -----
     const teamFiles = files.teamImages || [];
     let imageIndex = 0;
 
     const editedTeamMembers = parsedMembers.map((member) => {
       const edited = { ...member };
 
-      // Assign uploaded team image (in order)
       if (teamFiles[imageIndex]) {
         edited.img = `/uploads/${teamFiles[imageIndex].filename}`;
         imageIndex++;
@@ -292,7 +277,6 @@ const editSchool = async (req, res) => {
       school.teamMembers = editedTeamMembers;
     }
 
-    // ------ SAVE UPDATED SCHOOL ------
     const editedSchool = await school.save();
 
     return res.status(200).json({
@@ -311,8 +295,7 @@ const editSchool = async (req, res) => {
 
 const updateAuthentication = async (req, res) => {
   try {
-    // -------- AUTH ----------
-    const schoolId = req.school?._id; // from schoolAuth middleware
+    const schoolId = req.school?._id; 
 
     if (!schoolId) {
       return res.status(401).json({
@@ -330,7 +313,6 @@ const updateAuthentication = async (req, res) => {
       });
     }
 
-    // -------- VALIDATION ----------
     const school = await schoolModel.findById(schoolId);
 
     if (!school) {
@@ -340,7 +322,6 @@ const updateAuthentication = async (req, res) => {
       });
     }
 
-    // -- if user wants to change email
     if (changeEmail) {
       const emailExists = await schoolModel.findOne({
         schoolEmail: changeEmail,
@@ -355,7 +336,6 @@ const updateAuthentication = async (req, res) => {
       school.schoolEmail = changeEmail;
     }
 
-    // -- if user wants to change password
     if (changePassword) {
       const hashedPass = await bcrypt.hash(changePassword, 10);
       school.schoolPassword = hashedPass;

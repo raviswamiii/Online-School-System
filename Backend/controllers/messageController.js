@@ -4,7 +4,7 @@ import { getIO } from "../socket.js";
 export const sendMessage = async (req, res) => {
   try {
     const { receiverId, text } = req.body;
-    const senderId = req.school.id; // from auth middleware
+    const senderId = req.school.id; 
 
     if (!receiverId || !text) {
       return res.status(400).json({
