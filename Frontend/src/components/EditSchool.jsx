@@ -166,104 +166,106 @@ export const EditSchool = () => {
   return (
     <div className="bg-[#ECF4E8] min-h-screen">
       <form onSubmit={onSubmitHandle}>
-        <div className="bg-[#4C763B]/50 p-4 shadow-sm">
-          <div className="relative h-[60px] w-[60px] flex gap-5 items-center">
-            <div>
-              <div
-                onClick={logoClickHandle}
-                className="border-[#B0CE88]/40 bg-white h-[60px] w-[60px] rounded-full flex justify-center items-center overflow-hidden cursor-pointer"
-              >
-                {logoPreview ? (
-                  <img
-                    className="h-full w-full object-cover"
-                    src={logoPreview}
-                  />
-                ) : (
-                  <p>Logo</p>
-                )}
+        <div className="h-screen overflow-hidden">
+          <div className="bg-[#4C763B]/50 p-4 shadow-sm">
+            <div className="relative h-[60px] w-[60px] flex gap-5 items-center">
+              <div>
+                <div
+                  onClick={logoClickHandle}
+                  className="border-[#B0CE88]/40 bg-white h-[60px] w-[60px] rounded-full flex justify-center items-center overflow-hidden cursor-pointer"
+                >
+                  {logoPreview ? (
+                    <img
+                      className="h-full w-full object-cover"
+                      src={logoPreview}
+                    />
+                  ) : (
+                    <p>Logo</p>
+                  )}
+                </div>
+
+                <IoAddCircleSharp
+                  onClick={logoClickHandle}
+                  className="text-xl absolute right-0 bottom-0 bg-white rounded-full cursor-pointer"
+                />
               </div>
 
-              <IoAddCircleSharp
-                onClick={logoClickHandle}
-                className="text-xl absolute right-0 bottom-0 bg-white rounded-full cursor-pointer"
+              <input
+                className="w-[45vw] h-[4vh] outline-none text-white font-semibold text-md"
+                type="text"
+                placeholder="School name..."
+                value={schoolName}
+                onChange={(e) => setSchoolName(e.target.value)}
+              />
+
+              <input
+                onChange={getLogoHandle}
+                ref={logoInputRef}
+                className="hidden"
+                accept="image/*"
+                type="file"
               />
             </div>
+          </div>
 
-            <input
-              className="w-[45vw] h-[4vh] outline-none text-white font-semibold text-md"
-              type="text"
-              placeholder="School name..."
-              value={schoolName}
-              onChange={(e) => setSchoolName(e.target.value)}
+          <div className="h-full w-full relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden">
+            <IoAddCircleSharp
+              onClick={imageClickHandle}
+              className="text-[#4C763B] text-2xl absolute right-3 top-3 bg-white rounded-full cursor-pointer z-10"
             />
 
+            {imagesPreview.length > 0 ? (
+              <div
+                className="h-full w-full flex transition-transform duration-300 ease-out"
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                onTouchStart={touchStartHandle}
+                onTouchMove={touchMoveHandle}
+                onTouchEnd={touchEndHandle}
+              >
+                {imagesPreview.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    className="h-full w-full object-cover shrink-0"
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-[#4C763B]/50 font-semibold">
+                Add School images
+              </p>
+            )}
+
             <input
-              onChange={getLogoHandle}
-              ref={logoInputRef}
+              onChange={getImageHandle}
+              ref={imageInputRef}
               className="hidden"
               accept="image/*"
               type="file"
             />
+
+            {imagesPreview.length > 1 && (
+              <div className="absolute bottom-3 w-full flex justify-center gap-1 px-4">
+                {imagesPreview.map((_, index) => {
+                  const style = getDotSize(index);
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentIndex(index)}
+                      className={`h-1 rounded-full transition-all duration-300 ${style} ${
+                        index === currentIndex
+                          ? "bg-[#4C763B]"
+                          : "bg-[#B0CE88]/70"
+                      }`}
+                    ></button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="relative flex flex-col justify-center items-center bg-white h-[40vh] shadow-sm border border-[#B0CE88]/40 overflow-hidden">
-          <IoAddCircleSharp
-            onClick={imageClickHandle}
-            className="text-[#4C763B] text-2xl absolute right-3 top-3 bg-white rounded-full cursor-pointer z-10"
-          />
-
-          {imagesPreview.length > 0 ? (
-            <div
-              className="h-full w-full flex transition-transform duration-300 ease-out"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-              onTouchStart={touchStartHandle}
-              onTouchMove={touchMoveHandle}
-              onTouchEnd={touchEndHandle}
-            >
-              {imagesPreview.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img}
-                  className="h-full w-full object-cover shrink-0"
-                />
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-[#4C763B]/50 font-semibold">
-              Add School images
-            </p>
-          )}
-
-          <input
-            onChange={getImageHandle}
-            ref={imageInputRef}
-            className="hidden"
-            accept="image/*"
-            type="file"
-          />
-
-          {imagesPreview.length > 1 && (
-            <div className="absolute bottom-3 w-full flex justify-center gap-1 px-4">
-              {imagesPreview.map((_, index) => {
-                const style = getDotSize(index);
-                return (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentIndex(index)}
-                    className={`h-1 rounded-full transition-all duration-300 ${style} ${
-                      index === currentIndex
-                        ? "bg-[#4C763B]"
-                        : "bg-[#B0CE88]/70"
-                    }`}
-                  ></button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <div className="bg-white p-4 h-[40vh] shadow-sm border border-[#B0CE88]/40">
+        <div className="bg-white p-4 h-[50vh] shadow-sm border border-[#B0CE88]/40">
           <textarea
             className="h-full w-full border border-gray-300 rounded-md p-3 outline-none focus:border-[#B0CE88] resize-none"
             placeholder="About Us"
@@ -272,7 +274,7 @@ export const EditSchool = () => {
           />
         </div>
 
-        <div className="relative bg-white p-4 min-h-[40vh] shadow-sm border border-[#B0CE88]/40 flex flex-col justify-center items-center">
+        <div className="relative bg-white p-4 min-h-[50vh] shadow-sm border border-[#B0CE88]/40 flex flex-col justify-center items-center">
           <p className="text-center text-[#4C763B]/50 font-semibold mb-4">
             Add Team Members
           </p>
@@ -382,7 +384,12 @@ export const EditSchool = () => {
             />
           </div>
         </div>
-        <button type="submit" className="bg-green-500 text-white w-full p-2 text-xl font-semibold">Save Changes</button>
+        <button
+          type="submit"
+          className="bg-green-500 text-white w-full p-2 text-xl font-semibold"
+        >
+          Save Changes
+        </button>
       </form>
     </div>
   );

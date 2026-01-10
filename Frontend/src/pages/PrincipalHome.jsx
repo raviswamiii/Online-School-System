@@ -92,7 +92,7 @@ export const PrincipalHome = () => {
   return (
     <div className="relative">
       <div className="min-h-screen bg-[#ECF4E8] text-[#043915] flex flex-col overflow-auto">
-        <div className="lg:h-screen overflow-hidden">
+        <div className="h-screen overflow-hidden">
           <div className="flex justify-between items-center bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
             <div className="flex items-center gap-5">
               <div className="rounded-full h-[60px] w-[60px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88]">
@@ -131,7 +131,7 @@ export const PrincipalHome = () => {
             </div>
           </div>
 
-          <div className="relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden">
+          <div className="h-full w-full relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden">
             {schoolData?.images?.length > 0 ? (
               <div
                 className="w-full flex transition-transform duration-300 ease-out z-10"
@@ -151,7 +151,7 @@ export const PrincipalHome = () => {
               </div>
             ) : (
               <div>
-                <h2 className="text-[#4C763B] font-semibold text-center my-6">
+                <h2 className="text-[#4C763B] font-semibold text-center my-4">
                   Gallery
                 </h2>
                 <p className="text-center text-[#4C763B]/50 font-semibold mb-6">
@@ -181,53 +181,57 @@ export const PrincipalHome = () => {
           </div>
         </div>
 
-        <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40 w-full">
-          <h2 className="text-[#4C763B] font-semibold text-center mb-4">
-            About Us
-          </h2>
+        <div className="h-[50vh]">
+          <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40 h-full w-full flex flex-col justify-center items-center">
+            <h2 className="text-[#4C763B] font-semibold text-center mb-4">
+              About Us
+            </h2>
 
-          {schoolData?.aboutUs ? (
-            <p className="text-gray-700 text-center leading-relaxed px-2 whitespace-normal wrap-break-word">
-              {schoolData.aboutUs}
-            </p>
-          ) : (
-            <p className="text-[#4C763B]/50 font-semibold text-center">
-              No description added yet.
-            </p>
-          )}
+            {schoolData?.aboutUs ? (
+              <p className="text-gray-700 text-center leading-relaxed px-2 whitespace-normal wrap-break-word">
+                {schoolData.aboutUs}
+              </p>
+            ) : (
+              <p className="text-[#4C763B]/50 font-semibold text-center">
+                No description added yet.
+              </p>
+            )}
+          </div>
         </div>
 
-        <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40">
-          <h2 className="text-[#4C763B] font-semibold text-center mb-6">
-            Meet Our Team
-          </h2>
+        <div className="h-[50vh]">
+          <div className="h-full w-full bg-white shadow-sm p-6 border border-[#B0CE88]/40 flex flex-col justify-center items-center">
+            <h2 className="text-[#4C763B] font-semibold text-center mb-6">
+              Meet Our Team
+            </h2>
 
-          {schoolData?.teamMembers?.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              {schoolData.teamMembers.map((member, idx) => (
-                <div
-                  key={idx}
-                  className="flex flex-col items-center p-3 shadow-md rounded-xl border border-[#B0CE88]/50"
-                >
-                  <img
-                    src={`${backendURL}${member.img}`}
-                    className="h-24 w-24 rounded-full object-cover mb-3 border border-[#4C763B]"
-                    alt={member.name}
-                  />
-                  <p className="font-semibold text-[#043915] text-center">
-                    {member.name}
-                  </p>
-                  <p className="text-sm text-[#4C763B]/70 text-center">
-                    {member.role}
-                  </p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-[#4C763B]/50 font-semibold">
-              No team members added
-            </p>
-          )}
+            {schoolData?.teamMembers?.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                {schoolData.teamMembers.map((member, idx) => (
+                  <div
+                    key={idx}
+                    className="flex flex-col items-center p-3 shadow-md rounded-xl border border-[#B0CE88]/50"
+                  >
+                    <img
+                      src={`${backendURL}${member.img}`}
+                      className="h-24 w-24 rounded-full object-cover mb-3 border border-[#4C763B]"
+                      alt={member.name}
+                    />
+                    <p className="font-semibold text-[#043915] text-center">
+                      {member.name}
+                    </p>
+                    <p className="text-sm text-[#4C763B]/70 text-center">
+                      {member.role}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-[#4C763B]/50 font-semibold">
+                No team members added
+              </p>
+            )}
+          </div>
         </div>
 
         <footer className="bg-[#4C763B]/50 text-[#ECF4E8] pt-10 pb-6 px-6">
