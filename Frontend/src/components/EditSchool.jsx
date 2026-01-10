@@ -214,8 +214,8 @@ export const EditSchool = () => {
 
           <div
             className={`${
-              imagesPreview.length > 0 ? "h-full w-full" : "h-[50vh]"
-            }  relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden`}
+              imagesPreview.length > 0 ? "h-60 sm:h-90 md:h-100 lg:h-full" : " h-60 sm:h-[50vh]"
+            } w-full relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden`}
           >
             <IoAddCircleSharp
               onClick={imageClickHandle}
@@ -292,7 +292,7 @@ export const EditSchool = () => {
             className="text-[#4C763B] text-2xl absolute right-3 top-3 bg-white rounded-full cursor-pointer"
           />
 
-          <div className="grid grid-cols-2 gap-6 place-items-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 place-items-center">
             {teamMembers.map((member, index) => (
               <div
                 key={index}
