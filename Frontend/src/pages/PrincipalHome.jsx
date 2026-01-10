@@ -92,91 +92,93 @@ export const PrincipalHome = () => {
   return (
     <div className="relative">
       <div className="min-h-screen bg-[#ECF4E8] text-[#043915] flex flex-col overflow-auto">
-        <div className="flex justify-between items-center bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
-          <div className="flex items-center gap-5">
-            <div className="rounded-full h-[60px] w-[60px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88]">
-              {schoolData?.schoolLogo ? (
-                <img
-                  src={`${backendURL}${schoolData.schoolLogo}`}
-                  className="h-full w-full object-cover"
-                  alt="school logo"
-                />
-              ) : (
-                <span className="text-[#4C763B] font-semibold">Logo</span>
+        <div className="sm:h-screen overflow-hidden">
+          <div className="flex justify-between items-center bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
+            <div className="flex items-center gap-5">
+              <div className="rounded-full h-[60px] w-[60px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88]">
+                {schoolData?.schoolLogo ? (
+                  <img
+                    src={`${backendURL}${schoolData.schoolLogo}`}
+                    className="h-full w-full object-cover"
+                    alt="school logo"
+                  />
+                ) : (
+                  <span className="text-[#4C763B] font-semibold">Logo</span>
+                )}
+              </div>
+
+              <div className="text-white w-[45vw] h-[4vh] text-md font-semibold overflow-x-auto whitespace-nowrap scrollbar-hide">
+                {schoolData.schoolName}
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              {loggedInPrincipalId === principalId && (
+                <Link
+                  to={"/editSchool"}
+                  className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
+                >
+                  <MdEdit className="text-[#4C763B]" />
+                </Link>
               )}
-            </div>
 
-            <div className="text-white w-[45vw] h-[4vh] text-md font-semibold overflow-x-auto whitespace-nowrap scrollbar-hide">
-              {schoolData.schoolName}
-            </div>
-          </div>
-
-          <div className="flex gap-3">
-            {loggedInPrincipalId === principalId && (
-              <Link
-                to={"/editSchool"}
+              <button
+                onClick={handleChatClick}
                 className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
               >
-                <MdEdit className="text-[#4C763B]" />
-              </Link>
+                <BsChatRightFill className="text-[#4C763B]" />
+              </button>
+            </div>
+          </div>
+
+          <div className="relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden">
+            {schoolData?.images?.length > 0 ? (
+              <div
+                className="w-full flex transition-transform duration-300 ease-out z-10"
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                onTouchStart={touchStartHandle}
+                onTouchMove={touchMoveHandle}
+                onTouchEnd={touchEndHandle}
+              >
+                {schoolData.images.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={`${backendURL}${img}`}
+                    className="h-full w-full object-cover shrink-0"
+                    alt="school"
+                  />
+                ))}
+              </div>
+            ) : (
+              <div>
+                <h2 className="text-[#4C763B] font-semibold text-center my-6">
+                  Gallery
+                </h2>
+                <p className="text-center text-[#4C763B]/50 font-semibold mb-6">
+                  No images uploaded
+                </p>
+              </div>
             )}
 
-            <button
-              onClick={handleChatClick}
-              className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
-            >
-              <BsChatRightFill className="text-[#4C763B]" />
-            </button>
+            {schoolData?.images?.length > 1 && (
+              <div className="absolute bottom-3 w-full flex justify-center gap-1 px-4 z-20">
+                {schoolData.images.map((_, index) => {
+                  const style = getDotSize(index);
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentIndex(index)}
+                      className={`h-1 rounded-full transition-all duration-300 ${style} ${
+                        index === currentIndex
+                          ? "bg-[#4C763B]"
+                          : "bg-[#B0CE88]/70"
+                      }`}
+                    ></button>
+                  );
+                })}
+              </div>
+            )}
           </div>
-        </div>
-
-        <div className="relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden">
-          {schoolData?.images?.length > 0 ? (
-            <div
-              className="h-70 w-full flex transition-transform duration-300 ease-out"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-              onTouchStart={touchStartHandle}
-              onTouchMove={touchMoveHandle}
-              onTouchEnd={touchEndHandle}
-            >
-              {schoolData.images.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={`${backendURL}${img}`}
-                  className="h-full w-full object-cover shrink-0"
-                  alt="school"
-                />
-              ))}
-            </div>
-          ) : (
-            <div>
-              <h2 className="text-[#4C763B] font-semibold text-center my-6">
-                Gallery
-              </h2>
-              <p className="text-center text-[#4C763B]/50 font-semibold mb-6">
-                No images uploaded
-              </p>
-            </div>
-          )}
-
-          {schoolData?.images?.length > 1 && (
-            <div className="absolute bottom-3 w-full flex justify-center gap-1 px-4">
-              {schoolData.images.map((_, index) => {
-                const style = getDotSize(index);
-                return (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentIndex(index)}
-                    className={`h-1 rounded-full transition-all duration-300 ${style} ${
-                      index === currentIndex
-                        ? "bg-[#4C763B]"
-                        : "bg-[#B0CE88]/70"
-                    }`}
-                  ></button>
-                );
-              })}
-            </div>
-          )}
         </div>
 
         <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40 w-full">

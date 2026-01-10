@@ -231,7 +231,7 @@ export const EditSchool = () => {
             </div>
           ) : (
             <p className="text-center text-[#4C763B]/50 font-semibold">
-              Click here to get images
+              Add School images
             </p>
           )}
 
