@@ -92,7 +92,11 @@ export const PrincipalHome = () => {
   return (
     <div className="relative">
       <div className="min-h-screen bg-[#ECF4E8] text-[#043915] flex flex-col overflow-auto">
-        <div className="h-screen overflow-hidden">
+        <div
+          className={`overflow-hidden ${
+            schoolData?.images?.length > 0 ? "lg:h-screen" : ""
+          }`}
+        >
           <div className="flex justify-between items-center bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
             <div className="flex items-center gap-5">
               <div className="rounded-full h-[60px] w-[60px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88]">
@@ -131,7 +135,11 @@ export const PrincipalHome = () => {
             </div>
           </div>
 
-          <div className="h-full w-full relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden">
+          <div
+            className={` ${
+              schoolData?.images?.length > 0 ? "h-full w-full" : "h-[50vh]"
+            } relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden`}
+          >
             {schoolData?.images?.length > 0 ? (
               <div
                 className="w-full flex transition-transform duration-300 ease-out z-10"

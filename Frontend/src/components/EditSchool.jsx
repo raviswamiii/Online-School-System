@@ -166,7 +166,11 @@ export const EditSchool = () => {
   return (
     <div className="bg-[#ECF4E8] min-h-screen">
       <form onSubmit={onSubmitHandle}>
-        <div className="h-screen overflow-hidden">
+        <div
+          className={`overflow-hidden ${
+            imagesPreview.length > 0 ? "lg:h-screen" : ""
+          }`}
+        >
           <div className="bg-[#4C763B]/50 p-4 shadow-sm">
             <div className="relative h-[60px] w-[60px] flex gap-5 items-center">
               <div>
@@ -208,7 +212,11 @@ export const EditSchool = () => {
             </div>
           </div>
 
-          <div className="h-full w-full relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden">
+          <div
+            className={`${
+              imagesPreview.length > 0 ? "h-full w-full" : "h-[50vh]"
+            }  relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden`}
+          >
             <IoAddCircleSharp
               onClick={imageClickHandle}
               className="text-[#4C763B] text-2xl absolute right-3 top-3 bg-white rounded-full cursor-pointer z-10"
