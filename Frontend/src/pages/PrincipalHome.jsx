@@ -137,8 +137,8 @@ export const PrincipalHome = () => {
 
           <div
             className={` ${
-              schoolData?.images?.length > 0 ? "h-full w-full" : "h-[50vh]"
-            } relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden`}
+              schoolData?.images?.length > 0 ? "h-60 sm:h-90 md:h-100 lg:h-full" : " h-60 sm:h-[50vh]"
+            } w-full relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden`}
           >
             {schoolData?.images?.length > 0 ? (
               <div
@@ -189,7 +189,7 @@ export const PrincipalHome = () => {
           </div>
         </div>
 
-        <div className="h-[50vh]">
+        <div className={`${schoolData?.aboutUs ? "h-full w-full" : "h-[50vh]"}`}>
           <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40 h-full w-full flex flex-col justify-center items-center">
             <h2 className="text-[#4C763B] font-semibold text-center mb-4">
               About Us
@@ -207,7 +207,7 @@ export const PrincipalHome = () => {
           </div>
         </div>
 
-        <div className="h-[50vh]">
+        <div className={`${schoolData?.teamMembers?.length > 0 ? "h-full w-full" : "h-[50vh]"}`}>
           <div className="h-full w-full bg-white shadow-sm p-6 border border-[#B0CE88]/40 flex flex-col justify-center items-center">
             <h2 className="text-[#4C763B] font-semibold text-center mb-6">
               Meet Our Team
