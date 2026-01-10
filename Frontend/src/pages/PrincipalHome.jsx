@@ -92,7 +92,7 @@ export const PrincipalHome = () => {
   return (
     <div className="relative">
       <div className="min-h-screen bg-[#ECF4E8] text-[#043915] flex flex-col overflow-auto">
-        <div className="sm:h-screen overflow-hidden">
+        <div className="lg:h-screen overflow-hidden">
           <div className="flex justify-between items-center bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
             <div className="flex items-center gap-5">
               <div className="rounded-full h-[60px] w-[60px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88]">
