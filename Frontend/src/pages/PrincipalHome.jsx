@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { MdEdit } from "react-icons/md";
 import { BsChatRightFill } from "react-icons/bs";
+import { FaCreditCard, FaWallet } from "react-icons/fa";
 
 export const PrincipalHome = () => {
   const [schoolData, setSchoolData] = useState(null);
@@ -97,9 +98,9 @@ export const PrincipalHome = () => {
             schoolData?.images?.length > 0 ? "lg:h-screen" : ""
           }`}
         >
-          <div className="flex justify-between items-center bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
-            <div className="flex items-center gap-5">
-              <div className="rounded-full h-[60px] w-[60px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88]">
+          <div className="flex justify-between items-center gap-5 bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="rounded-full h-[60px] w-[60px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88] shrink-0">
                 {schoolData?.schoolLogo ? (
                   <img
                     src={`${backendURL}${schoolData.schoolLogo}`}
@@ -111,12 +112,12 @@ export const PrincipalHome = () => {
                 )}
               </div>
 
-              <div className="text-white w-[45vw] h-[4vh] text-md font-semibold overflow-x-auto whitespace-nowrap scrollbar-hide">
+              <div className="text-white text-md font-semibold truncate">
                 {schoolData.schoolName}
               </div>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 shrink-0">
               {loggedInPrincipalId === principalId && (
                 <Link
                   to={"/editSchool"}
@@ -125,6 +126,13 @@ export const PrincipalHome = () => {
                   <MdEdit className="text-[#4C763B]" />
                 </Link>
               )}
+
+              <Link
+                to={"/paymentGateway"}
+                className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
+              >
+                <span className="text-[#4C763B] font-bold">₹</span>
+              </Link>
 
               <button
                 onClick={handleChatClick}
@@ -137,7 +145,9 @@ export const PrincipalHome = () => {
 
           <div
             className={` ${
-              schoolData?.images?.length > 0 ? "h-60 sm:h-90 md:h-100 lg:h-full" : " h-60 sm:h-[50vh]"
+              schoolData?.images?.length > 0
+                ? "h-60 sm:h-90 md:h-100 lg:h-full"
+                : " h-60 sm:h-[50vh]"
             } w-full relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden`}
           >
             {schoolData?.images?.length > 0 ? (
@@ -189,7 +199,9 @@ export const PrincipalHome = () => {
           </div>
         </div>
 
-        <div className={`${schoolData?.aboutUs ? "h-full w-full" : "h-[50vh]"}`}>
+        <div
+          className={`${schoolData?.aboutUs ? "h-full w-full" : "h-[50vh]"}`}
+        >
           <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40 h-full w-full flex flex-col justify-center items-center">
             <h2 className="text-[#4C763B] font-semibold text-center mb-4">
               About Us
@@ -207,7 +219,11 @@ export const PrincipalHome = () => {
           </div>
         </div>
 
-        <div className={`${schoolData?.teamMembers?.length > 0 ? "h-full w-full" : "h-[50vh]"}`}>
+        <div
+          className={`${
+            schoolData?.teamMembers?.length > 0 ? "h-full w-full" : "h-[50vh]"
+          }`}
+        >
           <div className="h-full w-full bg-white shadow-sm p-6 border border-[#B0CE88]/40 flex flex-col justify-center items-center">
             <h2 className="text-[#4C763B] font-semibold text-center mb-6">
               Meet Our Team

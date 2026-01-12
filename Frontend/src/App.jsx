@@ -16,6 +16,7 @@ import { UpdateAuthentication } from "./components/UpdateAuthentication";
 import { EditSchool } from "./components/EditSchool";
 import { AllMessages } from "./components/AllMessages";
 import { ChatSection } from "./components/ChatSection";
+import { PaymentGateway } from "./components/paymentGateway";
 
 export const App = () => {
   return (
@@ -53,6 +54,7 @@ export const App = () => {
         <Route path="/editSchool" element={<EditSchool />} />
         <Route path="/allMessages" element={<AllMessages />} />
         <Route path="/chatSection/:chatId" element={<ChatSection />} />
+        <Route path="/paymentGateway" element={<PaymentGateway />} />
       </Routes>
     </div>
   );
