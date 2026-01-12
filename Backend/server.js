@@ -1,6 +1,7 @@
+import "dotenv/config";
+
 import express from "express";
 import databaseConnection from "./config/mongodb.js";
-import dotenv from "dotenv";
 import schoolRouter from "./routes/schoolRoutes.js";
 import cors from "cors";
 import path from "path";
@@ -9,8 +10,8 @@ import cookieParser from "cookie-parser";
 import messageRouter from "./routes/messageRoute.js";
 import { createServer } from "http";
 import { initSocket } from "./socket.js";
+import schoolFeeRouter from "./routes/schoolFeeRoute.js";
 
-dotenv.config();
 databaseConnection();
 
 const PORT = process.env.PORT || 3000;
@@ -35,6 +36,7 @@ app.use(
 
 app.use("/schools", schoolRouter);
 app.use("/messages", messageRouter);
+app.use("/payments", schoolFeeRouter);
 
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
