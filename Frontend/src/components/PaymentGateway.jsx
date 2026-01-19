@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const paymentGateway = () => {
+export const PaymentGateway = () => {
   return (
     <div>paymentGateway</div>
   )
