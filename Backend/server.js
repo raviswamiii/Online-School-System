@@ -9,6 +9,13 @@ import cookieParser from "cookie-parser";
 import messageRouter from "./routes/messageRoute.js";
 import { createServer } from "http";
 import { initSocket } from "./socket.js";
+import Razorpay from "razorpay";
+import paymentRouter from "./routes/paymentRoute.js";
+
+export const razorpayInstance = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 databaseConnection();
 const PORT = process.env.PORT || 3000;
@@ -33,6 +40,7 @@ app.use(
 
 app.use("/schools", schoolRouter);
 app.use("/messages", messageRouter);
+app.use("/payments", paymentRouter);
 
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
