@@ -17,6 +17,7 @@ import { EditSchool } from "./components/EditSchool";
 import { AllMessages } from "./components/AllMessages";
 import { ChatSection } from "./components/ChatSection";
 import { PaymentGateway } from "./components/paymentGateway";
+import { PaymentSuccess } from "./components/PaymentSuccess";
 
 export const App = () => {
   return (
@@ -55,6 +56,7 @@ export const App = () => {
         <Route path="/allMessages" element={<AllMessages />} />
         <Route path="/chatSection/:chatId" element={<ChatSection />} />
         <Route path="/paymentGateway" element={<PaymentGateway />} />
+        <Route path="/paymentSuccess" element={<PaymentSuccess />} />
       </Routes>
     </div>
   );

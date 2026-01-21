@@ -8,10 +8,10 @@ export const PaymentGateway = () => {
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   const checkoutHandle = async (amount) => {
-    // if (!payerName || !amount) {
-    //   alert("Please enter payer name and amount");
-    //   return;
-    // }
+    if (!payerName || !amount) {
+      alert("Please enter payer name and amount");
+      return;
+    }
 
     const { data: keyData } = await axios.get(`${backendURL}/payments/getKey`);
     const { key } = keyData;
@@ -34,7 +34,7 @@ export const PaymentGateway = () => {
       name: "Online School Sytem",
       description: "Test Transaction",
       order_id: fees.id,
-      callback_url: "/payments/paymentVerification", 
+      callback_url: `${backendURL}/payments/paymentVerification`, 
       prefill: {
         name: "Ravi Swami",
         email: "ravi@example.com",
@@ -51,7 +51,6 @@ export const PaymentGateway = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4">
       <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-6">
-        {/* Header */}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">
             School Fee Payment
@@ -61,7 +60,6 @@ export const PaymentGateway = () => {
           </p>
         </div>
 
-        {/* Inputs */}
         <div className="space-y-4">
           <div>
             <label className="text-sm text-gray-600">Payer Name</label>
@@ -86,7 +84,6 @@ export const PaymentGateway = () => {
           </div>
         </div>
 
-        {/* Pay Button */}
         <button
           onClick={() => checkoutHandle(amount)}
           disabled={loading}
@@ -95,7 +92,6 @@ export const PaymentGateway = () => {
           {loading ? "Processing..." : `Pay ₹${amount || 0}`}
         </button>
 
-        {/* Footer */}
         <p className="text-xs text-gray-500 text-center mt-4">
           Powered by Razorpay • Secure Payments
         </p>
