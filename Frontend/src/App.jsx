@@ -17,7 +17,7 @@ import { EditSchool } from "./components/EditSchool";
 import { AllMessages } from "./components/AllMessages";
 import { ChatSection } from "./components/ChatSection";
 import { PaymentSuccess } from "./components/PaymentSuccess";
-import { PaymentGateway } from "./components/paymentGateway";
+import { PaymentGateway } from "./components/PaymentGateway";
 
 export const App = () => {
   return (
