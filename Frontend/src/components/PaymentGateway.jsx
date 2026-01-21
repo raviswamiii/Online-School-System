@@ -13,21 +13,40 @@ export const PaymentGateway = () => {
     //   return;
     // }
 
-    const {data: keyData} = await axios.get(`${backendURL}/payments/getKey`);
-    const {key} = keyData;
-    console.log(key);
+    const { data: keyData } = await axios.get(`${backendURL}/payments/getKey`);
+    const { key } = keyData;
 
-    const {data: feeData} = await axios.post(
+    const { data: feeData } = await axios.post(
       `${backendURL}/payments/processPayments`,
       {
         amount,
         payerName,
       },
     );
-    
-    const {fees} = feeData;
+
+    const { fees } = feeData;
     console.log(fees);
 
+    const options = {
+      key,
+      amount,
+      currency: "INR",
+      name: "Online School Sytem",
+      description: "Test Transaction",
+      order_id: fees.id,
+      callback_url: "/payments/paymentVerification", 
+      prefill: {
+        name: "Ravi Swami",
+        email: "ravi@example.com",
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#F37254",
+      },
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
   };
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4">
@@ -69,7 +88,7 @@ export const PaymentGateway = () => {
 
         {/* Pay Button */}
         <button
-          onClick={()=>checkoutHandle(amount)}
+          onClick={() => checkoutHandle(amount)}
           disabled={loading}
           className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition duration-200 mt-6 disabled:opacity-50"
         >
