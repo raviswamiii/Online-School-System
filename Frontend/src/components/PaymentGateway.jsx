@@ -5,49 +5,67 @@ export const PaymentGateway = () => {
   const [payerName, setPayerName] = useState("");
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
+
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-  const checkoutHandle = async (amount) => {
+  const checkoutHandle = async (e) => {
+    e.preventDefault(); 
+
     if (!payerName || !amount) {
       alert("Please enter payer name and amount");
       return;
     }
 
-    const { data: keyData } = await axios.get(`${backendURL}/payments/getKey`);
-    const { key } = keyData;
+    try {
+      setLoading(true);
 
-    const { data: feeData } = await axios.post(
-      `${backendURL}/payments/processPayments`,
-      {
-        amount,
-        payerName,
-      },
-    );
+      const { data: keyData } = await axios.get(
+        `${backendURL}/payments/getKey`
+      );
+      const { key } = keyData;
 
-    const { fees } = feeData;
-    console.log(fees);
+      const { data: feeData } = await axios.post(
+        `${backendURL}/payments/processPayments`,
+        {
+          amount,
+          payerName,
+        }
+      );
 
-    const options = {
-      key,
-      amount,
-      currency: "INR",
-      name: "Online School Sytem",
-      description: "Test Transaction",
-      order_id: fees.id,
-      callback_url: `${backendURL}/payments/paymentVerification`, 
-      prefill: {
-        name: "Ravi Swami",
-        email: "ravi@example.com",
-        contact: "9999999999",
-      },
-      theme: {
-        color: "#F37254",
-      },
-    };
+      const { fees } = feeData;
 
-    const rzp = new Razorpay(options);
-    rzp.open();
+      const options = {
+        key,
+        amount: fees.amount,
+        currency: "INR",
+        name: "Online School System",
+        description: "School Fee Payment",
+        order_id: fees.id,
+        callback_url: `${backendURL}/payments/paymentVerification`,
+        prefill: {
+          name: payerName,
+          email: "ravi@example.com",
+          contact: "9999999999",
+        },
+        theme: {
+          color: "#16a34a",
+        },
+        modal: {
+          ondismiss: () => {
+            setLoading(false); 
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error(error);
+      alert("Payment initiation failed");
+      setLoading(false);
+    }
   };
+
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4">
       <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-6">
@@ -60,7 +78,7 @@ export const PaymentGateway = () => {
           </p>
         </div>
 
-        <div className="space-y-4">
+        <form onSubmit={checkoutHandle} className="space-y-4">
           <div>
             <label className="text-sm text-gray-600">Payer Name</label>
             <input
@@ -80,17 +98,18 @@ export const PaymentGateway = () => {
               onChange={(e) => setAmount(e.target.value)}
               className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Enter amount"
+              min="1"
             />
           </div>
-        </div>
 
-        <button
-          onClick={() => checkoutHandle(amount)}
-          disabled={loading}
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition duration-200 mt-6 disabled:opacity-50"
-        >
-          {loading ? "Processing..." : `Pay ₹${amount || 0}`}
-        </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Processing..." : `Pay ₹${amount || 0}`}
+          </button>
+        </form>
 
         <p className="text-xs text-gray-500 text-center mt-4">
           Powered by Razorpay • Secure Payments
