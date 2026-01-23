@@ -1,5 +1,5 @@
 import express from "express";
-import upload from "../middleware/uploadMiddleware.js";
+import upload, { uploadSchoolFields } from "../middleware/uploadMiddleware.js";
 import {
   deleteSchool,
   getSchoolById,
@@ -16,7 +16,7 @@ const schoolRouter = express.Router();
 
 schoolRouter.post(
   "/registerSchool",
-  upload.single("logo"),
+  uploadSchoolFields,
   registerSchool
 );
 
