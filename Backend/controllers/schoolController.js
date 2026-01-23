@@ -52,10 +52,7 @@ const registerSchool = async (req, res) => {
     if (req.files?.logo?.length > 0) {
       const logoFile = req.files.logo[0];
 
-      const result = await uploadToCloudinary(
-        logoFile.buffer,
-        "schools/logo"
-      );
+      const result = await uploadToCloudinary(logoFile.buffer, "schools/logo");
 
       schoolLogo = result.secure_url;
     }
@@ -75,6 +72,9 @@ const registerSchool = async (req, res) => {
     const school = await newSchool.save();
     const token = createToken(school._id, school.schoolName);
 
+    console.log("BODY:", req.body);
+    console.log("FILES:", req.files);
+
     return res.status(201).json({
       success: true,
       message: "School successfully registered.",
@@ -89,7 +89,6 @@ const registerSchool = async (req, res) => {
     });
   }
 };
-
 
 const getSchools = async (req, res) => {
   try {
@@ -276,7 +275,7 @@ const editSchool = async (req, res) => {
     if (files.logo?.length > 0) {
       const logoResult = await uploadToCloudinary(
         files.logo[0].buffer,
-        "schools/logo"
+        "schools/logo",
       );
       school.schoolLogo = logoResult.secure_url;
     }
@@ -285,8 +284,8 @@ const editSchool = async (req, res) => {
     if (files.images?.length > 0) {
       const uploadedImages = await Promise.all(
         files.images.map((file) =>
-          uploadToCloudinary(file.buffer, "schools/images")
-        )
+          uploadToCloudinary(file.buffer, "schools/images"),
+        ),
       );
 
       const imageUrls = uploadedImages.map((img) => img.secure_url);
@@ -302,9 +301,7 @@ const editSchool = async (req, res) => {
       const updatedMember = { ...member };
 
       if (teamFiles[imageIndex]) {
-        updatedMember.img = teamFiles[imageIndex]
-          ? undefined
-          : member.img;
+        updatedMember.img = teamFiles[imageIndex] ? undefined : member.img;
         imageIndex++;
       }
 
@@ -317,7 +314,7 @@ const editSchool = async (req, res) => {
       if (teamFiles[imageIndex]) {
         const teamImgResult = await uploadToCloudinary(
           teamFiles[imageIndex].buffer,
-          "schools/team"
+          "schools/team",
         );
         updatedTeamMembers[i].img = teamImgResult.secure_url;
         imageIndex++;

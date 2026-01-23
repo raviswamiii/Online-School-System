@@ -46,8 +46,7 @@ export const SchoolRegistration = () => {
 
       const response = await axios.post(
         `${backendURL}/schools/registerSchool`,
-        formdata,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        formdata
       );
 
       if (response.data.success) {
@@ -90,9 +89,7 @@ export const SchoolRegistration = () => {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <span className="text-sm text-[#4C763B]/70">
-                    Upload Logo
-                  </span>
+                  <span className="text-sm text-[#4C763B]/70">Upload Logo</span>
                 )}
               </div>
 
@@ -143,9 +140,7 @@ export const SchoolRegistration = () => {
             className="w-full px-4 py-2.5 rounded-lg border border-[#B0CE88]/50 outline-none focus:ring-2 focus:ring-[#4C763B]/40"
           />
 
-          {error && (
-            <p className="text-sm text-red-500 text-center">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
           <button
             type="submit"
