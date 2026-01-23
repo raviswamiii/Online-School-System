@@ -1,3 +1,5 @@
+import cloudinary from "../config/cloudinary.js";
+
 export const uploadToCloudinary = (buffer, folder) => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader
@@ -11,3 +13,4 @@ export const uploadToCloudinary = (buffer, folder) => {
       .end(buffer);
   });
 };
+
