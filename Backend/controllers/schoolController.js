@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import schoolModel from "../models/schoolModel.js";
 import blacklistTokenModel from "../models/blacklistToken.js";
+import { uploadToCloudinary } from "../utils/cloudinaryUpload.js";
 
 const createToken = (id, schoolName) => {
   return jwt.sign({ id, schoolName }, process.env.JWT_SECRET, {
@@ -14,7 +15,14 @@ const registerSchool = async (req, res) => {
   try {
     const { schoolName, schoolEmail, schoolPassword, schoolLocation } =
       req.body;
-    const schoolLogo = req.file ? `/uploads/${req.file.filename}` : null;
+    // const schoolLogo = req.file ? `/uploads/${req.file.filename}` : null;
+
+    let schoolLogo = null;
+
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer, "schools/logo");
+      schoolLogo = result.secure_url;
+    }
 
     if (!schoolName || !schoolEmail || !schoolPassword || !schoolLocation) {
       return res
@@ -130,7 +138,7 @@ const schoolSignIn = async (req, res) => {
         .status(401)
         .json({ success: false, message: "Invalid Credentials." });
 
-    const token = createToken(exists._id, exists.schoolName );
+    const token = createToken(exists._id, exists.schoolName);
 
     return res.status(200).json({
       success: true,
@@ -211,22 +219,27 @@ const deleteSchool = async (req, res) => {
 
 const editSchool = async (req, res) => {
   try {
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    /* ================= AUTH ================= */
+    const token =
+      req.cookies?.token || req.headers.authorization?.split(" ")[1];
 
-    if (!token)
+    if (!token) {
       return res
         .status(401)
         .json({ success: false, message: "Token not found." });
+    }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const school = await schoolModel.findById(decoded.id);
 
-    if (!school)
+    if (!school) {
       return res
         .status(404)
         .json({ success: false, message: "School not found." });
+    }
 
+    /* ================= BODY DATA ================= */
     const {
       schoolName,
       aboutUs,
@@ -246,37 +259,66 @@ const editSchool = async (req, res) => {
     if (email) school.email = email;
     if (workingPeriod) school.workingPeriod = workingPeriod;
 
+    /* ================= FILES ================= */
     const files = req.files || {};
 
-    if (files.logo && files.logo.length > 0) {
-      const logoFile = `/uploads/${files.logo[0].filename}`;
-      school.schoolLogo = logoFile;
+    /* ---------- LOGO ---------- */
+    if (files.logo?.length > 0) {
+      const logoResult = await uploadToCloudinary(
+        files.logo[0].buffer,
+        "schools/logo"
+      );
+      school.schoolLogo = logoResult.secure_url;
     }
 
-    if (files.images && files.images.length > 0) {
-      const newImages = files.images.map((file) => `/uploads/${file.filename}`);
+    /* ---------- SCHOOL IMAGES ---------- */
+    if (files.images?.length > 0) {
+      const uploadedImages = await Promise.all(
+        files.images.map((file) =>
+          uploadToCloudinary(file.buffer, "schools/images")
+        )
+      );
 
-      school.images = [...(school.images || []), ...newImages];
+      const imageUrls = uploadedImages.map((img) => img.secure_url);
+
+      school.images = [...(school.images || []), ...imageUrls];
     }
 
+    /* ---------- TEAM MEMBERS ---------- */
     const teamFiles = files.teamImages || [];
     let imageIndex = 0;
 
-    const editedTeamMembers = parsedMembers.map((member) => {
-      const edited = { ...member };
+    const updatedTeamMembers = parsedMembers.map((member) => {
+      const updatedMember = { ...member };
 
       if (teamFiles[imageIndex]) {
-        edited.img = `/uploads/${teamFiles[imageIndex].filename}`;
+        updatedMember.img = teamFiles[imageIndex]
+          ? undefined
+          : member.img;
         imageIndex++;
       }
 
-      return edited;
+      return updatedMember;
     });
 
-    if (editedTeamMembers.length > 0) {
-      school.teamMembers = editedTeamMembers;
+    // Upload team images AFTER mapping
+    imageIndex = 0;
+    for (let i = 0; i < updatedTeamMembers.length; i++) {
+      if (teamFiles[imageIndex]) {
+        const teamImgResult = await uploadToCloudinary(
+          teamFiles[imageIndex].buffer,
+          "schools/team"
+        );
+        updatedTeamMembers[i].img = teamImgResult.secure_url;
+        imageIndex++;
+      }
     }
 
+    if (updatedTeamMembers.length > 0) {
+      school.teamMembers = updatedTeamMembers;
+    }
+
+    /* ================= SAVE ================= */
     const editedSchool = await school.save();
 
     return res.status(200).json({
@@ -285,7 +327,7 @@ const editSchool = async (req, res) => {
       school: editedSchool,
     });
   } catch (error) {
-    console.log("Error editing school:", error.message);
+    console.error("Error editing school:", error.message);
     return res.status(500).json({
       success: false,
       message: "Error during edit.",
@@ -295,7 +337,7 @@ const editSchool = async (req, res) => {
 
 const updateAuthentication = async (req, res) => {
   try {
-    const schoolId = req.school?._id; 
+    const schoolId = req.school?._id;
 
     if (!schoolId) {
       return res.status(401).json({
