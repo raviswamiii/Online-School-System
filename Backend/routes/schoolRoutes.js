@@ -1,5 +1,4 @@
 import express from "express";
-import upload, { uploadSchoolFields } from "../middleware/uploadMiddleware.js";
 import {
   deleteSchool,
   getSchoolById,
@@ -11,14 +10,11 @@ import {
   updateAuthentication,
 } from "../controllers/schoolController.js";
 import schoolAuth from "../middleware/schoolAuth.js";
+import upload from "../middleware/multer.js";
 
 const schoolRouter = express.Router();
 
-schoolRouter.post(
-  "/registerSchool",
-  uploadSchoolFields,
-  registerSchool
-);
+schoolRouter.post("/registerSchool", upload.single("logo"), registerSchool);
 
 schoolRouter.get("/getSchools", getSchools);
 schoolRouter.get("/getPrincipalDashboard/:id", schoolAuth, getSchoolById);
@@ -37,7 +33,7 @@ schoolRouter.put(
     { name: "teamImages", maxCount: 20 },
   ]),
   schoolAuth,
-  editSchool
+  editSchool,
 );
 
 schoolRouter.put("/updateAuthentication", schoolAuth, updateAuthentication);

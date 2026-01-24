@@ -26,7 +26,7 @@ export const PrincipalDashboard = () => {
 
       const response = await axios.get(
         `${backendURL}/schools/getPrincipalDashboard/${principalId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       if (response.data.success) {
@@ -103,7 +103,7 @@ export const PrincipalDashboard = () => {
           <div className="h-20 w-20 rounded-full overflow-hidden border border-[#4C763B]">
             {schoolData.schoolLogo ? (
               <img
-                src={`${backendURL}${schoolData.schoolLogo}`}
+                src={schoolData.schoolLogo}
                 alt="School Logo"
                 className="h-full w-full object-cover"
               />

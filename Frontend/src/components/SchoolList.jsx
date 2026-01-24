@@ -68,7 +68,7 @@ export const SchoolList = () => {
               {school?.schoolLogo ? (
                 <img
                   className="h-full w-full object-cover"
-                  src={`${backendURL}${school.schoolLogo}`}
+                  src={school.schoolLogo}
                   alt="School Logo"
                 />
               ) : (

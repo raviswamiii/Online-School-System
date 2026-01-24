@@ -103,7 +103,7 @@ export const PrincipalHome = () => {
               <div className="rounded-full h-[60px] w-[60px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88] shrink-0">
                 {schoolData?.schoolLogo ? (
                   <img
-                    src={`${backendURL}${schoolData.schoolLogo}`}
+                    src={schoolData.schoolLogo}
                     className="h-full w-full object-cover"
                     alt="school logo"
                   />

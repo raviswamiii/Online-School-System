@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import schoolModel from "../models/schoolModel.js";
 import blacklistTokenModel from "../models/blacklistToken.js";
-import { uploadToCloudinary } from "../utils/cloudinaryUpload.js";
+import {v2 as cloudinary} from "cloudinary";
 
 const createToken = (id, schoolName) => {
   return jwt.sign({ id, schoolName }, process.env.JWT_SECRET, {
@@ -46,18 +46,17 @@ const registerSchool = async (req, res) => {
       });
     }
 
-    /* ================= LOGO UPLOAD ================= */
     let schoolLogo = null;
 
-    if (req.files?.logo?.length > 0) {
-      const logoFile = req.files.logo[0];
-
-      const result = await uploadToCloudinary(logoFile.buffer, "schools/logo");
-
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: "image",
+        folder: "schools/logo",
+      });
+      console.log("CLOUDINARY RESULT:", result);
       schoolLogo = result.secure_url;
     }
 
-    /* ================= PASSWORD ================= */
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(schoolPassword, salt);
 
@@ -71,9 +70,6 @@ const registerSchool = async (req, res) => {
 
     const school = await newSchool.save();
     const token = createToken(school._id, school.schoolName);
-
-    console.log("BODY:", req.body);
-    console.log("FILES:", req.files);
 
     return res.status(201).json({
       success: true,

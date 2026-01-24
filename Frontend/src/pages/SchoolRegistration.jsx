@@ -46,8 +46,9 @@ export const SchoolRegistration = () => {
 
       const response = await axios.post(
         `${backendURL}/schools/registerSchool`,
-        formdata
+        formdata,
       );
+      console.log(response.data.school.schoolLogo);
 
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);

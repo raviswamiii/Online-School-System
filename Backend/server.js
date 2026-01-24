@@ -9,14 +9,16 @@ import cookieParser from "cookie-parser";
 import messageRouter from "./routes/messageRoute.js";
 import { createServer } from "http";
 import { initSocket } from "./socket.js";
-import Razorpay from "razorpay";
+import Razorpay from "razorpay"; 
 import paymentRouter from "./routes/paymentRoute.js";
+import connectCloudinary from "./config/cloudinary.js";
 
 export const razorpayInstance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
+connectCloudinary();
 databaseConnection();
 const PORT = process.env.PORT || 3000;
 const app = express();
