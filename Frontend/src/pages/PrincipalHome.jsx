@@ -29,11 +29,11 @@ export const PrincipalHome = () => {
 
     if (distance > 50) {
       setCurrentIndex((prev) =>
-        prev === schoolData.images.length - 1 ? 0 : prev + 1
+        prev === schoolData.images.length - 1 ? 0 : prev + 1,
       );
     } else if (distance < -50) {
       setCurrentIndex((prev) =>
-        prev === 0 ? schoolData.images.length - 1 : prev - 1
+        prev === 0 ? schoolData.images.length - 1 : prev - 1,
       );
     }
 
@@ -56,7 +56,7 @@ export const PrincipalHome = () => {
       }
 
       const response = await axios.get(
-        `${backendURL}/schools/getSchool/${principalId}`
+        `${backendURL}/schools/getSchool/${principalId}`,
       );
 
       if (response.data.success) {
@@ -202,13 +202,13 @@ export const PrincipalHome = () => {
         <div
           className={`${schoolData?.aboutUs ? "h-full w-full" : "h-[50vh]"}`}
         >
-          <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40 h-full w-full flex flex-col justify-center items-center">
+          <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40 h-full w-full max-w-full flex flex-col justify-center items-center overflow-hidden">
             <h2 className="text-[#4C763B] font-semibold text-center mb-4">
               About Us
             </h2>
 
             {schoolData?.aboutUs ? (
-              <p className="text-gray-700 text-center leading-relaxed px-2 whitespace-normal wrap-break-word">
+              <p className="text-gray-700 text-center leading-relaxed px-2 wrap-break-word break-all max-w-full">
                 {schoolData.aboutUs}
               </p>
             ) : (
