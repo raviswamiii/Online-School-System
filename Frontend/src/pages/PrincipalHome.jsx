@@ -161,7 +161,7 @@ export const PrincipalHome = () => {
                 {schoolData.images.map((img, idx) => (
                   <img
                     key={idx}
-                    src={`${backendURL}${img}`}
+                    src={img}
                     className="h-full w-full object-cover shrink-0"
                     alt="school"
                   />
@@ -237,7 +237,7 @@ export const PrincipalHome = () => {
                     className="flex flex-col items-center p-3 shadow-md rounded-xl border border-[#B0CE88]/50"
                   >
                     <img
-                      src={`${backendURL}${member.img}`}
+                      src={member.img}
                       className="h-24 w-24 rounded-full object-cover mb-3 border border-[#4C763B]"
                       alt={member.name}
                     />

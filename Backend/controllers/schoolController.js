@@ -231,20 +231,19 @@ const editSchool = async (req, res) => {
     if (!token) {
       return res
         .status(401)
-        .json({ success: false, message: "Token not found." });
+        .json({ success: false, message: "Token not found" });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const school = await schoolModel.findById(decoded.id);
-
     if (!school) {
       return res
         .status(404)
-        .json({ success: false, message: "School not found." });
+        .json({ success: false, message: "School not found" });
     }
 
-    /* ================= BODY DATA ================= */
+    /* ================= BODY ================= */
     const {
       schoolName,
       aboutUs,
@@ -255,8 +254,6 @@ const editSchool = async (req, res) => {
       teamMembers,
     } = req.body;
 
-    const parsedMembers = teamMembers ? JSON.parse(teamMembers) : [];
-
     if (schoolName) school.schoolName = schoolName;
     if (aboutUs) school.aboutUs = aboutUs;
     if (address) school.address = address;
@@ -264,28 +261,31 @@ const editSchool = async (req, res) => {
     if (email) school.email = email;
     if (workingPeriod) school.workingPeriod = workingPeriod;
 
+    const parsedMembers = teamMembers ? JSON.parse(teamMembers) : [];
+
     /* ================= FILES ================= */
     const files = req.files || {};
 
     /* ---------- LOGO ---------- */
-    if (files.logo?.length > 0) {
-      const logoResult = await uploadToCloudinary(
-        files.logo[0].buffer,
-        "schools/logo",
+    if (files.logo?.length) {
+      const result = await cloudinary.uploader.upload(
+        files.logo[0].path,
+        { folder: "schools/logo" }
       );
-      school.schoolLogo = logoResult.secure_url;
+      school.schoolLogo = result.secure_url;
     }
 
     /* ---------- SCHOOL IMAGES ---------- */
-    if (files.images?.length > 0) {
+    if (files.images?.length) {
       const uploadedImages = await Promise.all(
         files.images.map((file) =>
-          uploadToCloudinary(file.buffer, "schools/images"),
-        ),
+          cloudinary.uploader.upload(file.path, {
+            folder: "schools/images",
+          })
+        )
       );
 
       const imageUrls = uploadedImages.map((img) => img.secure_url);
-
       school.images = [...(school.images || []), ...imageUrls];
     }
 
@@ -293,47 +293,34 @@ const editSchool = async (req, res) => {
     const teamFiles = files.teamImages || [];
     let imageIndex = 0;
 
-    const updatedTeamMembers = parsedMembers.map((member) => {
-      const updatedMember = { ...member };
-
+    for (let i = 0; i < parsedMembers.length; i++) {
       if (teamFiles[imageIndex]) {
-        updatedMember.img = teamFiles[imageIndex] ? undefined : member.img;
-        imageIndex++;
-      }
-
-      return updatedMember;
-    });
-
-    // Upload team images AFTER mapping
-    imageIndex = 0;
-    for (let i = 0; i < updatedTeamMembers.length; i++) {
-      if (teamFiles[imageIndex]) {
-        const teamImgResult = await uploadToCloudinary(
-          teamFiles[imageIndex].buffer,
-          "schools/team",
+        const result = await cloudinary.uploader.upload(
+          teamFiles[imageIndex].path,
+          { folder: "schools/team" }
         );
-        updatedTeamMembers[i].img = teamImgResult.secure_url;
+        parsedMembers[i].img = result.secure_url;
         imageIndex++;
       }
     }
 
-    if (updatedTeamMembers.length > 0) {
-      school.teamMembers = updatedTeamMembers;
+    if (parsedMembers.length) {
+      school.teamMembers = parsedMembers;
     }
 
     /* ================= SAVE ================= */
-    const editedSchool = await school.save();
+    const updatedSchool = await school.save();
 
     return res.status(200).json({
       success: true,
-      message: "School edited successfully.",
-      school: editedSchool,
+      message: "School edited successfully",
+      school: updatedSchool,
     });
   } catch (error) {
-    console.error("Error editing school:", error.message);
+    console.error("Edit school error:", error);
     return res.status(500).json({
       success: false,
-      message: "Error during edit.",
+      message: "Internal server error",
     });
   }
 };
