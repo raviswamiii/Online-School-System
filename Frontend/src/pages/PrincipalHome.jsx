@@ -40,6 +40,18 @@ export const PrincipalHome = () => {
     setTouchEndX(0);
   };
 
+  const handlePrev = () => {
+    setCurrentIndex((prev) =>
+      prev === 0 ? schoolData.images.length - 1 : prev - 1,
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) =>
+      prev === schoolData.images.length - 1 ? 0 : prev + 1,
+    );
+  };
+
   const getDotSize = (i) => {
     const distance = Math.abs(i - currentIndex);
     if (distance === 0) return "w-6 opacity-100";
@@ -122,7 +134,7 @@ export const PrincipalHome = () => {
                   to={"/editSchool"}
                   className="bg-white flex justify-center items-center rounded-full h-8 w-8 md:h-10 md:w-10 hover:bg-[#043915] transition-all"
                 >
-                  <MdEdit className="text-[#4C763B] xl:text-xl" /> 
+                  <MdEdit className="text-[#4C763B] xl:text-xl" />
                 </Link>
               )}
 
@@ -143,29 +155,55 @@ export const PrincipalHome = () => {
           </div>
 
           <div
-            className={` ${
+            className={`${
               schoolData?.images?.length > 0
                 ? "h-60 sm:h-90 md:h-100 lg:h-full"
-                : " h-60 sm:h-[50vh]"
+                : "h-60 sm:h-[50vh]"
             } w-full relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden`}
           >
             {schoolData?.images?.length > 0 ? (
-              <div
-                className="w-full flex transition-transform duration-300 ease-out z-10"
-                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-                onTouchStart={touchStartHandle}
-                onTouchMove={touchMoveHandle}
-                onTouchEnd={touchEndHandle}
-              >
-                {schoolData.images.map((img, idx) => (
-                  <img
-                    key={idx}
-                    src={img}
-                    className="h-full w-full object-cover shrink-0"
-                    alt="school"
-                  />
-                ))}
-              </div>
+              <>
+                <div
+                  className="w-full flex transition-transform duration-300 ease-out z-10"
+                  style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                  onTouchStart={touchStartHandle}
+                  onTouchMove={touchMoveHandle}
+                  onTouchEnd={touchEndHandle}
+                >
+                  {schoolData.images.map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      className="h-full w-full object-cover shrink-0"
+                      alt="school"
+                    />
+                  ))}
+                </div>
+
+                {schoolData.images.length > 1 && (
+                  <button
+                    onClick={handlePrev}
+                    className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 z-20
+               bg-white/70 hover:bg-white text-[#4C763B]
+               rounded-full h-10 w-10 items-center justify-center
+               shadow-md transition-all"
+                  >
+                    ‹
+                  </button>
+                )}
+
+                {schoolData.images.length > 1 && (
+                  <button
+                    onClick={handleNext}
+                    className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 z-20
+               bg-white/70 hover:bg-white text-[#4C763B]
+               rounded-full h-10 w-10 items-center justify-center
+               shadow-md transition-all"
+                  >
+                    ›
+                  </button>
+                )}
+              </>
             ) : (
               <div>
                 <h2 className="text-[#4C763B] md:text-xl font-semibold text-center my-4">
@@ -177,8 +215,9 @@ export const PrincipalHome = () => {
               </div>
             )}
 
+            {/* DOTS */}
             {schoolData?.images?.length > 1 && (
-              <div className="absolute bottom-3 lg:bottom-30 w-full flex justify-center gap-1 px-4 z-20">
+              <div className="absolute bottom-3 lg:bottom-[120px] w-full flex justify-center gap-1 px-4 z-20">
                 {schoolData.images.map((_, index) => {
                   const style = getDotSize(index);
                   return (
@@ -190,7 +229,7 @@ export const PrincipalHome = () => {
                           ? "bg-[#4C763B]"
                           : "bg-[#B0CE88]/70"
                       }`}
-                    ></button>
+                    />
                   );
                 })}
               </div>
