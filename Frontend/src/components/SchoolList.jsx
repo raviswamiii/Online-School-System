@@ -60,11 +60,11 @@ export const SchoolList = () => {
       ) : (
         filteredSchools.map((school) => (
           <div
-            className="border p-2 flex items-center gap-2 rounded-lg shadow-sm hover:shadow-md transition"
+            className="border p-2 sm:p-3 flex items-center gap-2 sm:gap-3 rounded-lg shadow-sm hover:shadow-md transition"
             key={school._id}
             onClick={()=>{onNavigateHandler(school._id)}}
           >
-            <div className="rounded-full h-[70px] w-[70px] flex justify-center items-center overflow-hidden">
+            <div className="rounded-full h-[65px] w-[65px] sm:h-[70px] sm:w-[70px] flex justify-center items-center overflow-hidden">
               {school?.schoolLogo ? (
                 <img
                   className="h-full w-full object-cover"
