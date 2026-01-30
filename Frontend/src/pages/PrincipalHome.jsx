@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { MdEdit } from "react-icons/md";
 import { BsChatRightFill } from "react-icons/bs";
-import { FaCreditCard, FaWallet } from "react-icons/fa";
 
 export const PrincipalHome = () => {
   const [schoolData, setSchoolData] = useState(null);
@@ -100,7 +99,7 @@ export const PrincipalHome = () => {
         >
           <div className="flex justify-between items-center gap-5 bg-[#4C763B]/50 shadow-sm p-4 border border-[#B0CE88]/40">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="rounded-full h-[60px] w-[60px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88] shrink-0">
+              <div className="rounded-full h-[60px] w-[60px] xl:h-[70px] xl:w-[70px] bg-white flex justify-center items-center overflow-hidden border border-[#B0CE88] shrink-0">
                 {schoolData?.schoolLogo ? (
                   <img
                     src={schoolData.schoolLogo}
@@ -112,33 +111,33 @@ export const PrincipalHome = () => {
                 )}
               </div>
 
-              <div className="text-white text-md font-semibold truncate">
+              <div className="text-white text-md sm:text-xl md:text-2xl xl:text-3xl font-semibold truncate">
                 {schoolData.schoolName}
               </div>
             </div>
 
-            <div className="flex gap-3 shrink-0">
+            <div className="flex gap-3 xl:gap-4 shrink-0">
               {loggedInPrincipalId === principalId && (
                 <Link
                   to={"/editSchool"}
-                  className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
+                  className="bg-white flex justify-center items-center rounded-full h-8 w-8 md:h-10 md:w-10 xl:h-12 xl:w-12 hover:bg-[#043915] transition-all"
                 >
-                  <MdEdit className="text-[#4C763B]" />
+                  <MdEdit className="text-[#4C763B] xl:text-xl" /> 
                 </Link>
               )}
 
               <Link
                 to={"/paymentGateway"}
-                className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
+                className="bg-white flex justify-center items-center rounded-full h-8 w-8 md:h-10 md:w-10 xl:h-12 xl:w-12 hover:bg-[#043915] transition-all"
               >
-                <span className="text-[#4C763B] font-bold">₹</span>
+                <span className="text-[#4C763B] xl:text-xl font-bold">₹</span>
               </Link>
 
               <button
                 onClick={handleChatClick}
-                className="bg-white flex justify-center items-center rounded-full h-8 w-8 hover:bg-[#043915] transition-all"
+                className="bg-white flex justify-center items-center rounded-full h-8 w-8 md:h-10 md:w-10 xl:h-12 xl:w-12 hover:bg-[#043915] transition-all"
               >
-                <BsChatRightFill className="text-[#4C763B]" />
+                <BsChatRightFill className="text-[#4C763B] xl:text-xl" />
               </button>
             </div>
           </div>
@@ -169,7 +168,7 @@ export const PrincipalHome = () => {
               </div>
             ) : (
               <div>
-                <h2 className="text-[#4C763B] font-semibold text-center my-4">
+                <h2 className="text-[#4C763B] md:text-xl xl:text-2xl font-semibold text-center my-4">
                   Gallery
                 </h2>
                 <p className="text-center text-[#4C763B]/50 font-semibold mb-6">
@@ -203,12 +202,12 @@ export const PrincipalHome = () => {
           className={`${schoolData?.aboutUs ? "h-full w-full" : "h-[50vh]"}`}
         >
           <div className="bg-white shadow-sm p-6 border border-[#B0CE88]/40 h-full w-full max-w-full flex flex-col justify-center items-center overflow-hidden">
-            <h2 className="text-[#4C763B] font-semibold text-center mb-4">
+            <h2 className="text-[#4C763B] md:text-xl xl:text-2xl font-semibold text-center mb-4">
               About Us
             </h2>
 
             {schoolData?.aboutUs ? (
-              <p className="text-gray-700 text-center leading-relaxed px-2 wrap-break-word break-all max-w-full">
+              <p className="md:text-xl xl:text-2xl text-gray-700 text-center leading-relaxed px-2 wrap-break-word break-all max-w-full">
                 {schoolData.aboutUs}
               </p>
             ) : (
@@ -225,7 +224,7 @@ export const PrincipalHome = () => {
           }`}
         >
           <div className="h-full w-full bg-white shadow-sm p-6 border border-[#B0CE88]/40 flex flex-col justify-center items-center">
-            <h2 className="text-[#4C763B] font-semibold text-center mb-6">
+            <h2 className="text-[#4C763B] md:text-xl xl:text-2xl font-semibold text-center mb-6">
               Meet Our Team
             </h2>
 
@@ -234,17 +233,17 @@ export const PrincipalHome = () => {
                 {schoolData.teamMembers.map((member, idx) => (
                   <div
                     key={idx}
-                    className="flex flex-col items-center p-3 shadow-md rounded-xl border border-[#B0CE88]/50"
+                    className="sm:w-[25vw] lg:w-[20vw] xl:w-[18vw] xl:h-[35vh] flex flex-col items-center p-3 shadow-md rounded-xl border border-[#B0CE88]/50"
                   >
                     <img
                       src={member.img}
-                      className="h-24 w-24 rounded-full object-cover mb-3 border border-[#4C763B]"
+                      className="h-24 w-24 xl:h-30 xl:w-30 rounded-full object-cover mb-3 border border-[#4C763B]"
                       alt={member.name}
                     />
-                    <p className="font-semibold text-[#043915] text-center">
+                    <p className="xl:text-xl font-semibold text-[#043915] text-center">
                       {member.name}
                     </p>
-                    <p className="text-sm text-[#4C763B]/70 text-center">
+                    <p className="text-sm xl:text-lg text-[#4C763B]/70 text-center">
                       {member.role}
                     </p>
                   </div>
@@ -262,11 +261,11 @@ export const PrincipalHome = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-8 border-b border-[#ECF4E8]/20">
               <div>
-                <h3 className="font-semibold text-lg mb-4 text-[#FFE797] tracking-wide">
+                <h3 className="font-semibold text-lg sm:text-2xl xl:text-3xl mb-4 text-[#FFE797] tracking-wide">
                   Contact Info
                 </h3>
 
-                <ul className="space-y-2 text-sm text-white leading-relaxed">
+                <ul className="space-y-2 text-sm sm:text-lg xl:text-2xl text-white leading-relaxed">
                   <li>📍 {schoolData.address || "Not added"}</li>
                   <li>📞 {schoolData.phoneNumber || "Not added"}</li>
                   <li>✉️ {schoolData.email || "Not added"}</li>
@@ -275,7 +274,7 @@ export const PrincipalHome = () => {
               </div>
             </div>
 
-            <div className="text-center text-sm text-white pt-6 tracking-wide">
+            <div className="text-center text-sm xl:text-xl text-white pt-6 tracking-wide">
               © {new Date().getFullYear()}{" "}
               <span className="font-semibold">{schoolData.schoolName}</span>.
               All rights reserved.
@@ -285,17 +284,17 @@ export const PrincipalHome = () => {
       </div>
 
       {loggedInPrincipalId === principalId && (
-        <div className="sticky bottom-0 w-full flex border-t border-[#B0CE88]/50 bg-white shadow-inner">
+        <div className="sticky bottom-0 w-full flex border-t border-[#B0CE88]/50 bg-white shadow-inner xl:py-1">
           <Link
             to={`/principalHome/${schoolData._id}`}
-            className="w-full text-center py-3 border-r border-[#B0CE88]/50 text-[#043915] font-semibold hover:bg-[#B0CE88]/30 transition-all"
+            className="w-full text-center py-3 border-r border-[#B0CE88]/50 text-[#043915] md:text-lg xl:text-2xl font-semibold hover:bg-[#B0CE88]/30 transition-all"
           >
             Home
           </Link>
 
           <Link
             to={`/principalDashboard/${schoolData._id}`}
-            className="w-full text-center py-3 text-[#043915] font-semibold hover:bg-[#B0CE88]/30 transition-all"
+            className="w-full text-center py-3 text-[#043915] md:text-lg xl:text-2xl font-semibold hover:bg-[#B0CE88]/30 transition-all"
           >
             My Profile
           </Link>
