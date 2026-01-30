@@ -178,7 +178,7 @@ export const PrincipalHome = () => {
             )}
 
             {schoolData?.images?.length > 1 && (
-              <div className="absolute bottom-3 w-full flex justify-center gap-1 px-4 z-20">
+              <div className="absolute bottom-3 lg:bottom-30 w-full flex justify-center gap-1 px-4 z-20">
                 {schoolData.images.map((_, index) => {
                   const style = getDotSize(index);
                   return (
