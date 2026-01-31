@@ -53,7 +53,6 @@ const registerSchool = async (req, res) => {
         resource_type: "image",
         folder: "schools/logo",
       });
-      console.log("CLOUDINARY RESULT:", result);
       schoolLogo = result.secure_url;
     }
 
@@ -224,7 +223,6 @@ const deleteSchool = async (req, res) => {
 
 const editSchool = async (req, res) => {
   try {
-    /* ================= AUTH ================= */
     const token =
       req.cookies?.token || req.headers.authorization?.split(" ")[1];
 
@@ -243,7 +241,6 @@ const editSchool = async (req, res) => {
         .json({ success: false, message: "School not found" });
     }
 
-    /* ================= BODY ================= */
     const {
       schoolName,
       aboutUs,
@@ -263,10 +260,8 @@ const editSchool = async (req, res) => {
 
     const parsedMembers = teamMembers ? JSON.parse(teamMembers) : [];
 
-    /* ================= FILES ================= */
     const files = req.files || {};
 
-    /* ---------- LOGO ---------- */
     if (files.logo?.length) {
       const result = await cloudinary.uploader.upload(
         files.logo[0].path,
@@ -275,7 +270,6 @@ const editSchool = async (req, res) => {
       school.schoolLogo = result.secure_url;
     }
 
-    /* ---------- SCHOOL IMAGES ---------- */
     if (files.images?.length) {
       const uploadedImages = await Promise.all(
         files.images.map((file) =>
@@ -289,7 +283,6 @@ const editSchool = async (req, res) => {
       school.images = [...(school.images || []), ...imageUrls];
     }
 
-    /* ---------- TEAM MEMBERS ---------- */
     const teamFiles = files.teamImages || [];
     let imageIndex = 0;
 
@@ -308,7 +301,6 @@ const editSchool = async (req, res) => {
       school.teamMembers = parsedMembers;
     }
 
-    /* ================= SAVE ================= */
     const updatedSchool = await school.save();
 
     return res.status(200).json({
