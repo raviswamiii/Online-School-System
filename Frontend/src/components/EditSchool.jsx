@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 export const EditSchool = () => {
   const [logo, setLogo] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [schoolName, setSchoolName] = useState("");
 
@@ -93,11 +94,11 @@ export const EditSchool = () => {
 
     if (distance > 50) {
       setCurrentIndex((prev) =>
-        prev === imagesPreview.length - 1 ? 0 : prev + 1
+        prev === imagesPreview.length - 1 ? 0 : prev + 1,
       );
     } else if (distance < -50) {
       setCurrentIndex((prev) =>
-        prev === 0 ? imagesPreview.length - 1 : prev - 1
+        prev === 0 ? imagesPreview.length - 1 : prev - 1,
       );
     }
 
@@ -114,16 +115,15 @@ export const EditSchool = () => {
 
   const onSubmitHandle = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const formdata = new FormData();
 
       formdata.append("logo", logo);
-
       formdata.append("schoolName", schoolName);
 
       images.forEach((file) => formdata.append("images", file));
-
       formdata.append("aboutUs", aboutUs);
 
       const memberDetails = teamMembers.map((m) => ({
@@ -150,7 +150,7 @@ export const EditSchool = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       if (response.data.success) {
@@ -160,6 +160,8 @@ export const EditSchool = () => {
       }
     } catch (error) {
       console.error(error.response?.data?.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -214,7 +216,9 @@ export const EditSchool = () => {
 
           <div
             className={`${
-              imagesPreview.length > 0 ? "h-60 sm:h-90 md:h-100 lg:h-full" : " h-60 sm:h-[50vh]"
+              imagesPreview.length > 0
+                ? "h-60 sm:h-90 md:h-100 lg:h-full"
+                : " h-60 sm:h-[50vh]"
             } w-full relative flex flex-col justify-center items-center bg-white shadow-sm border border-[#B0CE88]/40 overflow-hidden`}
           >
             <IoAddCircleSharp
@@ -394,9 +398,11 @@ export const EditSchool = () => {
         </div>
         <button
           type="submit"
-          className="bg-green-500 text-white w-full p-2 text-xl font-semibold"
+          disabled={loading}
+          className={`w-full p-2 text-xl font-semibold text-white 
+                   ${loading ? "bg-green-300 cursor-not-allowed" : "bg-green-500"}`}
         >
-          Save Changes
+          {loading ? "Saving Changes..." : "Save Changes"}
         </button>
       </form>
     </div>

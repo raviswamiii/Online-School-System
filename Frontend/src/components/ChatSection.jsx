@@ -114,7 +114,7 @@ export const ChatSection = () => {
     <div className="h-screen flex flex-col bg-[#efeae2]">
       <div className="sticky top-0 z-10 flex items-center gap-4 bg-[#075e54] px-5 py-3 shadow">
         <img
-          src={`${backendURL}${schoolData?.schoolLogo}`}
+          src={schoolData?.schoolLogo}
           alt="School Logo"
           className="h-11 w-11 rounded-full object-cover bg-white"
         />

@@ -93,10 +93,10 @@ export const PrincipalHome = () => {
       return;
     }
 
-    if (loggedInPrincipalId === principalId) {
-      navigate("/allMessages");
-      return;
-    }
+    // if (loggedInPrincipalId === principalId) {
+    //   navigate("/allMessages");
+    //   return;
+    // }
 
     navigate(`/chatSection/${schoolData._id}`);
   };
@@ -215,7 +215,6 @@ export const PrincipalHome = () => {
               </div>
             )}
 
-            {/* DOTS */}
             {schoolData?.images?.length > 1 && (
               <div className="absolute bottom-3 lg:bottom-[120px] w-full flex justify-center gap-1 px-4 z-20">
                 {schoolData.images.map((_, index) => {
