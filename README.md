@@ -9,8 +9,7 @@ Built to demonstrate end-to-end software engineering capability.
 🎯 Why This Project Stands Out
 ✔ Solves a real-world problem
 ✔ Full authentication & authorization system
-✔ Payment gateway integration
-✔ Real-time communication using WebSockets
+✔ Payment gateway integration✔ Real-time communication using WebSockets
 ✔ Fully responsive modern UI
 ✔ Clean RESTful API architecture
 ✔ Production deployment with environment configuration
