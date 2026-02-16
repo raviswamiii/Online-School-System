@@ -1,12 +1,12 @@
 🚀 Live Demo
 🔗 https://online-school-system.vercel.app
 
-💡 Project Overview
+💡 Project Overview:
 Online School System is a production-ready full-stack MERN application that centralizes schools, colleges, and universities into a single digital ecosystem.
 Instead of institutions maintaining separate websites, this platform provides a unified, scalable solution with secure authentication, payment processing, real-time updates, and modern UI/UX.
 Built to demonstrate end-to-end software engineering capability.
 
-🎯 Why This Project Stands Out
+🎯 Why This Project Stands Out:
 ✔ Solves a real-world problem
 ✔ Full authentication & authorization system
 ✔ Payment gateway integration
@@ -15,7 +15,7 @@ Built to demonstrate end-to-end software engineering capability.
 ✔ Clean RESTful API architecture
 ✔ Production deployment with environment configuration
 
-🛠 Tech Stack
+🛠 Tech Stack:
 Frontend:
 React
 Tailwind CSS
@@ -35,7 +35,7 @@ WebSockets (Real-time updates)
 Cloud Image Storage
 Production Deployment (Vercel + Render)
 
-🔐 Core Features
+🔐 Core Features:
 Authentication & Authorization
 Secure JWT-based login/register
 Protected routes and middleware
@@ -48,7 +48,7 @@ Responsive UI
 Mobile-first design
 Modern, clean, scalable components
 
-🏗 Architecture & Engineering Practices
+🏗 Architecture & Engineering Practices:
 RESTful API design
 Modular reusable components
 Middleware-based security
@@ -56,15 +56,15 @@ Proper environment variable handling
 Clean project structure
 Production deployment ready
 
-📂 Installation
+📂 Installation:
 git clone https://github.com/raviswamiii/Online-School-System.git
 
 
 Install dependencies:
-cd frontend
+cd frontend:
 npm install
 
-cd backend
+cd backend:
 npm install
 
 Run locally:
