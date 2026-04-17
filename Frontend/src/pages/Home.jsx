@@ -6,8 +6,9 @@ import { IndividualList } from "../components/IndividualList";
 
 export const Home = () => {
   return (
-    <div className="min-h-screen bg-[#ECF4E8] text-[#043915]">
-      <header className="bg-white border-b border-[#B0CE88]/40 shadow-sm sticky top-0 z-20">
+    <div className="h-screen flex flex-col bg-white text-[#043915]">
+      {/* Header */}
+      <div className="border-b border-[#B0CE88]/40 shadow-sm sticky top-0 bg-white z-20">
         <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-lg font-bold tracking-wide text-[#4C763B]">
             EduConnect
@@ -28,22 +29,14 @@ export const Home = () => {
             </Link>
           </div>
         </div>
-      </header>
+      </div>
 
-      <main className="max-w-7xl mx-auto px-4 pt-6 pb-10">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-[#043915]">
-            Explore Schools
-          </h2>
-          <p className="text-sm text-[#4C763B]/70">
-            Find and manage schools in one place
-          </p>
-        </div>
-
-        <section className="mt-6 bg-white rounded-xl shadow-sm border border-[#B0CE88]/40 p-5 min-h-[65vh]">
+      {/* Content */}
+      <section className="flex-1 overflow-hidden max-w-7xl mx-auto w-full px-4 py-4 ">
+        <div className="bg-white shadow-sm border border-[#B0CE88]/40 p-5 h-full flex flex-col rounded-xl">
           <SchoolList />
-        </section>
-      </main>
+        </div>
+      </section>
     </div>
   );
 };

@@ -304,10 +304,10 @@ export const PrincipalHome = () => {
                 </h3>
 
                 <ul className="space-y-2 text-sm sm:text-lg text-white leading-relaxed">
-                  <li>📍 {schoolData.address || "Not added"}</li>
                   <li>📞 {schoolData.phoneNumber || "Not added"}</li>
                   <li>✉️ {schoolData.email || "Not added"}</li>
                   <li>🕒 {schoolData.workingPeriod || "Not added"}</li>
+                  <li>📍 {schoolData.schoolLocation || "Not added"}</li>
                 </ul>
               </div>
             </div>
