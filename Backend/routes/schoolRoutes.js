@@ -8,6 +8,7 @@ import {
   schoolSignIn,
   editSchool,
   updateAuthentication,
+  getNearbySchools,
 } from "../controllers/schoolController.js";
 import schoolAuth from "../middleware/schoolAuth.js";
 import upload from "../middleware/multer.js";
@@ -17,6 +18,7 @@ const schoolRouter = express.Router();
 schoolRouter.post("/registerSchool", upload.single("logo"), registerSchool);
 
 schoolRouter.get("/getSchools", getSchools);
+schoolRouter.get("/nearby", getNearbySchools);
 schoolRouter.get("/getPrincipalDashboard/:id", schoolAuth, getSchoolById);
 schoolRouter.get("/getSchool/:id", getSchoolById);
 

@@ -103,6 +103,50 @@ const getSchools = async (req, res) => {
   }
 };
 
+export const getNearbySchools = async (req, res) => {
+  try {
+    let { lng, lat } = req.query;
+
+    // ✅ VALIDATION
+    if (!lng || !lat) {
+      return res.status(400).json({
+        success: false,
+        message: "Longitude and Latitude required",
+      });
+    }
+
+    lng = parseFloat(lng);
+    lat = parseFloat(lat);
+
+    if (isNaN(lng) || isNaN(lat)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid coordinates",
+      });
+    }
+
+    const schools = await schoolModel.find({
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [lng, lat],
+          },
+          $maxDistance: 50000, // 50km
+        },
+      },
+    });
+
+    res.json({ success: true, schools });
+  } catch (err) {
+    console.log("NEARBY ERROR:", err); // 🔥 IMPORTANT
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 const getSchoolById = async (req, res) => {
   try {
     const { id } = req.params;

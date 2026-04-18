@@ -9,6 +9,7 @@ export const SchoolList = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filteredSchools, setFilteredSchools] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
@@ -16,7 +17,6 @@ export const SchoolList = () => {
   const fetchSchools = async () => {
     try {
       setLoading(true);
-
       const response = await axios.get(`${backendURL}/schools/getSchools`);
 
       if (response.data.success) {
@@ -29,10 +29,6 @@ export const SchoolList = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const onNavigateHandler = (schoolId) => {
-    navigate(`principalHome/${schoolId}`);
   };
 
   useEffect(() => {
@@ -50,9 +46,61 @@ export const SchoolList = () => {
     }
   }, [schools, search]);
 
+  const onNavigateHandler = (schoolId) => {
+    navigate(`principalHome/${schoolId}`);
+  };
+
+  // ✅ Haversine formula (distance in KM)
+  const getDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // km
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  // ✅ Find nearby schools
+  const findNearbySchools = () => {
+  if (!navigator.geolocation) {
+    alert("Geolocation not supported");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const { latitude, longitude } = position.coords;
+
+    try {
+      const res = await axios.get(
+        `${backendURL}/schools/nearby?lng=${longitude}&lat=${latitude}`
+      );
+
+      if (res.data.success) {
+        setFilteredSchools(res.data.schools);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  });
+};
+
   return (
     <div className="flex flex-col h-full">
       <SearchBar search={search} setSearch={setSearch} />
+
+      <button
+        onClick={findNearbySchools}
+        className="border bg-[#4C763B] text-white mt-2 py-2 px-4 rounded-3xl"
+      >
+        Find schools near me
+      </button>
 
       <div className="flex-1 overflow-y-auto mt-2 flex flex-col gap-3 pr-1">
         {loading ? (
@@ -84,10 +132,16 @@ export const SchoolList = () => {
               <div>
                 <p className="font-semibold">{school.schoolName}</p>
 
-                {/* ✅ Direct address (NO API call) */}
                 <p className="text-sm text-gray-500">
                   {school.address || "Location not found"}
                 </p>
+
+                {/* ✅ Distance display */}
+                {school.distance !== undefined && (
+                  <p className="text-xs text-blue-600">
+                    {school.distance.toFixed(2)} km away
+                  </p>
+                )}
               </div>
             </div>
           ))
