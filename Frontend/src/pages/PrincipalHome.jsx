@@ -62,8 +62,12 @@ export const PrincipalHome = () => {
   const getSchoolDetails = async () => {
     try {
       if (token) {
-        const decoded = jwtDecode(token);
-        setLoggedInPrincipalId(decoded.id || decoded._id);
+        try {
+          const decoded = jwtDecode(token);
+          setLoggedInPrincipalId(decoded.id || decoded._id);
+        } catch (err) {
+          console.log("Invalid token");
+        }
       }
 
       const response = await axios.get(
@@ -170,7 +174,7 @@ export const PrincipalHome = () => {
                   onTouchMove={touchMoveHandle}
                   onTouchEnd={touchEndHandle}
                 >
-                  {schoolData.images.map((img, idx) => (
+                  {schoolData?.images?.map((img, idx) => (
                     <img
                       key={idx}
                       src={img}
@@ -180,7 +184,7 @@ export const PrincipalHome = () => {
                   ))}
                 </div>
 
-                {schoolData.images.length > 1 && (
+                {schoolData?.images?.length > 1 && (
                   <button
                     onClick={handlePrev}
                     className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 z-20
@@ -192,7 +196,7 @@ export const PrincipalHome = () => {
                   </button>
                 )}
 
-                {schoolData.images.length > 1 && (
+                {schoolData?.images?.length > 1 && (
                   <button
                     onClick={handleNext}
                     className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 z-20
@@ -217,7 +221,7 @@ export const PrincipalHome = () => {
 
             {schoolData?.images?.length > 1 && (
               <div className="absolute bottom-3 lg:bottom-[120px] w-full flex justify-center gap-1 px-4 z-20">
-                {schoolData.images.map((_, index) => {
+                {schoolData?.images?.map((_, index) => {
                   const style = getDotSize(index);
                   return (
                     <button
@@ -307,7 +311,21 @@ export const PrincipalHome = () => {
                   <li>📞 {schoolData.phoneNumber || "Not added"}</li>
                   <li>✉️ {schoolData.email || "Not added"}</li>
                   <li>🕒 {schoolData.workingPeriod || "Not added"}</li>
-                  <li>📍 {schoolData.schoolLocation || "Not added"}</li>
+                  <li>
+                    📍{" "}
+                    {schoolData.location ? (
+                      <a
+                        href={`https://www.google.com/maps?q=${schoolData.location.coordinates[1]},${schoolData.location.coordinates[0]}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline"
+                      >
+                        View on Map
+                      </a>
+                    ) : (
+                      "Not added"
+                    )}
+                  </li>{" "}
                 </ul>
               </div>
             </div>

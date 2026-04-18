@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import schoolModel from "../models/schoolModel.js";
 import blacklistTokenModel from "../models/blacklistToken.js";
-import {v2 as cloudinary} from "cloudinary";
+import cloudinary from "../config/cloudinary.js";
 
 const createToken = (id, schoolName) => {
   return jwt.sign({ id, schoolName }, process.env.JWT_SECRET, {
@@ -11,12 +11,25 @@ const createToken = (id, schoolName) => {
   });
 };
 
+// REGISTER SCHOOL
 const registerSchool = async (req, res) => {
   try {
-    const { schoolName, schoolEmail, schoolPassword, schoolLocation } =
-      req.body;
+    const {
+      schoolName,
+      schoolEmail,
+      schoolPassword,
+      latitude,
+      longitude,
+      address,
+    } = req.body;
 
-    if (!schoolName || !schoolEmail || !schoolPassword || !schoolLocation) {
+    if (
+      !schoolName ||
+      !schoolEmail ||
+      !schoolPassword ||
+      !latitude ||
+      !longitude
+    ) {
       return res.status(400).json({
         success: false,
         message: "All fields are required.",
@@ -31,69 +44,61 @@ const registerSchool = async (req, res) => {
       });
     }
 
-    if (!validator.isEmail(schoolEmail)) {
-      return res.status(400).json({
-        success: false,
-        message: "Please enter a valid email.",
-      });
-    }
+    let logoUrl = "";
 
-    if (!validator.isStrongPassword(schoolPassword)) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Password must be 8 characters long including uppercase, lowercase, number and symbol.",
-      });
-    }
-
-    let schoolLogo = null;
-
+    // ✅ UPLOAD TO CLOUDINARY
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
-        resource_type: "image",
-        folder: "schools/logo",
+        folder: "school_logos",
       });
-      schoolLogo = result.secure_url;
+
+      logoUrl = result.secure_url; // 🔥 this is the URL you will use in frontend
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(schoolPassword, salt);
+    const hashedPassword = await bcrypt.hash(schoolPassword, 10);
 
     const newSchool = new schoolModel({
       schoolName,
       schoolEmail,
-      schoolLocation,
       schoolPassword: hashedPassword,
-      schoolLogo,
+
+      location: {
+        type: "Point",
+        coordinates: [Number(longitude), Number(latitude)],
+      },
+
+      address: address || "",
+
+      schoolLogo: logoUrl, // ✅ CLOUDINARY URL STORED
     });
 
     const school = await newSchool.save();
+
     const token = createToken(school._id, school.schoolName);
 
     return res.status(201).json({
       success: true,
-      message: "School successfully registered.",
       token,
       school,
     });
   } catch (error) {
-    console.error("School registration error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Registration failed.",
-    });
+    console.log(error);
+    return res.status(500).json({ success: false });
   }
 };
 
 const getSchools = async (req, res) => {
   try {
     const schools = await schoolModel.find().select("-schoolPassword");
-    return res.status(200).json({ success: true, schools });
+
+    return res.status(200).json({
+      success: true,
+      schools,
+    });
   } catch (error) {
-    console.error("Error fetching schools:", error.message);
     return res.status(500).json({
       success: false,
-      message: "Server error while fetching schools.",
+      message: "Error fetching schools",
     });
   }
 };
