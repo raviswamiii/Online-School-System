@@ -308,24 +308,10 @@ export const PrincipalHome = () => {
                 </h3>
 
                 <ul className="space-y-2 text-sm sm:text-lg text-white leading-relaxed">
-                  <li>📞 {schoolData.phoneNumber || "Not added"}</li>
-                  <li>✉️ {schoolData.email || "Not added"}</li>
                   <li>🕒 {schoolData.workingPeriod || "Not added"}</li>
-                  <li>
-                    📍{" "}
-                    {schoolData.location ? (
-                      <a
-                        href={`https://www.google.com/maps?q=${schoolData.location.coordinates[1]},${schoolData.location.coordinates[0]}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="underline"
-                      >
-                        View on Map
-                      </a>
-                    ) : (
-                      "Not added"
-                    )}
-                  </li>{" "}
+                  <li>📞 {schoolData.phoneNumber || "Not added"}</li>
+                  <li>✉️ {schoolData.schoolEmail || "Not added"}</li>
+                  <li>📍 {schoolData.address || "Not added"}</li>
                 </ul>
               </div>
             </div>

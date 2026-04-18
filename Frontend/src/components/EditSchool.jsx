@@ -20,7 +20,6 @@ export const EditSchool = () => {
 
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
   const [workingPeriod, setWorkingPeriod] = useState("");
 
   const [touchStartX, setTouchStartX] = useState(0);
@@ -139,7 +138,6 @@ export const EditSchool = () => {
 
       formdata.append("address", address);
       formdata.append("phoneNumber", phoneNumber);
-      formdata.append("email", email);
       formdata.append("workingPeriod", workingPeriod);
 
       const response = await axios.put(
@@ -372,9 +370,9 @@ export const EditSchool = () => {
           <div className="space-y-3">
             <input
               className="w-full border border-[#4C763B]/50 outline-[#4C763B] p-2 rounded"
-              placeholder="Location..."
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Working period..."
+              value={workingPeriod}
+              onChange={(e) => setWorkingPeriod(e.target.value)}
             />
             <input
               className="w-full border border-[#4C763B]/50 outline-[#4C763B] p-2 rounded"
@@ -384,15 +382,9 @@ export const EditSchool = () => {
             />
             <input
               className="w-full border border-[#4C763B]/50 outline-[#4C763B] p-2 rounded"
-              placeholder="Email..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              className="w-full border border-[#4C763B]/50 outline-[#4C763B] p-2 rounded"
-              placeholder="Working period..."
-              value={workingPeriod}
-              onChange={(e) => setWorkingPeriod(e.target.value)}
+              placeholder="Location..."
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
             />
           </div>
         </div>
