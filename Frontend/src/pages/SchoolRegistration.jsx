@@ -53,7 +53,6 @@ export const SchoolRegistration = () => {
         console.log(res.data.features);
       } catch (err) {
         console.log(err);
-        console.log(res.data.features);
       }
     }, 400);
 
@@ -63,30 +62,28 @@ export const SchoolRegistration = () => {
   // ✅ CLOSE DROPDOWN
   useEffect(() => {
     const handleClickOutside = (e) => {
-      setTimeout(() => {
-        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-          setSuggestions([]);
-        }
-      }, 100); // ✅ delay fixes mobile race condition
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setSuggestions([]);
+      }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-
   // ✅ SELECT LOCATION (IMPORTANT)
   const handleSelectLocation = (place) => {
     if (!place?.center) return;
 
-    setLatitude(Number(place.center[1])); // ✅ ensure number
-    setLongitude(Number(place.center[0])); // ✅ ensure number
+    setLatitude(Number(place.center[1]));
+    setLongitude(Number(place.center[0]));
     setLocationInput(place.place_name);
     setSuggestions([]);
+
+    // ✅ close keyboard (important on mobile)
+    document.activeElement.blur();
   };
 
   const onSubmitHandler = async (e) => {
@@ -204,23 +201,21 @@ export const SchoolRegistration = () => {
                 setLatitude(null);
                 setLongitude(null);
               }}
-              onBlur={() => {
-                setTimeout(() => setSuggestions([]), 150);
-              }}
               className="w-full px-4 py-2.5 rounded-lg border"
             />
 
             {suggestions.length > 0 && (
-              <div className="absolute w-full bg-white border mt-1 rounded-lg shadow-lg max-h-56 overflow-y-auto z-10">
+              <div className="absolute w-full bg-white border mt-1 rounded-lg shadow-lg max-h-56 overflow-y-auto z-10 touch-manipulation">
+                {" "}
                 {suggestions.map((place, index) => (
                   <div
                     key={index}
                     onMouseDown={(e) => {
-                      e.stopPropagation();
+                      e.preventDefault();
                       handleSelectLocation(place);
                     }}
-                    onTouchStart={(e) => {
-                      e.stopPropagation();
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
                       handleSelectLocation(place);
                     }}
                     className="p-3 cursor-pointer hover:bg-gray-100"
