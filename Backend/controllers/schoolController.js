@@ -27,8 +27,8 @@ const registerSchool = async (req, res) => {
       !schoolName ||
       !schoolEmail ||
       !schoolPassword ||
-      !latitude ||
-      !longitude
+      !latitude === null ||
+      !longitude === null
     ) {
       return res.status(400).json({
         success: false,
@@ -207,7 +207,7 @@ const schoolSignIn = async (req, res) => {
 
 const schoolLogOut = async (req, res) => {
   try {
-    const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+    const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
 
     if (!token)
       return res
@@ -233,7 +233,7 @@ const schoolLogOut = async (req, res) => {
 
 const deleteSchool = async (req, res) => {
   try {
-    const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+    const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
 
     if (!token)
       return res

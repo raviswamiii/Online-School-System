@@ -89,6 +89,14 @@ export const SchoolRegistration = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
+    console.log({
+      schoolName,
+      schoolEmail,
+      schoolPassword,
+      latitude,
+      longitude,
+    });
+
     // ✅ STRONG VALIDATION
     if (!schoolName || !schoolEmail || !schoolPassword) {
       return setError("All fields are required.");
@@ -124,6 +132,7 @@ export const SchoolRegistration = () => {
       }
     } catch (error) {
       console.log(error);
+      console.log(error.response?.data);
       setError(error.response?.data?.message || "Something went wrong.");
     }
   };
