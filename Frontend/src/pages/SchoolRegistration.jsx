@@ -50,8 +50,10 @@ export const SchoolRegistration = () => {
         );
 
         setSuggestions(res.data.features);
+        console.log(res.data.features);
       } catch (err) {
         console.log(err);
+        console.log(res.data.features);
       }
     }, 400);
 
@@ -61,9 +63,11 @@ export const SchoolRegistration = () => {
   // ✅ CLOSE DROPDOWN
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setSuggestions([]);
-      }
+      setTimeout(() => {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+          setSuggestions([]);
+        }
+      }, 100); // ✅ delay fixes mobile race condition
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -197,8 +201,11 @@ export const SchoolRegistration = () => {
               value={locationInput}
               onChange={(e) => {
                 setLocationInput(e.target.value);
-                setLatitude(null); // ✅ reset if user types manually
+                setLatitude(null);
                 setLongitude(null);
+              }}
+              onBlur={() => {
+                setTimeout(() => setSuggestions([]), 150);
               }}
               className="w-full px-4 py-2.5 rounded-lg border"
             />
