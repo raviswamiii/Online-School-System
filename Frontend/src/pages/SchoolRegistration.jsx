@@ -15,7 +15,7 @@ export const SchoolRegistration = () => {
 
   // ✅ LOCATION STATES
   const [locationInput, setLocationInput] = useState("");
-  const [latitude, setLatitude] = useState(null);   // ✅ FIX
+  const [latitude, setLatitude] = useState(null); // ✅ FIX
   const [longitude, setLongitude] = useState(null); // ✅ FIX
   const [suggestions, setSuggestions] = useState([]);
   const dropdownRef = useRef();
@@ -46,7 +46,7 @@ export const SchoolRegistration = () => {
 
       try {
         const res = await axios.get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${locationInput}.json?access_token=${MAPBOX_TOKEN}&autocomplete=true&limit=5`
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${locationInput}.json?access_token=${MAPBOX_TOKEN}&autocomplete=true&limit=5`,
         );
 
         setSuggestions(res.data.features);
@@ -67,16 +67,20 @@ export const SchoolRegistration = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, []);
 
   // ✅ SELECT LOCATION (IMPORTANT)
   const handleSelectLocation = (place) => {
     if (!place?.center) return;
 
-    setLatitude(Number(place.center[1]));   // ✅ ensure number
-    setLongitude(Number(place.center[0]));  // ✅ ensure number
+    setLatitude(Number(place.center[1])); // ✅ ensure number
+    setLongitude(Number(place.center[0])); // ✅ ensure number
     setLocationInput(place.place_name);
     setSuggestions([]);
   };
@@ -108,7 +112,7 @@ export const SchoolRegistration = () => {
 
       const response = await axios.post(
         `${backendURL}/schools/registerSchool`,
-        formdata
+        formdata,
       );
 
       if (response.data.success) {
@@ -126,7 +130,6 @@ export const SchoolRegistration = () => {
   return (
     <div className="min-h-screen bg-[#ECF4E8] flex items-center justify-center px-4">
       <div className="bg-white w-full max-w-md rounded-2xl shadow-sm border p-8">
-
         <div className="flex flex-col items-center mb-6">
           <div className="h-12 w-12 rounded-full bg-[#4C763B]/10 flex items-center justify-center mb-3">
             <MdSchool className="text-2xl text-[#4C763B]" />
@@ -138,7 +141,6 @@ export const SchoolRegistration = () => {
         </div>
 
         <form onSubmit={onSubmitHandler} className="space-y-4">
-
           {/* LOGO */}
           <div className="flex justify-center">
             <div className="relative">
@@ -147,7 +149,10 @@ export const SchoolRegistration = () => {
                 className="h-[90px] w-[90px] rounded-full border flex items-center justify-center overflow-hidden cursor-pointer"
               >
                 {previewLogo ? (
-                  <img src={previewLogo} className="h-full w-full object-cover" />
+                  <img
+                    src={previewLogo}
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
                   <span className="text-sm">Upload Logo</span>
                 )}
@@ -192,7 +197,7 @@ export const SchoolRegistration = () => {
               value={locationInput}
               onChange={(e) => {
                 setLocationInput(e.target.value);
-                setLatitude(null);   // ✅ reset if user types manually
+                setLatitude(null); // ✅ reset if user types manually
                 setLongitude(null);
               }}
               className="w-full px-4 py-2.5 rounded-lg border"
@@ -203,13 +208,18 @@ export const SchoolRegistration = () => {
                 {suggestions.map((place, index) => (
                   <div
                     key={index}
-                    onClick={() => handleSelectLocation(place)}
+                    onMouseDown={(e) => {
+                      e.stopPropagation();
+                      handleSelectLocation(place);
+                    }}
+                    onTouchStart={(e) => {
+                      e.stopPropagation();
+                      handleSelectLocation(place);
+                    }}
                     className="p-3 cursor-pointer hover:bg-gray-100"
                   >
                     <p className="font-medium">{place.text}</p>
-                    <p className="text-xs text-gray-500">
-                      {place.place_name}
-                    </p>
+                    <p className="text-xs text-gray-500">{place.place_name}</p>
                   </div>
                 ))}
               </div>
@@ -224,9 +234,7 @@ export const SchoolRegistration = () => {
             className="w-full px-4 py-2.5 rounded-lg border"
           />
 
-          {error && (
-            <p className="text-sm text-red-500 text-center">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
           <button className="w-full py-2.5 rounded-lg bg-[#4C763B] text-white">
             Register School
