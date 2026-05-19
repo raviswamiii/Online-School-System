@@ -42,6 +42,10 @@ app.use("/schools", schoolRouter);
 app.use("/messages", messageRouter);
 app.use("/payments", paymentRouter);
 
+app.get("/keepAwake", (req,res) => {
+  res.send("Keep Awake");
+})
+
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
