@@ -311,7 +311,7 @@ export const PrincipalHome = () => {
                   <li>🕒 {schoolData.workingPeriod || "Not added"}</li>
                   <li>📞 {schoolData.phoneNumber || "Not added"}</li>
                   <li>✉️ {schoolData.schoolEmail || "Not added"}</li>
-                  <li>📍 {schoolData.address || "Not added"}</li>
+                  <li>📍 {schoolData.schoolAddress || "Not added"}</li>
                 </ul>
               </div>
             </div>

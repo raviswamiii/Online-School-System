@@ -12,18 +12,11 @@ export const SchoolRegistration = () => {
   const [schoolName, setSchoolName] = useState("");
   const [schoolEmail, setSchoolEmail] = useState("");
   const [schoolPassword, setSchoolPassword] = useState("");
-
-  // ✅ LOCATION STATES
-  const [locationInput, setLocationInput] = useState("");
-  const [latitude, setLatitude] = useState(null); // ✅ FIX
-  const [longitude, setLongitude] = useState(null); // ✅ FIX
-  const [suggestions, setSuggestions] = useState([]);
-  const dropdownRef = useRef();
+  const [schoolAddress, setSchoolAddress] = useState("");
 
   const [error, setError] = useState("");
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
-  const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
   const navigate = useNavigate();
 
   const handleLogoClick = () => logoInputRef.current.click();
@@ -36,56 +29,6 @@ export const SchoolRegistration = () => {
     setLogo(file);
   };
 
-  // ✅ MAPBOX AUTOCOMPLETE
-  useEffect(() => {
-    const delay = setTimeout(async () => {
-      if (!locationInput) {
-        setSuggestions([]);
-        return;
-      }
-
-      try {
-        const res = await axios.get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${locationInput}.json?access_token=${MAPBOX_TOKEN}&autocomplete=true&limit=5`,
-        );
-
-        setSuggestions(res.data.features);
-        console.log(res.data.features);
-      } catch (err) {
-        console.log(err);
-      }
-    }, 400);
-
-    return () => clearTimeout(delay);
-  }, [locationInput]);
-
-  // ✅ CLOSE DROPDOWN
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setSuggestions([]);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-  // ✅ SELECT LOCATION (IMPORTANT)
-  const handleSelectLocation = (place) => {
-    if (!place?.center) return;
-
-    setLatitude(Number(place.center[1]));
-    setLongitude(Number(place.center[0]));
-    setLocationInput(place.place_name);
-    setSuggestions([]);
-
-    // ✅ close keyboard (important on mobile)
-    document.activeElement.blur();
-  };
-
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
@@ -93,17 +36,12 @@ export const SchoolRegistration = () => {
       schoolName,
       schoolEmail,
       schoolPassword,
-      latitude,
-      longitude,
+      schoolAddress,
     });
 
     // ✅ STRONG VALIDATION
-    if (!schoolName || !schoolEmail || !schoolPassword) {
+    if (!schoolName || !schoolEmail || !schoolPassword || !schoolAddress) {
       return setError("All fields are required.");
-    }
-
-    if (latitude === null || longitude === null) {
-      return setError("Please select location from dropdown.");
     }
 
     try {
@@ -113,11 +51,7 @@ export const SchoolRegistration = () => {
       formdata.append("schoolName", schoolName);
       formdata.append("schoolEmail", schoolEmail);
       formdata.append("schoolPassword", schoolPassword);
-
-      // ✅ SEND CLEAN DATA
-      formdata.append("latitude", latitude);
-      formdata.append("longitude", longitude);
-      formdata.append("address", locationInput);
+      formdata.append("schoolAddress", schoolAddress);
 
       const response = await axios.post(
         `${backendURL}/schools/registerSchool`,
@@ -164,13 +98,13 @@ export const SchoolRegistration = () => {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <span className="text-sm">Upload Logo</span>
+                  <span className="text-sm text-center">Upload <br/> Logo</span>
                 )}
               </div>
 
               <IoAddCircleSharp
                 onClick={handleLogoClick}
-                className="absolute bottom-0 right-0 text-2xl text-[#4C763B]"
+                className="absolute rounded-full bottom-1 right-0 text-2xl text-[#4C763B] bg-white"
               />
 
               <input
@@ -199,43 +133,13 @@ export const SchoolRegistration = () => {
             className="w-full px-4 py-2.5 rounded-lg border"
           />
 
-          {/* LOCATION */}
-          <div className="relative" ref={dropdownRef}>
-            <input
-              type="text"
-              placeholder="School Location"
-              value={locationInput}
-              onChange={(e) => {
-                setLocationInput(e.target.value);
-                setLatitude(null);
-                setLongitude(null);
-              }}
-              className="w-full px-4 py-2.5 rounded-lg border"
-            />
-
-            {suggestions.length > 0 && (
-              <div className="absolute w-full bg-white border mt-1 rounded-lg shadow-lg max-h-56 overflow-y-auto z-10 touch-manipulation">
-                {" "}
-                {suggestions.map((place, index) => (
-                  <div
-                    key={index}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      handleSelectLocation(place);
-                    }}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      handleSelectLocation(place);
-                    }}
-                    className="p-3 cursor-pointer hover:bg-gray-100"
-                  >
-                    <p className="font-medium">{place.text}</p>
-                    <p className="text-xs text-gray-500">{place.place_name}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <input
+            type="text"
+            placeholder="Address"
+            value={schoolAddress}
+            onChange={(e) => setSchoolAddress(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-lg border"
+          />
 
           <input
             type="password"

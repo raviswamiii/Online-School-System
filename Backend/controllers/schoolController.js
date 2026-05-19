@@ -18,17 +18,14 @@ const registerSchool = async (req, res) => {
       schoolName,
       schoolEmail,
       schoolPassword,
-      latitude,
-      longitude,
-      address,
+      schoolAddress,
     } = req.body;
 
     if (
       !schoolName ||
       !schoolEmail ||
       !schoolPassword ||
-      !latitude === null ||
-      !longitude === null
+      !schoolAddress 
     ) {
       return res.status(400).json({
         success: false,
@@ -61,14 +58,7 @@ const registerSchool = async (req, res) => {
       schoolName,
       schoolEmail,
       schoolPassword: hashedPassword,
-
-      location: {
-        type: "Point",
-        coordinates: [Number(longitude), Number(latitude)],
-      },
-
-      address: address || "",
-
+      schoolAddress,
       schoolLogo: logoUrl, // ✅ CLOUDINARY URL STORED
     });
 
@@ -99,50 +89,6 @@ const getSchools = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error fetching schools",
-    });
-  }
-};
-
-export const getNearbySchools = async (req, res) => {
-  try {
-    let { lng, lat } = req.query;
-
-    // ✅ VALIDATION
-    if (!lng || !lat) {
-      return res.status(400).json({
-        success: false,
-        message: "Longitude and Latitude required",
-      });
-    }
-
-    lng = parseFloat(lng);
-    lat = parseFloat(lat);
-
-    if (isNaN(lng) || isNaN(lat)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid coordinates",
-      });
-    }
-
-    const schools = await schoolModel.find({
-      location: {
-        $near: {
-          $geometry: {
-            type: "Point",
-            coordinates: [lng, lat],
-          },
-          $maxDistance: 50000, // 50km
-        },
-      },
-    });
-
-    res.json({ success: true, schools });
-  } catch (err) {
-    console.log("NEARBY ERROR:", err); // 🔥 IMPORTANT
-    res.status(500).json({
-      success: false,
-      message: err.message,
     });
   }
 };

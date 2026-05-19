@@ -27,21 +27,7 @@ const schoolSchema = new mongoose.Schema(
       required: true 
     },
 
-    // ✅ GEO LOCATION (FIXED)
-    location: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        default: "Point",
-      },
-      coordinates: {
-        type: [Number], // [lng, lat]
-        required: true,
-      },
-    },
-
-    // ✅ Store readable address (VERY IMPORTANT for UI)
-    address: { 
+    schoolAddress: { 
       type: String,
       trim: true
     },
@@ -60,9 +46,6 @@ const schoolSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-// 🔥 REQUIRED for geospatial queries ($near, $geoNear)
-schoolSchema.index({ location: "2dsphere" });
 
 const schoolModel =
   mongoose.models.School || mongoose.model("School", schoolSchema);

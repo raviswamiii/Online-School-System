@@ -9,7 +9,6 @@ export const SchoolList = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filteredSchools, setFilteredSchools] = useState([]);
-  const [userLocation, setUserLocation] = useState(null);
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
@@ -50,57 +49,9 @@ export const SchoolList = () => {
     navigate(`principalHome/${schoolId}`);
   };
 
-  // ✅ Haversine formula (distance in KM)
-  const getDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // km
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
-
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  };
-
-  // ✅ Find nearby schools
-  const findNearbySchools = () => {
-  if (!navigator.geolocation) {
-    alert("Geolocation not supported");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(async (position) => {
-    const { latitude, longitude } = position.coords;
-
-    try {
-      const res = await axios.get(
-        `${backendURL}/schools/nearby?lng=${longitude}&lat=${latitude}`
-      );
-
-      if (res.data.success) {
-        setFilteredSchools(res.data.schools);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  });
-};
-
   return (
     <div className="flex flex-col h-full">
       <SearchBar search={search} setSearch={setSearch} />
-
-      <button
-        onClick={findNearbySchools}
-        className="border bg-[#4C763B] text-white mt-2 py-2 px-4 rounded-3xl"
-      >
-        Find schools near me
-      </button>
 
       <div className="flex-1 overflow-y-auto mt-2 flex flex-col gap-3 pr-1">
         {loading ? (
@@ -118,7 +69,7 @@ export const SchoolList = () => {
               onClick={() => onNavigateHandler(school._id)}
               className="border p-3 flex items-center gap-3 rounded-lg shadow-sm cursor-pointer hover:shadow-md"
             >
-              <div className="h-[70px] w-[70px] rounded-full overflow-hidden">
+              <div className="h-[70px] w-[70px] rounded-full overflow-hidden border border-[#4C763B]/30 flex justify-center items-center bg-[#4C763B]/10">
                 {school?.schoolLogo ? (
                   <img
                     src={school.schoolLogo}
@@ -133,15 +84,9 @@ export const SchoolList = () => {
                 <p className="font-semibold">{school.schoolName}</p>
 
                 <p className="text-sm text-gray-500">
-                  {school.address || "Location not found"}
+                  {school.schoolAddress || "Location not found"}
                 </p>
-
-                {/* ✅ Distance display */}
-                {school.distance !== undefined && (
-                  <p className="text-xs text-blue-600">
-                    {school.distance.toFixed(2)} km away
-                  </p>
-                )}
+                
               </div>
             </div>
           ))
